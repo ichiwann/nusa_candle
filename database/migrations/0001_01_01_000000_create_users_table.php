@@ -14,10 +14,11 @@ return new class extends Migration
             $table->string('username', 100)->unique();
             $table->string('email', 100)->unique();
             $table->text('alamat');
+            $table->string('no_telepon', 20)->nullable(); // ← TAMBAHKAN INI
             $table->string('password', 255);
             $table->enum('role', ['admin', 'pembeli'])->default('pembeli');
             $table->unsignedBigInteger('total_poin')->nullable()->default(null);
-            $table->timestamps(); // created_at & updated_at
+            $table->timestamps();
         });
 
         // Tabel password_reset_tokens (dari Breeze)

@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -26,6 +24,7 @@ class RegisteredUserController extends Controller
             'username' => ['required', 'string', 'max:100', 'unique:user,username'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:100', 'unique:user,email'],
             'alamat' => ['required', 'string'],
+            'no_telepon' => ['required', 'string', 'max:20'], // ← TAMBAHKAN
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -34,15 +33,13 @@ class RegisteredUserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'alamat' => $request->alamat,
+            'no_telepon' => $request->no_telepon, // ← TAMBAHKAN
             'password' => Hash::make($request->password),
             'role' => 'pembeli',
             'total_poin' => 0,
         ]);
 
-        event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan masuk dengan akun Anda.');
     }
 }

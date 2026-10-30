@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@gmail.com',
             'alamat' => 'Malang',
+            'no_telepon' => '081234567890', // ← TAMBAHKAN
             'password' => Hash::make('12345'),
             'role' => 'admin',
             'total_poin' => null,
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'username' => 'iwan',
             'email' => 'iwan@gmail.com',
             'alamat' => 'kemantren',
+            'no_telepon' => '082555477611', // ← TAMBAHKAN
             'password' => Hash::make('12345'),
             'role' => 'pembeli',
             'total_poin' => 150,
