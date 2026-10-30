@@ -10,20 +10,17 @@ return new class extends Migration
     {
         Schema::create('penukaran_hadiah', function (Blueprint $table) {
             $table->id('id_penukaran');
-            $table->foreignId('id_user')->constrained('user', 'id_user')->onDelete('cascade');
-            $table->foreignId('id_hadiah')->constrained('hadiah', 'id_hadiah')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete();
+            $table->foreignId('id_hadiah')->constrained('hadiah', 'id_hadiah')->cascadeOnDelete();
             $table->unsignedBigInteger('poin_ditukar');
-            $table->enum('status_klaim', [
-                'pending', 'disetujui', 'ditolak'
-            ])->default('pending');
+            $table->enum('status_klaim', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->string('catatan', 255)->nullable();
-            $table->timestamp('tanggal_klaim')->useCurrent();
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('penukaran_hadiah');
-    }   
+    } 
 };
-    

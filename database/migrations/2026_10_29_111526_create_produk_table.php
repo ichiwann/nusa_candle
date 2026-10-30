@@ -14,7 +14,7 @@ return new class extends Migration
             $table->unsignedBigInteger('stok')->default(0);
             $table->unsignedBigInteger('harga');
             $table->string('gambar', 255)->nullable();
-            $table->timestamp('dibuat_pada')->useCurrent();
+            $table->timestamps();
         });
     }
 

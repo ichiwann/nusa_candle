@@ -10,12 +10,12 @@ return new class extends Migration
     {
         Schema::create('kode_redeem', function (Blueprint $table) {
             $table->id('id_kode');
-            $table->foreignId('id_user')->constrained('user', 'id_user')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete();
             $table->string('kode', 32)->unique();
             $table->unsignedBigInteger('poin');
             $table->enum('status', ['tersedia', 'terpakai'])->default('tersedia');
             $table->dateTime('dipakai_pada')->nullable();
-            $table->timestamp('dibuat_pada')->useCurrent();
+            $table->timestamps();
         });
     }
 

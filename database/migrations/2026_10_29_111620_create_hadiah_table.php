@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('hadiah', function (Blueprint $table) {
             $table->id('id_hadiah');
-            $table->foreignId('id_produk')->constrained('produk', 'id_produk')->onDelete('cascade');
+            $table->foreignId('id_produk')->constrained('produk', 'id_produk')->cascadeOnDelete();
             $table->unsignedBigInteger('poin_dibutuhkan');
-            $table->timestamp('dibuat_pada')->useCurrent();
+            $table->timestamps();
         });
     }
 

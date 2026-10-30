@@ -8,7 +8,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Tabel user (pengganti users)
         Schema::create('user', function (Blueprint $table) {
             $table->id('id_user');
             $table->string('nama_lengkap', 100);
@@ -17,8 +16,8 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('password', 255);
             $table->enum('role', ['admin', 'pembeli'])->default('pembeli');
-            $table->unsignedBigInteger('total_poin')->nullable()->default(null); // ← Diubah
-            $table->timestamp('dibuat_pada')->useCurrent();
+            $table->unsignedBigInteger('total_poin')->nullable()->default(null);
+            $table->timestamps(); // created_at & updated_at
         });
 
         // Tabel password_reset_tokens (dari Breeze)

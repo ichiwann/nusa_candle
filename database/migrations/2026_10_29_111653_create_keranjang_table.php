@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('keranjang', function (Blueprint $table) {
             $table->id('id_keranjang');
-            $table->foreignId('id_user')->constrained('user', 'id_user')->onDelete('cascade');
-            $table->foreignId('id_produk')->constrained('produk', 'id_produk')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete();
+            $table->foreignId('id_produk')->constrained('produk', 'id_produk')->cascadeOnDelete();
             $table->unsignedBigInteger('jumlah')->default(1);
-            $table->timestamp('dibuat_pada')->useCurrent();
+            $table->timestamps();
         });
     }
 

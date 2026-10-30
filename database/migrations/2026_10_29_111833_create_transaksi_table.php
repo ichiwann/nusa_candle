@@ -10,15 +10,11 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id('id_transaksi');
-            $table->foreignId('id_pesanan')->constrained('pesanan', 'id_pesanan')->onDelete('cascade');
-            $table->enum('metode_pembayaran', [
-                'bca', 'mandiri', 'gopay', 'dana', 'shopeepay', 'cash'
-            ]);
-            $table->enum('status_pembayaran', [
-                'menunggu', 'berhasil', 'gagal'
-            ])->default('menunggu');
+            $table->foreignId('id_pesanan')->constrained('pesanan', 'id_pesanan')->cascadeOnDelete();
+            $table->enum('metode_pembayaran', ['bca', 'mandiri', 'gopay', 'dana', 'shopeepay', 'cash']);
+            $table->enum('status_pembayaran', ['menunggu', 'berhasil', 'gagal'])->default('menunggu');
             $table->string('bukti_pembayaran', 255)->nullable();
-            $table->timestamp('tanggal_transaksi')->useCurrent();
+            $table->timestamps();
         });
     }
 
