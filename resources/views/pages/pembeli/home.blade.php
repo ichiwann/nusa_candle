@@ -134,7 +134,7 @@
                 Daftar Sekarang
             </a>
         @else
-            <a href="{{ route('pembeli.dashboard') }}" class="inline-block bg-white text-emerald-900 font-semibold px-8 py-3 rounded-xl hover:bg-emerald-50 transition shadow-lg">
+            <a href="{{ route('home') }}" class="inline-block bg-white text-emerald-900 font-semibold px-8 py-3 rounded-xl hover:bg-emerald-50 transition shadow-lg">
                 Ke Dashboard Saya
             </a>
         @endguest
