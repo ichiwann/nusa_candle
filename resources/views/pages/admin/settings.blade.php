@@ -1,0 +1,24 @@
+<x-admin.layout title="Pengaturan Admin">
+    <div><p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Kontrol Akun</p><h1 class="display-font mt-1 text-3xl font-semibold text-[#183b2c]">Pengaturan Admin</h1><p class="mt-2 max-w-xl text-sm text-[#718078]">Kelola informasi akun dan keamanan akses administrator NusaCandle.</p></div>
+
+    <section class="overflow-hidden border border-[#e8eee8] bg-white">
+        <div class="border-b border-[#edf0eb] bg-[#f7faf7] px-5 py-4 sm:px-7"><p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#64835d]">Data Admin Aktif</p><h2 class="display-font mt-1 text-xl font-semibold">Informasi Profil</h2><p class="mt-1 text-xs text-[#7b887f]">Perubahan nama, username, dan email berlaku pada akun ini.</p></div>
+        <form action="{{ route('admin.settings.profile') }}" method="POST" class="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">@csrf @method('PUT')
+            <div><label for="nama_lengkap" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Nama Lengkap</label><input id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap', $admin->nama_lengkap) }}" maxlength="100" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div><label for="username" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Username</label><input id="username" name="username" value="{{ old('username', $admin->username) }}" minlength="3" maxlength="100" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div><label for="email" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Email</label><input id="email" type="email" name="email" value="{{ old('email', $admin->email) }}" maxlength="100" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div><label for="no_telepon" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Nomor Telepon</label><input id="no_telepon" name="no_telepon" inputmode="numeric" value="{{ old('no_telepon', $admin->no_telepon) }}" class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"><p class="mt-1 text-[10px] text-[#87948b]">Opsional, 10–15 angka.</p></div>
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-[#edf0eb] pt-4 sm:col-span-2"><span class="inline-flex items-center gap-2 text-xs text-[#718078]"><span class="h-2 w-2 rounded-full bg-[#50885c]"></span>Role akun: Administrator</span><button type="submit" class="bg-[#103a2a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#315d41]">Simpan Profil</button></div>
+        </form>
+    </section>
+
+    <section class="overflow-hidden border border-[#e8eee8] bg-white">
+        <div class="border-b border-[#edf0eb] bg-[#f7faf7] px-5 py-4 sm:px-7"><p class="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#64835d]">Keamanan Akun</p><h2 class="display-font mt-1 text-xl font-semibold">Ubah Password</h2><p class="mt-1 text-xs text-[#7b887f]">Masukkan password saat ini sebelum menetapkan password baru.</p></div>
+        <form action="{{ route('admin.settings.password') }}" method="POST" class="grid gap-5 p-5 sm:max-w-2xl sm:grid-cols-2 sm:p-7">@csrf @method('PUT')
+            <div class="sm:col-span-2"><label for="current_password" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Password Saat Ini</label><input id="current_password" type="password" name="current_password" autocomplete="current-password" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div><label for="password" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Password Baru</label><input id="password" type="password" name="password" minlength="8" autocomplete="new-password" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div><label for="password_confirmation" class="mb-1.5 block text-xs font-semibold text-[#32483b]">Konfirmasi Password Baru</label><input id="password_confirmation" type="password" name="password_confirmation" minlength="8" autocomplete="new-password" required class="w-full border border-[#dce7dc] bg-[#f7faf7] px-3 py-2.5 text-sm focus:border-[#315e43] focus:ring-[#315e43]/20"></div>
+            <div class="border-t border-[#edf0eb] pt-4 sm:col-span-2"><button type="submit" class="bg-[#103a2a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#315d41]">Perbarui Password</button></div>
+        </form>
+    </section>
+</x-admin.layout>

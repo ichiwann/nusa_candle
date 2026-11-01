@@ -4,21 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - NusaCandle</title>
+    <title>Daftar - NusaCandle</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .display-font { font-family: 'Playfair Display', serif; }
+    </style>
 </head>
 
-<body class="font-sans bg-emerald-50 min-h-screen flex items-center justify-center p-4 py-8">
+<body class="min-h-screen bg-[#f3f6f1] p-4 py-8 text-[#153b2a] sm:p-4">
 
-    <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+    <main class="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-7xl items-center justify-center">
+        <section class="grid w-full overflow-hidden rounded-lg bg-white shadow-[0_24px_70px_-35px_rgba(16,54,36,0.5)] lg:grid-cols-[0.78fr_1.22fr]">
 
         <!-- LEFT PANEL - Hijau Gelap (Natural Flow) -->
-        <div class="lg:w-5/12 bg-emerald-900 text-white p-8 md:p-12 flex flex-col">
+        <div class="flex flex-col bg-[#123b2b] p-7 text-white sm:p-10 lg:min-h-[560px] lg:p-12">
 
             <!-- Badge -->
             <div
@@ -112,24 +117,28 @@
         </div>
 
         <!-- RIGHT PANEL - Form -->
-        <div class="lg:w-7/12 p-8 md:p-12 flex flex-col justify-center">
+        <div class="flex flex-col justify-center px-6 py-10 sm:px-12 lg:px-16">
 
             <!-- Logo & Header -->
             <div class="mb-8">
                 <div class="flex items-center space-x-3 mb-6">
-                    <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle Logo"
-                        class="w-12 h-12 object-contain" onerror="this.style.display='none'">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-md bg-[#edf6ee] text-[#17432f]" aria-hidden="true">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 19 6v5c0 4.6-2.8 8.1-7 10-4.2-1.9-7-5.4-7-10V6l7-3Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4" />
+                        </svg>
+                    </span>
                     <div>
-                        <h3 class="text-2xl font-serif font-bold text-emerald-900">NusaCandle</h3>
+                        <h3 class="display-font text-2xl font-semibold text-[#183b2c]">NusaCandle</h3>
                         <p class="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Artisanal Botanical
                             Scent</p>
                     </div>
                 </div>
 
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-3">
+                <h2 class="display-font mb-3 text-3xl font-semibold text-[#183b2c] sm:text-4xl">
                     Buat Akun NusaCandle
                 </h2>
-                <p class="text-gray-600 text-sm">
+                <p class="text-sm leading-6 text-[#68766e]">
                     Daftar sekarang dan nikmati pengalaman berbelanja di NusaCandle.
                 </p>
             </div>
@@ -146,7 +155,7 @@
             @endif
 
             <!-- Form -->
-            <form action="{{ route('register') }}" method="POST" class="space-y-4">
+            <form action="{{ route('register') }}" method="POST" class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                 @csrf
 
                 <!-- Nama Lengkap -->
@@ -157,7 +166,7 @@
                     </label>
                     <div class="relative">
                         <input type="text" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
-                            required
+                            maxlength="100" aria-describedby="nama_lengkap-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
                             placeholder="Masukkan nama lengkap">
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -167,6 +176,7 @@
                             </svg>
                         </div>
                     </div>
+                    <p id="nama_lengkap-error" role="alert" class="mt-1.5 {{ $errors->has('nama_lengkap') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('nama_lengkap') }}</p>
                 </div>
 
                 <!-- Username (TAMBAHAN) -->
@@ -176,7 +186,8 @@
                         Username <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="text" id="username" name="username" value="{{ old('username') }}" required
+                        <input type="text" id="username" name="username" value="{{ old('username') }}"
+                            minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+" aria-describedby="username-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
                             placeholder="Buat username unik">
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -187,16 +198,17 @@
                             </svg>
                         </div>
                     </div>
+                    <p id="username-error" role="alert" class="mt-1.5 {{ $errors->has('username') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('username') }}</p>
                 </div>
 
                 <!-- Alamat (TAMBAHAN) -->
-                <div>
+                <div class="sm:col-span-2">
                     <label for="alamat"
                         class="block text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
                         Alamat <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <textarea id="alamat" name="alamat" rows="2" required
+                        <textarea id="alamat" name="alamat" rows="2" minlength="10" maxlength="500" aria-describedby="alamat-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm resize-none"
                             placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
                         <div class="absolute top-3 right-3 pointer-events-none">
@@ -209,6 +221,7 @@
                             </svg>
                         </div>
                     </div>
+                    <p id="alamat-error" role="alert" class="mt-1.5 {{ $errors->has('alamat') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('alamat') }}</p>
                 </div>
 
                 <!-- Email -->
@@ -218,7 +231,7 @@
                         Email <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" maxlength="100" aria-describedby="email-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
                             placeholder="Masukkan alamat email">
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -229,6 +242,7 @@
                             </svg>
                         </div>
                     </div>
+                    <p id="email-error" role="alert" class="mt-1.5 {{ $errors->has('email') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('email') }}</p>
                 </div>
 
                 <!-- Nomor Telepon -->
@@ -239,9 +253,9 @@
                     </label>
                     <div class="relative">
                         <input type="tel" id="no_telepon" name="no_telepon" value="{{ old('no_telepon') }}"
-                            required
+                            inputmode="numeric" minlength="10" maxlength="15" pattern="[0-9]{10,15}" aria-describedby="no_telepon-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
-                            placeholder="Masukkan nomor telepon (e.g. 0812-3456-7890)">
+                            placeholder="Masukkan nomor telepon">
                         <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                             <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -250,6 +264,7 @@
                             </svg>
                         </div>
                     </div>
+                    <p id="no_telepon-error" role="alert" class="mt-1.5 {{ $errors->has('no_telepon') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('no_telepon') }}</p>
                 </div>
 
                 <!-- Password -->
@@ -259,7 +274,7 @@
                         Password <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="password" id="password" name="password" required
+                        <input type="password" id="password" name="password" minlength="8" aria-describedby="password-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
                             placeholder="Buat password">
                         <button type="button" class="absolute inset-y-0 right-0 pr-4 flex items-center"
@@ -273,6 +288,7 @@
                             </svg>
                         </button>
                     </div>
+                    <p id="password-error" role="alert" class="mt-1.5 {{ $errors->has('password') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('password') }}</p>
                 </div>
 
                 <!-- Konfirmasi Password -->
@@ -282,7 +298,7 @@
                         Konfirmasi Password <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="password" id="password_confirmation" name="password_confirmation" required
+                        <input type="password" id="password_confirmation" name="password_confirmation" minlength="8" aria-describedby="password_confirmation-error" required
                             class="block w-full px-4 py-3 bg-emerald-50/50 border border-emerald-100 rounded-xl focus:bg-white focus:border-emerald-900 focus:ring-2 focus:ring-emerald-900/10 outline-none transition-all text-gray-900 placeholder-gray-500 text-sm"
                             placeholder="Masukkan kembali password">
                         <button type="button" class="absolute inset-y-0 right-0 pr-4 flex items-center"
@@ -296,11 +312,13 @@
                             </svg>
                         </button>
                     </div>
+                    <p id="password_confirmation-error" role="alert" class="mt-1.5 {{ $errors->has('password_confirmation') ? '' : 'hidden' }} text-xs font-medium text-red-600">{{ $errors->first('password_confirmation') }}</p>
                 </div>
 
                 <!-- Terms Checkbox -->
-                <div class="flex items-start space-x-2 pt-2">
-                    <input id="terms" name="terms" type="checkbox" required
+                <div class="sm:col-span-2">
+                    <div class="flex items-start space-x-2 pt-2">
+                    <input id="terms" name="terms" type="checkbox" value="1" aria-describedby="terms-error" aria-invalid="false"
                         class="h-4 w-4 mt-0.5 text-emerald-900 border-gray-300 rounded focus:ring-emerald-900 cursor-pointer">
                     <label for="terms" class="text-xs text-gray-600 cursor-pointer select-none leading-relaxed">
                         Saya menyetujui <a href="#"
@@ -308,11 +326,15 @@
                             href="#" class="text-emerald-900 font-semibold hover:underline">Kebijakan
                             Privasi</a> NusaCandle.
                     </label>
+                    </div>
+                    <p id="terms-error" role="alert" class="mt-2 hidden text-xs font-medium text-red-600">
+                        Centang persetujuan terlebih dahulu sebelum mendaftar.
+                    </p>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit"
-                    class="w-full bg-emerald-900 hover:bg-emerald-800 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 group mt-2">
+                    class="group mt-2 flex w-full items-center justify-center gap-2 bg-[#092f21] px-5 py-3.5 font-semibold text-white transition hover:bg-[#17432f] focus:outline-none focus:ring-2 focus:ring-[#315e43] focus:ring-offset-2 sm:col-span-2">
                     <span>Daftar Sekarang</span>
                     <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
@@ -322,7 +344,7 @@
                 </button>
 
                 <!-- Privacy Note -->
-                <p class="text-center text-[11px] text-gray-500 flex items-center justify-center space-x-1">
+                <p class="flex items-center justify-center space-x-1 text-center text-[11px] text-gray-500 sm:col-span-2">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -332,18 +354,90 @@
             </form>
 
             <!-- Login Link -->
-            <div class="mt-6 bg-emerald-50/50 rounded-xl p-4 text-center border border-emerald-100">
+            <div class="mt-6 border-t border-[#edf0eb] pt-5 text-center sm:col-span-2">
                 <p class="text-gray-700 text-sm">
                     Sudah punya akun NusaCandle?
-                    <a href="{{ route('login') }}" class="text-emerald-900 font-bold hover:underline">
+                    <a href="{{ route('login') }}" class="font-semibold text-[#315e43] hover:text-[#173b2a]">
                         Login
                     </a>
                 </p>
             </div>
         </div>
-    </div>
+        </section>
+    </main>
 
     <script>
+        const registerForm = document.querySelector('form[action$="/register"]');
+        const termsCheckbox = document.getElementById('terms');
+        const termsError = document.getElementById('terms-error');
+        const validationRules = {
+            nama_lengkap: input => !input.value.trim()
+                ? 'Nama lengkap wajib diisi.'
+                : !/^[\p{L}\p{M}][\p{L}\p{M}\s.'’-]*$/u.test(input.value.trim())
+                ? 'Nama lengkap hanya boleh berisi huruf, spasi, titik, tanda hubung, atau apostrof.' : '',
+            username: input => !input.value.trim()
+                ? 'Username wajib diisi.'
+                : !/^[A-Za-z0-9._-]{3,30}$/.test(input.value)
+                ? 'Username harus 3-30 karakter dan hanya boleh berisi huruf, angka, titik, garis bawah, atau tanda hubung.' : '',
+            alamat: input => !input.value.trim()
+                ? 'Alamat wajib diisi.'
+                : input.value.trim().length < 10 || input.value.trim().length > 500
+                ? 'Alamat harus terdiri dari 10 sampai 500 karakter.' : '',
+            no_telepon: input => !input.value.trim()
+                ? 'Nomor telepon wajib diisi.'
+                : !/^[0-9]+$/.test(input.value)
+                    ? 'Nomor telepon hanya boleh berisi angka.'
+                    : !/^[0-9]{10,15}$/.test(input.value)
+                ? 'Nomor telepon harus terdiri dari 10 sampai 15 angka.' : '',
+            password: input => !input.value ? 'Password wajib diisi.' : input.value.length < 8 ? 'Password minimal 8 karakter.' : '',
+            password_confirmation: input => !input.value
+                ? 'Konfirmasi password wajib diisi.'
+                : input.value !== document.getElementById('password').value ? 'Konfirmasi password harus sama dengan password.' : '',
+        };
+
+        function validateField(input) {
+            const error = document.getElementById(`${input.id}-error`);
+            const message = validationRules[input.id](input);
+
+            input.setCustomValidity(message);
+            input.setAttribute('aria-invalid', String(Boolean(message)));
+            error.textContent = message;
+            error.classList.toggle('hidden', !message);
+        }
+
+        Object.keys(validationRules).forEach(fieldId => {
+            const input = document.getElementById(fieldId);
+            const validate = () => validateField(input);
+
+            input.addEventListener('input', validate);
+            input.addEventListener('blur', validate);
+            input.addEventListener('invalid', validate);
+
+        });
+
+        document.getElementById('password').addEventListener('input', () => {
+            const confirmation = document.getElementById('password_confirmation');
+            if (confirmation.value) {
+                validateField(confirmation);
+            }
+        });
+
+        registerForm.addEventListener('submit', function (event) {
+            if (!termsCheckbox.checked) {
+                event.preventDefault();
+                termsError.classList.remove('hidden');
+                termsCheckbox.setAttribute('aria-invalid', 'true');
+                termsCheckbox.focus();
+            }
+        });
+
+        termsCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                termsError.classList.add('hidden');
+                this.setAttribute('aria-invalid', 'false');
+            }
+        });
+
         function togglePassword(inputId, eyeId) {
             const passwordInput = document.getElementById(inputId);
             const eyeIcon = document.getElementById(eyeId);
