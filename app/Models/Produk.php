@@ -10,9 +10,12 @@ class Produk extends Model
     use HasFactory;
 
     protected $table = 'produk';
-
     protected $primaryKey = 'id_produk';
 
+    public $incrementing = false; 
+    protected $keyType = 'int';
+
+    // Hanya kolom yang ada di database
     protected $fillable = [
         'nama_produk',
         'stok',
@@ -21,7 +24,7 @@ class Produk extends Model
     ];
 
     protected $casts = [
-        'harga' => 'integer',
         'stok' => 'integer',
+        'harga' => 'integer',
     ];
 }

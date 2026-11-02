@@ -4,33 +4,71 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(): View
+    // Ganti __invoke jadi index (ini yang paling umum dipakai di Laravel)
+    public function index(): View
     {
-        $hasUserTable = Schema::hasTable('user');
-        $hasProductTable = Schema::hasTable('produk');
-        $hasOrderTable = Schema::hasTable('pesanan');
+        // Hitung statistik dasar
+        $totalProducts = DB::table('produk')->count();
+        $totalMembers = DB::table('user')->where('role', 'pembeli')->count();
+        $totalPoints = (int) DB::table('user')->where('role', 'pembeli')->sum('total_poin');
+        
+        // Hitung pendapatan dari pesanan yang selesai
+        $totalRevenue = DB::table('pesanan')
+            ->where('status_pesanan', 'selesai')
+            ->sum('total_harga');
+        
+        // Hitung stok terjual (total pesanan)
+        $totalSold = DB::table('detail_pesanan')->sum('jumlah');
+        
+        // Data chart penjualan 7 minggu terakhir
+        $chartData = $this->getWeeklySalesData();
+        
+        return view('pages.admin.dashboard', compact(
+            'totalProducts',
+            'totalMembers',
+            'totalPoints',
+            'totalRevenue',
+            'totalSold',
+            'chartData'
+        ));
+    }
 
-        return view('pages.admin.dashboard', [
-            'totalUsers' => $hasUserTable ? DB::table('user')->where('role', 'pembeli')->count() : 0,
-            'totalPoints' => $hasUserTable
-                ? (int) DB::table('user')->where('role', 'pembeli')->sum('total_poin')
-                : 0,
-            'totalProducts' => $hasProductTable ? DB::table('produk')->count() : 0,
-            'pendingOrders' => $hasOrderTable
-                ? DB::table('pesanan')->where('status_pesanan', 'menunggu_pembayaran')->count()
-                : 0,
-            'topUsers' => $hasUserTable
-                ? DB::table('user')
-                    ->where('role', 'pembeli')
-                    ->orderByDesc('total_poin')
-                    ->limit(5)
-                    ->get(['nama_lengkap', 'total_poin'])
-                : collect(),
-        ]);
+    private function getWeeklySalesData(): array
+    {
+        $weeks = [];
+        $labels = [];
+        $revenue = [];
+        $orders = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $startDate = now()->subWeeks($i)->startOfWeek();
+            $endDate = now()->subWeeks($i)->endOfWeek();
+            
+            $weekRevenue = DB::table('pesanan')
+                ->where('status_pesanan', 'selesai')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->sum('total_harga');
+            
+            $weekOrders = DB::table('pesanan')
+                ->where('status_pesanan', 'selesai')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->count();
+
+            $weeks[] = $startDate->format('d M');
+            $labels[] = 'Minggu ' . (7 - $i);
+            $revenue[] = $weekRevenue;
+            $orders[] = $weekOrders;
+        }
+
+        return [
+            'labels' => $labels,
+            'weeks' => $weeks,
+            'revenue' => $revenue,
+            'orders' => $orders,
+        ];
     }
 }
