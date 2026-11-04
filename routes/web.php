@@ -9,6 +9,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HadiahController;       // Nanti bisa diganti HadiahController
 use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\KodeRedeemController;
+use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\Admin\PesananController;
+use App\Http\Controllers\Admin\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,18 +68,23 @@ Route::middleware(['auth', 'admin']) // Pastikan middleware 'admin' sudah didaft
         Route::put('/settings/password', [AdminSettingsController::class, 'updatePassword'])->name('settings.password');
 
         // Manajemen Produk
-        Route::get('/produk', [\App\Http\Controllers\Admin\ProdukController::class, 'index'])->name('products.index');
-        Route::post('/produk', [\App\Http\Controllers\Admin\ProdukController::class, 'store'])->name('products.store');
-        Route::put('/produk/{id}', [\App\Http\Controllers\Admin\ProdukController::class, 'update'])->name('products.update');
-        Route::delete('/produk/{id}', [\App\Http\Controllers\Admin\ProdukController::class, 'destroy'])->name('products.destroy');
+        Route::get('/produk', [ProdukController::class, 'index'])->name('products.index');
+        Route::post('/produk', [ProdukController::class, 'store'])->name('products.store');
+        Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('products.update');
+        Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('products.destroy');
 
         // Manajemen Pesanan
-        Route::get('/pesanan', [\App\Http\Controllers\Admin\PesananController::class, 'index'])->name('orders.index');
-        Route::patch('/pesanan/{id}/status', [\App\Http\Controllers\Admin\PesananController::class, 'updateStatus'])->name('orders.updateStatus');
+        Route::get('/pesanan', [PesananController::class, 'index'])->name('orders.index');
+        Route::patch('/pesanan/{id}/status', [PesananController::class, 'updateStatus'])->name('orders.updateStatus');
 
         // Manajemen Transaksi
-        Route::get('/transaksi', [\App\Http\Controllers\Admin\TransaksiController::class, 'index'])->name('transactions.index');
-        Route::patch('/transaksi/{id}/status', [\App\Http\Controllers\Admin\TransaksiController::class, 'updateStatus'])->name('transactions.updateStatus');
+        Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transactions.index');
+        Route::patch('/transaksi/{id}/status', [TransaksiController::class, 'updateStatus'])->name('transactions.updateStatus');
+
+        // Redeem Code
+        Route::get('/kode-redeem', [KodeRedeemController::class, 'index'])->name('kodeRedeem.index');
+        Route::post('/kode-redeem', [KodeRedeemController::class, 'store'])->name('kodeRedeem.store');
+        Route::delete('/kode-redeem/{id}', [KodeRedeemController::class, 'destroy'])->name('kodeRedeem.destroy');
     });
 
 

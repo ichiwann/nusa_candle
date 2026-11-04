@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('kode_redeem', function (Blueprint $table) {
             $table->id('id_kode');
-            $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete();
+            $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete()->nullable();
             $table->string('kode', 32)->unique();
             $table->unsignedBigInteger('poin');
             $table->enum('status', ['tersedia', 'terpakai'])->default('tersedia');

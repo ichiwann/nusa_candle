@@ -77,13 +77,17 @@
                 </a>
 
                 <!-- DISABLED - Belum ada halaman -->
-                <span class="flex items-center gap-3 px-3 py-2 opacity-50 cursor-not-allowed" title="Segera hadir">
+                <a href="{{ route('admin.kodeRedeem.index') }}" @class([
+                    'flex items-center gap-3 rounded-sm px-3 py-2 transition hover:bg-white/10 hover:text-white',
+                    'bg-[#315d41] text-white' => request()->routeIs('admin.kodeRedeem.*'),
+                    'text-emerald-50/75' => !request()->routeIs('admin.kodeRedeem.*'),
+                ])>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
                     Redeem Code
-                </span>
+                </a>
             </div>
         </div>
 
