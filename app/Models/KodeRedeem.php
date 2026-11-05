@@ -14,11 +14,13 @@ class KodeRedeem extends Model
         'kode',
         'poin',
         'status',
+        'berlaku_hingga',
         'dipakai_pada',
     ];
 
     protected $casts = [
         'poin' => 'integer',
+        'berlaku_hingga' => 'date',
         'dipakai_pada' => 'datetime',
     ];
 

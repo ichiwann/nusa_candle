@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -23,9 +22,9 @@ class RegisteredUserController extends Controller
             'nama_lengkap' => ['required', 'string', 'max:100', 'regex:/^[\p{L}\p{M}][\p{L}\p{M}\s.\'-]*$/u'],
             'username' => ['required', 'string', 'min:3', 'max:30', 'regex:/^[A-Za-z0-9._-]+$/', 'unique:user,username'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:100', 'unique:user,email'],
-            'alamat' => ['required', 'string', 'min:10', 'max:500'],
-            'no_telepon' => ['required', 'string', 'regex:/^[0-9]+$/', 'digits_between:10,15'],
-            'password' => ['required', Rules\Password::defaults()],
+            'alamat' => ['required', 'string', 'min:5', 'max:500'],
+            'no_telepon' => ['required', 'string', 'regex:/^[0-9]+$/', 'digits_between:12,13'],
+            'password' => ['required', 'string', 'min:4', 'confirmed'],
             'password_confirmation' => ['required', 'same:password'],
             'terms' => ['accepted'],
         ], [
@@ -40,12 +39,13 @@ class RegisteredUserController extends Controller
             'email.email' => 'Masukkan alamat email yang valid.',
             'email.unique' => 'Email sudah terdaftar.',
             'alamat.required' => 'Alamat wajib diisi.',
-            'alamat.min' => 'Alamat minimal 10 karakter.',
+            'alamat.min' => 'Alamat minimal 5 karakter.',
             'alamat.max' => 'Alamat maksimal 500 karakter.',
             'no_telepon.required' => 'Nomor telepon wajib diisi.',
             'no_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
-            'no_telepon.digits_between' => 'Nomor telepon harus terdiri dari 10 sampai 15 angka.',
+            'no_telepon.digits_between' => 'Nomor telepon harus terdiri dari 12 sampai 13 angka.',
             'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 4 karakter.', // ← Diubah jadi 4
             'password_confirmation.required' => 'Konfirmasi password wajib diisi.',
             'password_confirmation.same' => 'Konfirmasi password harus sama dengan password.',
             'terms.accepted' => 'Persetujuan wajib dicentang sebelum mendaftar.',

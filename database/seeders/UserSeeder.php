@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'no_telepon' => '082555477611', // ← TAMBAHKAN
             'password' => Hash::make('12345'),
             'role' => 'pembeli',
-            'total_poin' => 150,
+            'total_poin' => 50,
         ]);
     }
 }

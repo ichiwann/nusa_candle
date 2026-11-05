@@ -20,9 +20,9 @@ class KodeRedeemController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('kode', 'like', "%{$search}%")
-                    ->orWhereHas('user', function ($q) use ($search) {
-                        $q->where('nama_lengkap', 'like', "%{$search}%");
-                    });
+                  ->orWhereHas('user', function ($q) use ($search) {
+                      $q->where('nama_lengkap', 'like', "%{$search}%");
+                  });
             });
         }
 
@@ -57,10 +57,10 @@ class KodeRedeemController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Validasi dinamis berdasarkan mode
         $rules = [
             'mode' => ['required', 'in:manual,auto'],
             'poin' => ['required', 'integer', 'min:1'],
+            'berlaku_hingga' => ['nullable', 'date', 'after:today'], // ← TAMBAHKAN VALIDASI INI
         ];
 
         if ($request->mode === 'manual') {
@@ -73,26 +73,25 @@ class KodeRedeemController extends Controller
 
         $createdCount = 0;
 
+        // Siapkan data dasar (termasuk berlaku_hingga)
+        $data = [
+            'poin' => $validated['poin'],
+            'status' => 'tersedia',
+            'berlaku_hingga' => $validated['berlaku_hingga'] ?? null, // ← SIMPAN TANGGAL
+        ];
+
         if ($validated['mode'] === 'manual') {
-            // MODE MANUAL: Simpan 1 kode yang diketik admin
-            KodeRedeem::create([
-                'kode' => strtoupper(trim($validated['kode_manual'])),
-                'poin' => $validated['poin'],
-                'status' => 'tersedia',
-            ]);
+            $data['kode'] = strtoupper(trim($validated['kode_manual']));
+            KodeRedeem::create($data);
             $createdCount = 1;
         } else {
-            // MODE AUTO (BATCH): Generate random sebanyak 'jumlah'
             for ($i = 0; $i < $validated['jumlah']; $i++) {
                 do {
-                    $kode = strtoupper(Str::random(8)); // Pure random 8 karakter
+                    $kode = strtoupper(Str::random(8));
                 } while (KodeRedeem::where('kode', $kode)->exists());
 
-                KodeRedeem::create([
-                    'kode' => $kode,
-                    'poin' => $validated['poin'],
-                    'status' => 'tersedia',
-                ]);
+                $data['kode'] = $kode;
+                KodeRedeem::create($data);
                 $createdCount++;
             }
         }

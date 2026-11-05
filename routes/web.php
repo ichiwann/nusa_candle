@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\KodeRedeemController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Pembeli\ProfilController;
+use App\Http\Controllers\Pembeli\PoinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +88,18 @@ Route::middleware(['auth', 'admin']) // Pastikan middleware 'admin' sudah didaft
         Route::post('/kode-redeem', [KodeRedeemController::class, 'store'])->name('kodeRedeem.store');
         Route::delete('/kode-redeem/{id}', [KodeRedeemController::class, 'destroy'])->name('kodeRedeem.destroy');
     });
+
+// Routes untuk Pembeli (perlu login)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
+    Route::put('/profil/update', [ProfilController::class, 'updateProfile'])->name('profil.update');
+    Route::put('/profil/password', [ProfilController::class, 'updatePassword'])->name('profil.password');
+
+    // --- ROUTE POIN ---
+    Route::get('/poin-saya', [PoinController::class, 'index'])->name('poin.index'); // ← GANTI INI
+    Route::post('/poin-saya/redeem', [PoinController::class, 'redeem'])->name('poin.redeem'); // ← GANTI INI
+    Route::post('/poin-saya/klaim-hadiah', [PoinController::class, 'claimHadiah'])->name('poin.klaim'); // ← GANTI INI
+});
 
 
 require __DIR__ . '/auth.php';
