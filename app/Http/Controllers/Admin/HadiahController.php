@@ -5,121 +5,137 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Validation\Rule;
+use App\Models\Hadiah;
+use App\Models\Produk;
+use App\Models\PenukaranHadiah;
 use Illuminate\View\View;
 
 class HadiahController extends Controller
 {
-    /**
-     * Menampilkan halaman daftar hadiah
-     */
     public function index(): View
     {
-        $hasProdukTable = Schema::hasTable('produk');
-        $hasHadiahTable = Schema::hasTable('hadiah');
-        $hasUserTable = Schema::hasTable('user');
+        // Statistik
+        $totalHadiah = Hadiah::count();
+        $totalStokProduk = Produk::sum('stok');
 
-        $hadiahs = collect();
-        $products = collect();
+        // Hitung penukaran berdasarkan status
+        $penukaranPending = PenukaranHadiah::where('status_klaim', 'pending')->count();
+        $penukaranDisetujui = PenukaranHadiah::where('status_klaim', 'disetujui')->count();
+        $penukaranDitolak = PenukaranHadiah::where('status_klaim', 'ditolak')->count();
+        $totalPenukaran = PenukaranHadiah::count();
 
-        // Ambil data hadiah yang di-join dengan tabel produk
-        if ($hasHadiahTable && $hasProdukTable) {
-            $hadiahs = DB::table('hadiah')
-                ->join('produk', 'produk.id_produk', '=', 'hadiah.id_produk')
-                ->orderBy('hadiah.id_hadiah', 'desc') // Urutkan dari yang terbaru
-                ->get([
-                    'hadiah.id_hadiah',
-                    'hadiah.id_produk',
-                    'hadiah.poin_dibutuhkan',
-                    'produk.nama_produk',
-                    'produk.stok',
-                    'produk.harga',
-                ]);
-        }
+        // Daftar hadiah dengan info produk
+        $daftarHadiah = Hadiah::with('produk')->orderBy('created_at', 'desc')->get();
 
-        // Ambil semua produk untuk dropdown form
-        if ($hasProdukTable) {
-            $products = DB::table('produk')->orderBy('nama_produk')->get(['id_produk', 'nama_produk', 'stok']);
-        }
+        // ✅ DATA PENUKARAN HADIAH (untuk section konfirmasi)
+        $daftarPenukaran = PenukaranHadiah::with(['user', 'hadiah.produk'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($penukaran) {
+                $user = $penukaran->user;
+                $poinSekarang = (int) $user->total_poin;
+                $poinDitukar = $penukaran->poin_ditukar;
 
-        return view('pages.admin.hadiah', [ // Pastikan path view sesuai struktur folder kamu
-            'hadiahs' => $hadiahs,
-            'products' => $products,
-            'hasHadiahTable' => $hasHadiahTable,
-            'totalMembers' => $hasUserTable ? DB::table('user')->where('role', 'pembeli')->count() : 0,
-            'totalPoints' => $hasUserTable ? (int) DB::table('user')->where('role', 'pembeli')->sum('total_poin') : 0,
-        ]);
+                return [
+                    'id_penukaran' => $penukaran->id_penukaran,
+                    'nama_user' => $user->nama_lengkap ?? 'Unknown',
+                    'username' => $user->username ?? '-',
+                    'poin_sekarang' => $poinSekarang,
+                    'poin_saat_klaim' => (int) $penukaran->poin_saat_klaim, // ✅ LANGSUNG DARI DB
+                    'nama_produk' => $penukaran->hadiah->produk->nama_produk ?? 'Hadiah',
+                    'poin_ditukar' => $poinDitukar,
+                    'status_klaim' => $penukaran->status_klaim,
+                    'catatan' => $penukaran->catatan,
+                    'tanggal' => $penukaran->created_at,
+                ];
+            });
+
+        return view('pages.admin.hadiah', compact(
+            'totalHadiah',
+            'totalStokProduk',
+            'penukaranPending',
+            'penukaranDisetujui',
+            'penukaranDitolak',
+            'totalPenukaran',
+            'daftarHadiah',
+            'daftarPenukaran'
+        ));
     }
 
-    /**
-     * Menyimpan data hadiah baru
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'id_produk' => ['required', 'integer', Rule::exists('produk', 'id_produk')],
-            'poin_dibutuhkan' => ['required', 'integer', 'min:1', 'max:100000000'],
+            'id_produk' => ['required', 'exists:produk,id_produk'],
+            'poin_dibutuhkan' => ['required', 'integer', 'min:1'],
         ]);
 
-        // Cek apakah produk sudah pernah dijadikan hadiah
-        $exists = DB::table('hadiah')->where('id_produk', $validated['id_produk'])->exists();
+        $exists = Hadiah::where('id_produk', $validated['id_produk'])->exists();
         if ($exists) {
-            return back()->withErrors(['id_produk' => 'Produk ini sudah terdaftar sebagai hadiah.'])->withInput();
+            return back()->withErrors(['id_produk' => 'Produk ini sudah terdaftar sebagai hadiah.']);
         }
 
-        DB::table('hadiah')->insert([
-            'id_produk' => $validated['id_produk'],
-            'poin_dibutuhkan' => $validated['poin_dibutuhkan'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Hadiah::create($validated);
 
-        return back()->with('success', 'Hadiah berhasil ditambahkan ke program loyalitas.');
+        return back()->with('success', 'Hadiah berhasil ditambahkan.');
     }
 
-    /**
-     * Memperbarui data hadiah
-     */
-    public function update(Request $request, int $id): RedirectResponse
-    {
-        $validated = $request->validate([
-            'id_produk' => ['required', 'integer', Rule::exists('produk', 'id_produk')],
-            'poin_dibutuhkan' => ['required', 'integer', 'min:1', 'max:100000000'],
-        ]);
-
-        // Pastikan data yang mau diupdate ada
-        $hadiahRecord = DB::table('hadiah')->where('id_hadiah', $id)->first();
-        abort_unless($hadiahRecord, 404, 'Data hadiah tidak ditemukan.');
-
-        // Cek duplikasi (kecuali ID dirinya sendiri)
-        $duplicate = DB::table('hadiah')
-            ->where('id_produk', $validated['id_produk'])
-            ->where('id_hadiah', '!=', $id)
-            ->exists();
-
-        if ($duplicate) {
-            return back()->withErrors(['id_produk' => 'Produk ini sudah terdaftar sebagai hadiah lain.'])->withInput();
-        }
-
-        DB::table('hadiah')->where('id_hadiah', $id)->update([
-            'id_produk' => $validated['id_produk'],
-            'poin_dibutuhkan' => $validated['poin_dibutuhkan'],
-            'updated_at' => now(),
-        ]);
-
-        return back()->with('success', 'Data hadiah berhasil diperbarui.');
-    }
-
-    /**
-     * Menghapus data hadiah
-     */
     public function destroy(int $id): RedirectResponse
     {
-        $deleted = DB::table('hadiah')->where('id_hadiah', $id)->delete();
-        abort_unless($deleted, 404, 'Data hadiah tidak ditemukan.');
+        $hadiah = Hadiah::findOrFail($id);
 
-        return back()->with('success', 'Hadiah berhasil dihapus dari program loyalitas.');
+        $adaPenukaran = PenukaranHadiah::where('id_hadiah', $id)->exists();
+        if ($adaPenukaran) {
+            return back()->withErrors(['delete' => 'Tidak bisa menghapus hadiah yang sudah pernah ditukar.']);
+        }
+
+        $hadiah->delete();
+
+        return back()->with('success', 'Hadiah berhasil dihapus.');
+    }
+
+    /**
+     * Approve klaim hadiah
+     */
+    public function approve(int $id): RedirectResponse
+    {
+        $penukaran = PenukaranHadiah::findOrFail($id);
+
+        if ($penukaran->status_klaim !== 'pending') {
+            return back()->withErrors(['status' => 'Hanya klaim berstatus pending yang bisa diproses.']);
+        }
+
+        $penukaran->update(['status_klaim' => 'disetujui']);
+
+        return back()->with('success', 'Klaim hadiah berhasil disetujui. Silakan proses pengiriman hadiah.');
+    }
+
+    /**
+     * Reject klaim hadiah (kembalikan poin ke user)
+     */
+    public function reject(Request $request, int $id): RedirectResponse
+    {
+        $penukaran = PenukaranHadiah::findOrFail($id);
+
+        if ($penukaran->status_klaim !== 'pending') {
+            return back()->withErrors(['status' => 'Hanya klaim berstatus pending yang bisa ditolak.']);
+        }
+
+        $validated = $request->validate([
+            'alasan_tolak' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        // Kembalikan poin ke user
+        $user = $penukaran->user;
+        if ($user) {
+            $user->increment('total_poin', $penukaran->poin_ditukar);
+        }
+
+        // Update status + simpan alasan di kolom catatan
+        $penukaran->update([
+            'status_klaim' => 'ditolak',
+            'catatan' => ($penukaran->catatan ? $penukaran->catatan . ' | ' : '') . 'Ditolak: ' . ($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
+        ]);
+
+        return back()->with('success', 'Klaim hadiah ditolak. Poin user telah dikembalikan.');
     }
 }

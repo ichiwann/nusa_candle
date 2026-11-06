@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('user', 'id_user')->cascadeOnDelete();
             $table->foreignId('id_hadiah')->constrained('hadiah', 'id_hadiah')->cascadeOnDelete();
             $table->unsignedBigInteger('poin_ditukar');
+            $table->unsignedBigInteger('poin_saat_klaim');
             $table->enum('status_klaim', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->string('catatan', 255)->nullable();
             $table->timestamps();

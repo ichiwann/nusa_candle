@@ -15,6 +15,10 @@ use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Pembeli\ProfilController;
 use App\Http\Controllers\Pembeli\PoinController;
+use App\Http\Controllers\Pembeli\PembeliProdukController;
+use App\Http\Controllers\Pembeli\KeranjangController;
+use App\Http\Controllers\Pembeli\PembeliPesananController;
+use App\Http\Controllers\Pembeli\PembeliTransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +67,8 @@ Route::middleware(['auth', 'admin']) // Pastikan middleware 'admin' sudah didaft
         Route::post('/hadiah', [HadiahController::class, 'store'])->name('hadiah.store');
         Route::put('/hadiah/{hadiah}', [HadiahController::class, 'update'])->name('hadiah.update');
         Route::delete('/hadiah/{hadiah}', [HadiahController::class, 'destroy'])->name('hadiah.destroy');
+        Route::post('/hadiah/{id}/approve', [HadiahController::class, 'approve'])->name('hadiah.approve');
+        Route::post('/hadiah/{id}/reject', [HadiahController::class, 'reject'])->name('hadiah.reject');
 
         // Pengaturan Admin
         Route::get('/settings', [AdminSettingsController::class, 'edit'])->name('settings.edit');
@@ -99,6 +105,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/poin-saya', [PoinController::class, 'index'])->name('poin.index'); // ← GANTI INI
     Route::post('/poin-saya/redeem', [PoinController::class, 'redeem'])->name('poin.redeem'); // ← GANTI INI
     Route::post('/poin-saya/klaim-hadiah', [PoinController::class, 'claimHadiah'])->name('poin.klaim'); // ← GANTI INI
+
+    // halaman produk untuk pembeli
+    Route::get('/produk', [PembeliProdukController::class, 'index'])->name('produk.index');
+    Route::get('/produk/{id}', [PembeliProdukController::class, 'show'])->name('produk.show');
+
+    // Keranjang (perlu login)
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang', [KeranjangController::class, 'store'])->name('keranjang.store');
+    Route::put('/keranjang/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+    Route::delete('/keranjang/{id}', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
+    Route::delete('/keranjang', [KeranjangController::class, 'clear'])->name('keranjang.clear');
+
+    // Di dalam Route::middleware(['auth'])->group(...)
+    Route::get('/pesanan', [PembeliPesananController::class, 'index'])->name('pembeli.pesanan.index');
+    Route::get('/pesanan/{id}', [PembeliPesananController::class, 'show'])->name('pembeli.pesanan.show');
+    Route::post('/pesanan/{id}/reorder', [PembeliPesananController::class, 'reorder'])->name('pembeli.pesanan.reorder');
+
+    // Di dalam Route::middleware(['auth'])->group(...)
+    Route::get('/transaksi', [PembeliTransaksiController::class, 'index'])->name('pembeli.transaksi.index');
+    Route::post('/transaksi/konfirmasi', [PembeliTransaksiController::class, 'store'])->name('pembeli.transaksi.store');
+    Route::get('/transaksi/{id}', [PembeliTransaksiController::class, 'show'])->name('pembeli.transaksi.show');
 });
 
 

@@ -34,8 +34,7 @@
         {{-- Notifikasi --}}
         @if (session('success'))
             <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md">
-                {{ session('success') }}
-            </div>
+                {{ session('success') }}</div>
         @endif
 
         @if ($errors->any())
@@ -48,9 +47,12 @@
             </div>
         @endif
 
+        {{-- ✅ GRID UTAMA: Panel Kiri (2/3) + Panel Kanan (1/3) --}}
         <div class="grid lg:grid-cols-3 gap-6 mb-6">
-            {{-- Panel Kiri - Info Poin --}}
+
+            {{-- PANEL KIRI (col-span-2) --}}
             <div class="lg:col-span-2 space-y-6">
+
                 {{-- Kartu Info User & Poin --}}
                 <div class="bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
                     <div class="flex items-start justify-between mb-6">
@@ -137,42 +139,39 @@
                     </div>
 
                     {{-- Status --}}
-                    <div class="mt-6 bg-white rounded-lg p-5 shadow-sm border-l-4 border-yellow-500">
-                        <div class="flex items-start justify-between">
-                            <div class="flex items-start gap-3">
+                    <div
+                        class="mt-6 bg-white rounded-lg p-5 shadow-sm border-l-4 {{ $kurangPoin > 0 ? 'border-yellow-500' : 'border-green-500' }}">
+                        <div class="flex items-start gap-3">
+                            @if ($kurangPoin > 0)
                                 <svg class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <div>
-                                    <p class="font-semibold text-[#2C1810]">Status:
-                                        {{ $kurangPoin > 0 ? 'Belum Memenuhi Syarat' : 'Siap Klaim Hadiah!' }}</p>
-                                    <p class="text-sm text-[#718078] mt-1">
-                                        @if ($kurangPoin > 0)
-                                            Kurang <strong class="text-[#8B1E1E]">{{ $kurangPoin }} Poin</strong> lagi
-                                            untuk mendapatkan 1x Refill Lilin Aroma Terapi Aroma Apel Gratis.
-                                        @else
-                                            Selamat! Anda sudah bisa menukarkan poin dengan hadiah refill lilin.
-                                        @endif
-                                    </p>
+                                    <p class="font-semibold text-[#2C1810]">Status: Belum Memenuhi Syarat</p>
+                                    <p class="text-sm text-[#718078] mt-1">Kurang <strong
+                                            class="text-[#8B1E1E]">{{ $kurangPoin }} Poin</strong> lagi untuk mendapatkan
+                                        1x Refill Lilin Aroma Terapi Aroma Apel Gratis.</p>
                                 </div>
-                            </div>
-                            @if ($kurangPoin > 0)
-                                <button
-                                    class="bg-[#FAF9F6] hover:bg-[#F5F5F5] text-[#8B1E1E] border-2 border-[#8B1E1E] px-4 py-2 rounded-md text-xs font-semibold transition flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                    </svg>
-                                    Simulasi Tambah {{ $kurangPoin }} Poin
-                                </button>
+                            @else
+                                <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <p class="font-semibold text-[#2C1810]">Status: <span class="text-green-600">Siap
+                                            Klaim Hadiah!</span></p>
+                                    <p class="text-sm text-[#718078] mt-1">Selamat! Anda sudah bisa menukarkan poin dengan
+                                        hadiah refill lilin.</p>
+                                </div>
                             @endif
                         </div>
                     </div>
                 </div>
 
-                {{-- Section Klaim Hadiah --}}
+                {{-- ✅ SECTION KLAIM HADIAH (DIPINDAH KE SINI - di dalam Panel Kiri) --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
@@ -233,11 +232,10 @@
                         </div>
                     </div>
 
-                    {{-- Status Hadiah - Logic Dinamis --}}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-start gap-3">
+                    {{-- Status Hadiah + Form Klaim --}}
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-start gap-3 flex-1 min-w-[300px]">
                             @if ($kurangPoin > 0)
-                                {{-- ICON KUNCI (Belum cukup poin) --}}
                                 <svg class="w-6 h-6 text-gray-400 flex-shrink-0 mt-0.5" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -250,7 +248,6 @@
                                         membuka hadiah (Kurang {{ $kurangPoin }} poin lagi).</p>
                                 </div>
                             @else
-                                {{-- ICON BUKA KUNCI (Sudah bisa klaim) --}}
                                 <svg class="w-6 h-6 text-[#2E7D32] flex-shrink-0 mt-0.5" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -265,13 +262,13 @@
                             @endif
                         </div>
 
-                        {{-- TOMBOL KLAIM - Muncul hanya jika poin >= 70 --}}
                         @if ($kurangPoin <= 0)
                             <form action="{{ route('poin.klaim') }}" method="POST"
+                                class="flex items-center gap-3 justify-end"
                                 onsubmit="return confirm('Tukarkan 70 poin untuk 1x Refill Lilin Aroma Apel Gratis? Poin akan berkurang 70.')">
                                 @csrf
                                 <button type="submit"
-                                    class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md text-sm font-semibold transition flex items-center gap-2 shadow-sm">
+                                    class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md text-sm font-semibold transition flex items-center gap-2 shadow-sm whitespace-nowrap">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -280,9 +277,8 @@
                                 </button>
                             </form>
                         @else
-                            {{-- PESAN MOTIVASI - Muncul jika poin belum cukup --}}
                             <div
-                                class="bg-[#FAF9F6] border-2 border-dashed border-[#8B1E1E]/30 rounded-lg px-5 py-3 text-center">
+                                class="bg-[#FAF9F6] border-2 border-dashed border-[#8B1E1E]/30 rounded-lg px-5 py-3 text-center flex-1 min-w-[300px]">
                                 <p class="text-sm font-semibold text-[#8B1E1E]">🕯️ Ayo kumpulkan poin lagi untuk
                                     mendapatkan lilin gratis!</p>
                                 <p class="text-xs text-[#718078] mt-1">Tinggal {{ $kurangPoin }} poin lagi menuju hadiah
@@ -293,7 +289,7 @@
                 </div>
             </div>
 
-            {{-- Panel Kanan - Panduan & Redeem --}}
+            {{-- PANEL KANAN (col-span-1) --}}
             <div class="space-y-6">
                 {{-- Panduan Tambah Poin --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -341,7 +337,6 @@
                         </div>
                     </div>
 
-                    {{-- Komitmen Alami --}}
                     <div class="mt-6 bg-[#FAF9F6] rounded-lg p-4 border border-gray-200">
                         <p class="text-[10px] font-semibold uppercase tracking-wider text-[#2E7D32] mb-2">Komitmen Alami
                         </p>
@@ -410,8 +405,7 @@
                 </div>
             </div>
         </div>
-
-        {{-- Riwayat Poin & Hadiah --}}
+        {{-- ✅ RIWAYAT POIN (Full Width) --}}
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -454,7 +448,25 @@
                                 </td>
                                 <td class="px-4 py-4">
                                     <div class="flex items-start gap-3">
-                                        @if ($riwayat['type'] === 'purchase')
+                                        @if ($riwayat['tipe'] === 'klaim_hadiah')
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-[#8B1E1E] flex items-center justify-center flex-shrink-0">
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                            </div>
+                                        @elseif($riwayat['tipe'] === 'redeem_code')
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
+                                                <svg class="w-4 h-4 text-[#2E7D32]" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                                                </svg>
+                                            </div>
+                                        @else
                                             <div
                                                 class="w-8 h-8 rounded-full bg-[#FCE4EC] flex items-center justify-center flex-shrink-0">
                                                 <svg class="w-4 h-4 text-[#8B1E1E]" fill="none" stroke="currentColor"
@@ -463,51 +475,37 @@
                                                         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                                 </svg>
                                             </div>
-                                        @else
-                                            <div
-                                                class="w-8 h-8 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                                                <svg class="w-4 h-4 text-[#2E7D32]" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                                                </svg>
-                                            </div>
                                         @endif
                                         <div>
                                             <p class="font-semibold text-[#2C1810] text-sm">{{ $riwayat['keterangan'] }}
                                             </p>
-                                            @if ($riwayat['total_pesanan'] > 0)
-                                                <p class="text-xs text-[#718078] mt-0.5">{{ $riwayat['total_pesanan'] }}
-                                                </p>
+                                            @if (!empty($riwayat['catatan']))
+                                                <p class="text-xs text-[#718078] mt-0.5 italic">📝
+                                                    {{ $riwayat['catatan'] }}</p>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4">
-                                    @if ($riwayat['status'] === 'Selesai')
-                                        <span
-                                            class="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            {{ $riwayat['status'] }}
-                                        </span>
-                                    @else
-                                        <span
-                                            class="inline-flex items-center gap-1 bg-[#E8F5E9] text-[#2E7D32] text-xs font-semibold px-2.5 py-1 rounded">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            {{ $riwayat['status'] }}
-                                        </span>
-                                    @endif
+                                    @php
+                                        $statusColors = [
+                                            'pending' => 'bg-yellow-100 text-yellow-800',
+                                            'disetujui' => 'bg-green-100 text-green-800',
+                                            'ditolak' => 'bg-red-100 text-red-800',
+                                            'Selesai' => 'bg-green-100 text-green-800',
+                                            'Bonus Diberikan' => 'bg-[#E8F5E9] text-[#2E7D32]',
+                                        ];
+                                        $colorClass = $statusColors[$riwayat['status']] ?? 'bg-gray-100 text-gray-800';
+                                    @endphp
+                                    <span
+                                        class="inline-flex items-center gap-1 {{ $colorClass }} text-xs font-semibold px-2.5 py-1 rounded">
+                                        {{ $riwayat['status'] }}
+                                    </span>
                                 </td>
                                 <td class="px-4 py-4 text-right">
-                                    <p class="font-semibold text-[#2E7D32]">+{{ number_format($riwayat['poin']) }} Poin
+                                    <p
+                                        class="font-semibold {{ $riwayat['poin'] < 0 ? 'text-red-600' : 'text-[#2E7D32]' }}">
+                                        {{ $riwayat['poin'] > 0 ? '+' : '' }}{{ number_format($riwayat['poin']) }} Poin
                                     </p>
                                 </td>
                             </tr>
@@ -531,14 +529,13 @@
                     </svg>
                     Poin Anda berlaku selama 12 bulan dari tanggal perolehan terakhir.
                 </p>
-                <p class="text-xs text-[#718078]">Menampilkan {{ $riwayatPoin->count() }}
-                    entr{{ $riwayatPoin->count() == 1 ? 'i' : 'i' }} terbaru</p>
+                <p class="text-xs text-[#718078]">Menampilkan {{ $riwayatPoin->count() }} entri terbaru</p>
             </div>
         </div>
 
-        {{-- Banner Bebas Ongkir --}}
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <div class="flex items-center justify-between">
+        {{-- ✅ BANNER BEBAS ONGKIR (Full Width) --}}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-[#8B1E1E] flex items-center justify-center flex-shrink-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

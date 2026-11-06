@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Pembeli;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\PenukaranHadiah;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Pesanan;
-use App\Models\KodeRedeem;
+use Illuminate\Http\Request;
+use App\Models\Hadiah;
 
 class PoinController extends Controller
 {
@@ -15,6 +15,7 @@ class PoinController extends Controller
      */
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $targetPoin = 70;
@@ -22,35 +23,27 @@ class PoinController extends Controller
         $progressPercentage = min(100, ($currentPoin / $targetPoin) * 100);
         $kurangPoin = max(0, $targetPoin - $currentPoin);
 
-        // Ambil riwayat perolehan poin
-        $riwayatPoin = Pesanan::where('id_user', $user->id_user)
-            ->where('status_pesanan', 'selesai')
+        // ✅ AMBIL RIWAYAT DARI TABEL penukaran_hadiah
+        $riwayatPoin = PenukaranHadiah::with('hadiah.produk')
+            ->where('id_user', $user->id_user)
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get()
-            ->map(function ($pesanan) {
-                $poinDidapat = floor($pesanan->total_harga / 10000);
+            ->map(function ($penukaran) {
                 return [
-                    'tanggal' => $pesanan->created_at,
-                    'keterangan' => 'Pembelian Pesanan #' . str_pad($pesanan->id_pesanan, 4, '0', STR_PAD_LEFT),
-                    'total_pesanan' => 'Rp ' . number_format($pesanan->total_harga, 0, ',', '.'),
-                    'poin' => $poinDidapat,
-                    'status' => 'Selesai',
-                    'type' => 'purchase',
+                    'tanggal' => $penukaran->created_at,
+                    'keterangan' => 'Klaim ' . ($penukaran->hadiah->produk->nama_produk ?? 'Hadiah Refill'),
+                    'status' => match ($penukaran->status_klaim) {
+                        'pending' => 'Menunggu Persetujuan',
+                        'disetujui' => 'Disetujui',
+                        'ditolak' => 'Ditolak',
+                        default => $penukaran->status_klaim,
+                    },
+                    'poin' => -$penukaran->poin_ditukar, // Negatif karena poin keluar
+                    'catatan' => $penukaran->catatan,
+                    'tipe' => 'klaim_hadiah',
                 ];
             });
-
-        // Bonus pendaftaran (contoh logic)
-        if ($user->created_at->diffInDays(now()) <= 7) {
-            $riwayatPoin->prepend([
-                'tanggal' => $user->created_at,
-                'keterangan' => 'Bonus Pendaftaran & Ulasan Bintang 5',
-                'total_pesanan' => 'Rp 0',
-                'poin' => 15,
-                'status' => 'Bonus Diberikan',
-                'type' => 'bonus',
-            ]);
-        }
 
         $membershipStatus = $this->getMembershipStatus($currentPoin);
 
@@ -65,43 +58,6 @@ class PoinController extends Controller
         ));
     }
 
-    /**
-     * Tukarkan redeem code
-     */
-    public function redeem(Request $request)
-{
-    /** @var \App\Models\User $user */ // ← TAMBAHKAN BARIS INI
-    $user = Auth::user();
-    
-    $validated = $request->validate([
-        'redeem_code' => ['required', 'string', 'max:32'],
-    ]);
-
-    $kodeRedeem = KodeRedeem::where('kode', strtoupper(trim($validated['redeem_code'])))->first();
-
-    if (!$kodeRedeem) {
-        return back()->withErrors(['redeem_code' => 'Kode redeem tidak ditemukan.']);
-    }
-
-    if ($kodeRedeem->status === 'terpakai') {
-        return back()->withErrors(['redeem_code' => 'Kode redeem sudah pernah digunakan.']);
-    }
-
-    if (isset($kodeRedeem->berlaku_hingga) && $kodeRedeem->berlaku_hingga->isPast()) {
-        return back()->withErrors(['redeem_code' => 'Kode redeem sudah kedaluwarsa.']);
-    }
-
-    // Proses penukaran - warning 'increment' akan hilang
-    $user->increment('total_poin', $kodeRedeem->poin);
-    
-    $kodeRedeem->update([
-        'status' => 'terpakai',
-        'id_user' => $user->id_user,
-        'dipakai_pada' => now(),
-    ]);
-
-    return back()->with('success', "Selamat! Anda mendapatkan {$kodeRedeem->poin} poin dari redeem code.");
-}
 
     /**
      * Helper: Tentukan status keanggotaan
@@ -121,19 +77,36 @@ class PoinController extends Controller
     /**
      * Klaim hadiah refill (tukar 70 poin)
      */
-    public function claimHadiah()
-{
-    /** @var \App\Models\User $user */ // ← TAMBAHKAN BARIS INI
-    $user = Auth::user();
-    $targetPoin = 70;
+    public function claimHadiah(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $targetPoin = 70;
 
-    if ((int) $user->total_poin < $targetPoin) {
-        return back()->withErrors(['claim' => 'Poin Anda belum mencukupi untuk klaim hadiah.']);
+        if ((int) $user->total_poin < $targetPoin) {
+            return back()->withErrors(['claim' => 'Poin Anda belum mencukupi untuk klaim hadiah.']);
+        }
+
+        // Cari hadiah yang butuh 70 poin di tabel 'hadiah'
+        $hadiah = Hadiah::where('poin_dibutuhkan', $targetPoin)->first();
+
+        if (!$hadiah) {
+            return back()->withErrors(['claim' => 'Hadiah tidak tersedia di sistem.']);
+        }
+
+        // ✅ SIMPAN KE TABEL penukaran_hadiah (Status pending dulu)
+        PenukaranHadiah::create([
+            'id_user' => $user->id_user,
+            'id_hadiah' => $hadiah->id_hadiah,
+            'poin_ditukar' => $targetPoin,
+            'poin_saat_klaim' => (int) $user->total_poin, // ✅ SNAPSHOT POIN SAAT KLAIM
+            'status_klaim' => 'pending',
+            'catatan' => $request->catatan ?? null, // Alamat/catatan dari user
+        ]);
+
+        // Kurangi poin user
+        $user->decrement('total_poin', $targetPoin);
+
+        return back()->with('success', "Klaim hadiah berhasil! Menunggu persetujuan admin. {$targetPoin} poin telah dikurangi.");
     }
-
-    // Kurangi 70 poin dari user - warning 'decrement' akan hilang
-    $user->decrement('total_poin', $targetPoin);
-
-    return back()->with('success', "Selamat! Anda berhasil menukarkan {$targetPoin} poin dengan 1x Refill Lilin Aroma Terapi Aroma Apel Gratis. Hadiah akan dikirim ke alamat Anda.");
-}
 }
