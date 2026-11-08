@@ -24,12 +24,12 @@
         {{-- Sidebar --}}
         <x-admin.sidebar />
 
-        <main class="min-w-0">
+        <main class="min-w-0 flex-1">
             {{-- Navbar --}}
             <x-admin.navbar />
 
-            <!-- Konten Utama -->
-            <div class="mx-auto max-w-7xl space-y-6 px-5 py-7 sm:px-9 sm:py-9">
+            <!-- Konten Utama (Fluid/Responsive) -->
+            <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-9">
                 
                 {{-- Notifikasi --}}
                 @if (session('success'))

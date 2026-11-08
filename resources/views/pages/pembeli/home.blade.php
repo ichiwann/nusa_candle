@@ -25,7 +25,7 @@
                     </p>
 
                     <div class="flex flex-wrap gap-4 mb-8">
-                        <a href="#" class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md font-semibold transition flex items-center gap-2">
+                        <a href="{{ route('produk.index') }}" class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md font-semibold transition flex items-center gap-2">
                             Belanja Sekarang
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
