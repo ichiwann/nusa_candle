@@ -23,7 +23,7 @@
     <x-pembeli.navbar />
 
     {{-- Konten Utama (flex-grow agar footer selalu di bawah jika konten sedikit) --}}
-    <main class="flex-grow w-full">
+    <main class="flex-grow">
         @yield('content')
     </main>
 

@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Pesanan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\DetailPesanan;
+use App\Models\Transaksi;
+use App\Models\Keranjang;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
 
 class PembeliPesananController extends Controller
 {
@@ -41,19 +46,6 @@ class PembeliPesananController extends Controller
         ));
     }
 
-    public function show(int $id): View
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        $pesanan = Pesanan::with(['detailPesanan.produk', 'transaksi'])
-            ->where('id_pesanan', $id)
-            ->where('id_user', $user->id_user)
-            ->firstOrFail();
-
-        return view('pages.pembeli.pembeli_pesanan_detail', compact('pesanan'));
-    }
-
     public function reorder(int $id): \Illuminate\Http\RedirectResponse
     {
         /** @var \App\Models\User $user */
@@ -66,14 +58,14 @@ class PembeliPesananController extends Controller
 
         // Tambahkan semua item dari pesanan lama ke keranjang
         foreach ($pesanan->detailPesanan as $detail) {
-            $existing = \App\Models\Keranjang::where('id_user', $user->id_user)
+            $existing = Keranjang::where('id_user', $user->id_user)
                 ->where('id_produk', $detail->id_produk)
                 ->first();
 
             if ($existing) {
                 $existing->increment('jumlah', $detail->jumlah);
             } else {
-                \App\Models\Keranjang::create([
+                Keranjang::create([
                     'id_user' => $user->id_user,
                     'id_produk' => $detail->id_produk,
                     'jumlah' => $detail->jumlah,
@@ -82,5 +74,136 @@ class PembeliPesananController extends Controller
         }
 
         return redirect()->route('keranjang.index')->with('success', 'Produk dari pesanan sebelumnya berhasil ditambahkan ke keranjang.');
+    }
+
+    public function showCheckout(): View | RedirectResponse
+    {
+        $user = Auth::user();
+
+        $keranjangItems = Keranjang::with('produk')
+            ->where('id_user', $user->id_user)
+            ->get();
+
+        if ($keranjangItems->isEmpty()) {
+            return redirect()->route('produk.index')
+                ->withErrors(['checkout' => 'Keranjang Anda kosong.']);
+        }
+
+        // Hitung total
+        $totalHargaProduk = 0;
+        foreach ($keranjangItems as $item) {
+            $totalHargaProduk += ($item->produk->harga * $item->jumlah);
+        }
+
+        $ongkir = 15000;
+        $packaging = 5000;
+        $totalBelanja = $totalHargaProduk + $ongkir + $packaging;
+
+        return view('pages.pembeli.pembeli_checkout', compact(
+            'keranjangItems',
+            'totalHargaProduk',
+            'ongkir',
+            'packaging',
+            'totalBelanja'
+        ));
+    }
+
+    /**
+     * Proses checkout setelah user pilih metode pembayaran
+     */
+    public function checkout(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'metode_pembayaran' => ['required', 'in:bca,mandiri,gopay,dana,shopeepay,cod'],
+        ]);
+
+        $user = Auth::user();
+
+        $keranjangItems = Keranjang::with('produk')
+            ->where('id_user', $user->id_user)
+            ->get();
+
+        if ($keranjangItems->isEmpty()) {
+            return back()->withErrors(['checkout' => 'Keranjang Anda kosong.']);
+        }
+
+        // ✅ VALIDASI STOK SEBELUM PROSES
+        foreach ($keranjangItems as $item) {
+            if ($item->produk->stok < $item->jumlah) {
+                return back()->withErrors([
+                    'checkout' => "Stok {$item->produk->nama_produk} tidak mencukupi. Tersedia: {$item->produk->stok}, Diminta: {$item->jumlah}"
+                ]);
+            }
+        }
+
+        // Hitung total
+        $totalHargaProduk = 0;
+        foreach ($keranjangItems as $item) {
+            $totalHargaProduk += ($item->produk->harga * $item->jumlah);
+        }
+
+        $ongkir = 15000;
+        $packaging = 5000;
+        $totalBelanja = $totalHargaProduk + $ongkir + $packaging;
+
+        DB::beginTransaction();
+        try {
+            // Tentukan status pesanan berdasarkan metode pembayaran
+            $statusPesanan = $validated['metode_pembayaran'] === 'cod'
+                ? 'diproses'
+                : 'menunggu_pembayaran';
+
+            // A. Buat Pesanan
+            $pesanan = Pesanan::create([
+                'id_user' => $user->id_user,
+                'total_harga' => $totalBelanja,
+                'status_pesanan' => $statusPesanan,
+            ]);
+
+            // B. Buat Detail Pesanan & ✅ KURANGI STOK
+            foreach ($keranjangItems as $item) {
+                DetailPesanan::create([
+                    'id_pesanan' => $pesanan->id_pesanan,
+                    'id_produk' => $item->id_produk,
+                    'jumlah' => $item->jumlah,
+                    'harga_satuan' => $item->produk->harga,
+                ]);
+
+                // ✅ KURANGI STOK PRODUK
+                $item->produk->decrement('stok', $item->jumlah);
+            }
+
+            // C. Buat Transaksi
+            Transaksi::create([
+                'id_pesanan' => $pesanan->id_pesanan,
+                'metode_pembayaran' => $validated['metode_pembayaran'],
+                'status_pembayaran' => 'menunggu',
+            ]);
+
+            // D. Hapus Keranjang
+            Keranjang::where('id_user', $user->id_user)->delete();
+
+            DB::commit();
+
+            return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
+                ->with('success', $validated['metode_pembayaran'] === 'cod'
+                    ? 'Pesanan COD berhasil dibuat! Pesanan akan segera diproses.'
+                    : 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['checkout' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
+    public function show(int $id): View
+    {
+        $user = Auth::user();
+
+        $pesanan = Pesanan::with(['detailPesanan.produk', 'transaksi'])
+            ->where('id_pesanan', $id)
+            ->where('id_user', $user->id_user)
+            ->firstOrFail();
+
+        return view('pages.pembeli.pembeli_detail_pesanan', compact('pesanan'));
     }
 }

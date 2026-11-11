@@ -12,7 +12,7 @@ class PesananController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Pesanan::with(['user', 'detail.produk']);
+        $query = Pesanan::with(['user', 'detailPesanan.produk']);
 
         // Search
         if ($request->filled('search')) {

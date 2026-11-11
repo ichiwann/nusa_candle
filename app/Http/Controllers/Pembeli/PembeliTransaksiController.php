@@ -92,6 +92,6 @@ class PembeliTransaksiController extends Controller
             })
             ->firstOrFail();
 
-        return view('pages.pembeli.pembeli_transaksi_detail', compact('transaksi'));
+        return view('pages.pembeli.pembeli_detail_transaksi', compact('transaksi'));
     }
 }

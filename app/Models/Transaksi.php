@@ -70,7 +70,7 @@ class Transaksi extends Model
             'gopay'     => 'GRIS Gopay',
             'dana'      => 'DANA',
             'shopeepay' => 'ShopeePay',
-            'cash'      => 'Cash',
+            'cod'      => 'Cod (Bayar di Tempat)',
             default     => ucfirst($this->metode_pembayaran),
         };
     }

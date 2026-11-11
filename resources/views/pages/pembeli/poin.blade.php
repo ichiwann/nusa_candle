@@ -382,7 +382,7 @@
                             <label
                                 class="block text-xs font-semibold uppercase tracking-wider text-[#718078] mb-2">Masukkan
                                 Redeem Code</label>
-                            <input type="text" name="redeem_code" placeholder="MASUKKAN REDEEM CODE"
+                            <input type="text" name="kode_redeem" placeholder="MASUKKAN REDEEM CODE"
                                 class="w-full px-4 py-2.5 bg-[#FAF9F6] border border-gray-200 rounded-md text-sm uppercase focus:border-[#8B1E1E] focus:ring-1 focus:ring-[#8B1E1E]/20 outline-none">
                         </div>
                         <button type="submit"

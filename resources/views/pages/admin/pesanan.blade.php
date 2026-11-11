@@ -9,7 +9,8 @@
         <p class="text-[10px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Admin Ledger</p>
         <h1 class="display-font mt-1 text-3xl font-semibold text-[#183b2c]">Manajemen Pesanan</h1>
         <p class="mt-2 max-w-2xl text-sm text-[#718078] leading-relaxed">
-            Kelola pesanan pelanggan khusus produk tunggal Lilin Aroma Terapi Apel Malang (Signature Edition). Verifikasi pengiriman dan status pesanan.
+            Kelola pesanan pelanggan khusus produk tunggal Lilin Aroma Terapi Apel Malang (Signature Edition). Verifikasi
+            pengiriman dan status pesanan.
         </p>
     </div>
 
@@ -55,27 +56,35 @@
     <!-- Search & Filter Bar -->
     <form method="GET" action="{{ route('admin.orders.index') }}" class="flex flex-wrap items-center gap-3 mb-4">
         <div class="flex-1 min-w-[250px] relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#87948b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#87948b]" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari ID pesanan atau nama pelanggan..." 
+            <input type="text" name="search" value="{{ request('search') }}"
+                placeholder="Cari ID pesanan atau nama pelanggan..."
                 class="w-full pl-10 pr-4 py-2.5 bg-white border border-[#e8eee8] rounded-md text-sm focus:border-[#103a2a] focus:ring-1 focus:ring-[#103a2a]/20 outline-none">
         </div>
-        
-        <select name="status" onchange="this.form.submit()" class="px-4 py-2.5 bg-white border border-[#e8eee8] rounded-md text-sm focus:border-[#103a2a] outline-none min-w-[150px]">
+
+        <select name="status" onchange="this.form.submit()"
+            class="px-4 py-2.5 bg-white border border-[#e8eee8] rounded-md text-sm focus:border-[#103a2a] outline-none min-w-[150px]">
             <option value="">Semua Status</option>
-            <option value="menunggu_pembayaran" {{ request('status') == 'menunggu_pembayaran' ? 'selected' : '' }}>Menunggu Pembayaran</option>
+            <option value="menunggu_pembayaran" {{ request('status') == 'menunggu_pembayaran' ? 'selected' : '' }}>Menunggu
+                Pembayaran</option>
             <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
             <option value="dikirim" {{ request('status') == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
             <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
             <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
         </select>
 
-        <select name="sort" onchange="this.form.submit()" class="px-4 py-2.5 bg-white border border-[#e8eee8] rounded-md text-sm focus:border-[#103a2a] outline-none min-w-[150px]">
+        <select name="sort" onchange="this.form.submit()"
+            class="px-4 py-2.5 bg-white border border-[#e8eee8] rounded-md text-sm focus:border-[#103a2a] outline-none min-w-[150px]">
             <option value="terbaru" {{ request('sort') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
             <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
-            <option value="total_terendah" {{ request('sort') == 'total_terendah' ? 'selected' : '' }}>Total Terendah</option>
-            <option value="total_tertinggi" {{ request('sort') == 'total_tertinggi' ? 'selected' : '' }}>Total Tertinggi</option>
+            <option value="total_terendah" {{ request('sort') == 'total_terendah' ? 'selected' : '' }}>Total Terendah
+            </option>
+            <option value="total_tertinggi" {{ request('sort') == 'total_tertinggi' ? 'selected' : '' }}>Total Tertinggi
+            </option>
         </select>
     </form>
 
@@ -84,9 +93,11 @@
         <p class="text-[10px] text-[#718078] uppercase tracking-wider">
             Status: <span class="font-semibold text-[#103a2a]">Diproses ({{ $diproses }})</span>
         </p>
-        <button type="button" onclick="window.location.href='{{ route('admin.orders.index') }}'" class="text-[10px] text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
+        <button type="button" onclick="window.location.href='{{ route('admin.orders.index') }}'"
+            class="text-[10px] text-red-600 hover:text-red-700 font-medium flex items-center gap-1">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             Reset Filter
         </button>
@@ -96,7 +107,8 @@
     <section class="border border-[#e8eee8] bg-white rounded-md shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left">
-                <thead class="bg-[#f7faf7] text-[10px] uppercase tracking-[0.12em] text-[#718078] border-b border-[#edf0eb]">
+                <thead
+                    class="bg-[#f7faf7] text-[10px] uppercase tracking-[0.12em] text-[#718078] border-b border-[#edf0eb]">
                     <tr>
                         <th class="px-5 py-3 font-semibold">No. Pesanan</th>
                         <th class="px-5 py-3 font-semibold">Pelanggan</th>
@@ -110,98 +122,116 @@
                 </thead>
                 <tbody class="divide-y divide-[#edf0eb]">
                     @forelse($pesanans as $pesanan)
-                    <tr class="text-xs hover:bg-[#f9fcf9] transition-colors">
-                        <td class="px-5 py-4">
-                            <p class="font-semibold text-[#30483a]">#{{ str_pad($pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}</p>
-                            <p class="mt-1 text-[10px] text-[#87948b]">{{ $pesanan->created_at->format('d M Y') }}</p>
-                        </td>
-                        <td class="px-5 py-4">
-                            <p class="font-semibold text-[#30483a]">{{ $pesanan->user->nama_lengkap ?? 'Unknown' }}</p>
-                            <p class="mt-1 text-[10px] text-[#87948b]">{{ $pesanan->user->username ?? '-' }}</p>
-                        </td>
-                        <td class="px-5 py-4">
-                            @foreach($pesanan->detail as $detail)
-                                <p class="font-semibold text-[#30483a]">{{ $detail->produk->nama_produk ?? 'Produk Dihapus' }}</p>
-                                <p class="mt-1 text-[10px] text-[#87948b]">{{ $detail->produk->varian ?? 'Signature Edition' }}</p>
-                            @endforeach
-                        </td>
-                        <td class="px-5 py-4">
-                            @php
-                                $totalQty = $pesanan->detail->sum('jumlah');
-                            @endphp
-                            <p class="font-semibold text-[#183b2c]">{{ $totalQty }}</p>
-                            <p class="text-[10px] text-[#87948b]">unit</p>
-                        </td>
-                        <td class="px-5 py-4">
-                            <p class="font-semibold text-[#183b2c]">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</p>
-                        </td>
-                        <td class="px-5 py-4">
-                            <p class="text-[#30483a]">{{ $pesanan->created_at->format('d M Y') }}</p>
-                            <p class="text-[10px] text-[#87948b]">{{ $pesanan->created_at->format('H:i') }}</p>
-                        </td>
-                        <td class="px-5 py-4">
-                            @php
-                                $statusColors = [
-                                    'menunggu_pembayaran' => 'bg-orange-100 text-orange-800',
-                                    'diproses' => 'bg-blue-100 text-blue-800',
-                                    'dikirim' => 'bg-purple-100 text-purple-800',
-                                    'selesai' => 'bg-emerald-100 text-emerald-800',
-                                    'dibatalkan' => 'bg-red-100 text-red-800',
-                                ];
-                                $statusLabels = [
-                                    'menunggu_pembayaran' => 'Menunggu',
-                                    'diproses' => 'Diproses',
-                                    'dikirim' => 'Dikirim',
-                                    'selesai' => 'Selesai',
-                                    'dibatalkan' => 'Dibatalkan',
-                                ];
-                            @endphp
-                            <span class="inline-block px-2.5 py-1 rounded text-[10px] font-semibold {{ $statusColors[$pesanan->status_pesanan] ?? 'bg-gray-100 text-gray-800' }}">
-                                {{ $statusLabels[$pesanan->status_pesanan] ?? ucfirst($pesanan->status_pesanan) }}
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex justify-end">
-                                <button onclick="openStatusModal({{ $pesanan->id_pesanan }}, '{{ $pesanan->status_pesanan }}')" class="bg-[#103a2a] hover:bg-[#315d41] text-white px-3 py-1.5 rounded text-[10px] font-semibold transition">
-                                    Update Status
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr class="text-xs hover:bg-[#f9fcf9] transition-colors">
+                            <td class="px-5 py-4">
+                                <p class="font-semibold text-[#30483a]">
+                                    #{{ str_pad($pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}</p>
+                                <p class="mt-1 text-[10px] text-[#87948b]">{{ $pesanan->created_at->format('d M Y') }}</p>
+                            </td>
+                            <td class="px-5 py-4">
+                                <p class="font-semibold text-[#30483a]">{{ $pesanan->user->nama_lengkap ?? 'Unknown' }}</p>
+                                <p class="mt-1 text-[10px] text-[#87948b]">{{ $pesanan->user->username ?? '-' }}</p>
+                            </td>
+                            <td class="px-5 py-4">
+                                {{-- ✅ LEBIH AMAN --}}
+                                @forelse($pesanan->detailPesanan as $item)
+                                    <div class="text-sm">
+                                        {{ $item->produk->nama_produk ?? 'Produk tidak tersedia' }}
+                                        ({{ $item->jumlah }}x)
+                                    </div>
+                                @empty
+                                    <span class="text-xs text-gray-400">Tidak ada produk</span>
+                                @endforelse
+                            </td>
+                            <td class="px-5 py-4">
+                                @php
+                                    $totalQty = 0;
+                                    if ($pesanan->detailPesanan && $pesanan->detailPesanan->isNotEmpty()) {
+                                        $totalQty = $pesanan->detailPesanan->sum('jumlah');
+                                    }
+                                @endphp
+
+                                <span class="text-sm font-semibold">{{ $totalQty }} Item</span>
+                            </td>
+                            <td class="px-5 py-4">
+                                <p class="font-semibold text-[#183b2c]">Rp
+                                    {{ number_format($pesanan->total_harga, 0, ',', '.') }}</p>
+                            </td>
+                            <td class="px-5 py-4">
+                                <p class="text-[#30483a]">{{ $pesanan->created_at->format('d M Y') }}</p>
+                                <p class="text-[10px] text-[#87948b]">{{ $pesanan->created_at->format('H:i') }}</p>
+                            </td>
+                            <td class="px-5 py-4">
+                                @php
+                                    $statusColors = [
+                                        'menunggu_pembayaran' => 'bg-orange-100 text-orange-800',
+                                        'diproses' => 'bg-blue-100 text-blue-800',
+                                        'dikirim' => 'bg-purple-100 text-purple-800',
+                                        'selesai' => 'bg-emerald-100 text-emerald-800',
+                                        'dibatalkan' => 'bg-red-100 text-red-800',
+                                    ];
+                                    $statusLabels = [
+                                        'menunggu_pembayaran' => 'Menunggu',
+                                        'diproses' => 'Diproses',
+                                        'dikirim' => 'Dikirim',
+                                        'selesai' => 'Selesai',
+                                        'dibatalkan' => 'Dibatalkan',
+                                    ];
+                                @endphp
+                                <span
+                                    class="inline-block px-2.5 py-1 rounded text-[10px] font-semibold {{ $statusColors[$pesanan->status_pesanan] ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ $statusLabels[$pesanan->status_pesanan] ?? ucfirst($pesanan->status_pesanan) }}
+                                </span>
+                            </td>
+                            <td class="px-5 py-4">
+                                <div class="flex justify-end">
+                                    <button
+                                        onclick="openStatusModal({{ $pesanan->id_pesanan }}, '{{ $pesanan->status_pesanan }}')"
+                                        class="bg-[#103a2a] hover:bg-[#315d41] text-white px-3 py-1.5 rounded text-[10px] font-semibold transition">
+                                        Update Status
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="8" class="px-5 py-12 text-center">
-                            <p class="text-sm font-semibold text-[#30483a]">Tidak ada pesanan ditemukan</p>
-                            <p class="mt-1 text-xs text-[#87948b]">Coba ubah filter pencarian.</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="8" class="px-5 py-12 text-center">
+                                <p class="text-sm font-semibold text-[#30483a]">Tidak ada pesanan ditemukan</p>
+                                <p class="mt-1 text-xs text-[#87948b]">Coba ubah filter pencarian.</p>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
         <!-- Pagination -->
-        @if($pesanans->hasPages())
-        <div class="border-t border-[#edf0eb] px-5 py-4 flex items-center justify-between">
-            <p class="text-xs text-[#718078]">
-                Menampilkan {{ $pesanans->firstItem() }}-{{ $pesanans->lastItem() }} dari {{ $pesanans->total() }} pesanan terdaftar
-            </p>
-            <div class="flex items-center gap-1">
-                {{ $pesanans->links() }}
+        @if ($pesanans->hasPages())
+            <div class="border-t border-[#edf0eb] px-5 py-4 flex items-center justify-between">
+                <p class="text-xs text-[#718078]">
+                    Menampilkan {{ $pesanans->firstItem() }}-{{ $pesanans->lastItem() }} dari {{ $pesanans->total() }}
+                    pesanan terdaftar
+                </p>
+                <div class="flex items-center gap-1">
+                    {{ $pesanans->links() }}
+                </div>
             </div>
-        </div>
         @endif
     </section>
 
     <!-- Modal Update Status -->
-    <div id="status-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0b251b]/60 p-4 backdrop-blur-sm">
+    <div id="status-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0b251b]/60 p-4 backdrop-blur-sm">
         <div class="w-full max-w-md bg-white rounded-lg shadow-2xl">
             <div class="border-b border-[#edf0eb] px-6 py-4 flex items-center justify-between">
                 <div>
-                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Update Status Pesanan</p>
-                    <h2 class="display-font mt-1 text-xl font-semibold text-[#183b2c]">Pesanan #<span id="modal-pesanan-id"></span></h2>
+                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Update Status Pesanan
+                    </p>
+                    <h2 class="display-font mt-1 text-xl font-semibold text-[#183b2c]">Pesanan #<span
+                            id="modal-pesanan-id"></span></h2>
                 </div>
-                <button onclick="closeStatusModal()" class="text-2xl text-[#718078] hover:text-[#30483a] transition">&times;</button>
+                <button onclick="closeStatusModal()"
+                    class="text-2xl text-[#718078] hover:text-[#30483a] transition">&times;</button>
             </div>
 
             <form id="status-form" method="POST" class="p-6 space-y-4">
@@ -209,8 +239,10 @@
                 @method('PATCH')
 
                 <div>
-                    <label class="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#64835d] mb-2">Status Pesanan</label>
-                    <select name="status_pesanan" id="status_pesanan" required class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] focus:ring-1 focus:ring-[#103a2a]/20 outline-none">
+                    <label class="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#64835d] mb-2">Status
+                        Pesanan</label>
+                    <select name="status_pesanan" id="status_pesanan" required
+                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] focus:ring-1 focus:ring-[#103a2a]/20 outline-none">
                         <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
                         <option value="diproses">Diproses</option>
                         <option value="dikirim">Dikirim</option>
@@ -220,8 +252,11 @@
                 </div>
 
                 <div class="flex justify-end gap-2 border-t border-[#edf0eb] pt-4">
-                    <button type="button" onclick="closeStatusModal()" class="border border-[#dce7dc] px-4 py-2 text-sm text-[#52645a] hover:bg-[#f7faf7] rounded-md transition">Batal</button>
-                    <button type="submit" class="bg-[#103a2a] px-5 py-2 text-sm font-semibold text-white hover:bg-[#315d41] rounded-md transition">Simpan Perubahan</button>
+                    <button type="button" onclick="closeStatusModal()"
+                        class="border border-[#dce7dc] px-4 py-2 text-sm text-[#52645a] hover:bg-[#f7faf7] rounded-md transition">Batal</button>
+                    <button type="submit"
+                        class="bg-[#103a2a] px-5 py-2 text-sm font-semibold text-white hover:bg-[#315d41] rounded-md transition">Simpan
+                        Perubahan</button>
                 </div>
             </form>
         </div>

@@ -121,6 +121,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pesanan', [PembeliPesananController::class, 'index'])->name('pembeli.pesanan.index');
     Route::get('/pesanan/{id}', [PembeliPesananController::class, 'show'])->name('pembeli.pesanan.show');
     Route::post('/pesanan/{id}/reorder', [PembeliPesananController::class, 'reorder'])->name('pembeli.pesanan.reorder');
+    // Halaman checkout (pilih metode pembayaran)
+    Route::get('/checkout', [PembeliPesananController::class, 'showCheckout'])->name('pembeli.checkout.show');
+    // Proses checkout setelah pilih metode
+    Route::post('/checkout', [PembeliPesananController::class, 'checkout'])->name('pembeli.checkout.store');
+
 
     // Di dalam Route::middleware(['auth'])->group(...)
     Route::get('/transaksi', [PembeliTransaksiController::class, 'index'])->name('pembeli.transaksi.index');
