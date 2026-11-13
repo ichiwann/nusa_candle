@@ -12,6 +12,7 @@ use App\Models\Transaksi;
 use App\Models\Keranjang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 
 class PembeliPesananController extends Controller
 {
@@ -204,6 +205,47 @@ class PembeliPesananController extends Controller
             ->where('id_user', $user->id_user)
             ->firstOrFail();
 
-        return view('pages.pembeli.pembeli_detail_pesanan', compact('pesanan'));
+        return view('pages.pembeli.pembeli_detail_pesanan', [
+            'pesanan' => $pesanan,
+            'isPreview' => false,
+        ]);
+    }
+
+    public function preview(int $id): View
+    {
+        $previewOrders = [
+            8841 => ['date' => '2024-10-24', 'status' => 'dikirim', 'label' => 'Dalam Perjalanan', 'color' => 'bg-[#e8f2e2] text-[#2E7D32]', 'quantity' => 2],
+            8820 => ['date' => '2024-10-25', 'status' => 'diproses', 'label' => 'Sedang Diproses', 'color' => 'bg-[#f8e6e5] text-[#8B1E1E]', 'quantity' => 1],
+            7102 => ['date' => '2024-09-12', 'status' => 'selesai', 'label' => 'Selesai', 'color' => 'bg-[#e8f2e2] text-[#2E7D32]', 'quantity' => 1],
+            6510 => ['date' => '2024-08-08', 'status' => 'selesai', 'label' => 'Selesai', 'color' => 'bg-[#e8f2e2] text-[#2E7D32]', 'quantity' => 3],
+        ];
+
+        abort_unless(isset($previewOrders[$id]), 404);
+
+        $preview = $previewOrders[$id];
+        $produk = (object) [
+            'nama_produk' => 'NusaCandle - Lilin Aroma Terapi Aroma Apel',
+            'gambar' => null,
+        ];
+        $detail = (object) [
+            'produk' => $produk,
+            'jumlah' => $preview['quantity'],
+            'harga_satuan' => 89000,
+        ];
+        $pesanan = (object) [
+            'id_pesanan' => $id,
+            'total_harga' => 89000 * $preview['quantity'],
+            'status_pesanan' => $preview['status'],
+            'status_label' => $preview['label'],
+            'status_color' => $preview['color'],
+            'created_at' => Carbon::parse($preview['date'])->locale('id'),
+            'detailPesanan' => collect([$detail]),
+            'transaksi' => collect(),
+        ];
+
+        return view('pages.pembeli.pembeli_detail_pesanan', [
+            'pesanan' => $pesanan,
+            'isPreview' => true,
+        ]);
     }
 }

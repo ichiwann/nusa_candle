@@ -3,8 +3,359 @@
 @section('title', 'Poin & Loyalitas Saya - NusaCandle')
 
 @section('content')
+    <style>
+        body:has(.poin-page) {
+            background: #faf7ed;
+        }
+
+        body:has(.poin-page) nav:not(#catalog-pagination) {
+            border-top: 3px solid #8b1e1e;
+            background: #faf7ed;
+            box-shadow: none;
+        }
+
+        body:has(.poin-page) footer {
+            margin-top: 1.5rem;
+            border-top-color: #e8dfcf;
+            background: #f5f0e2;
+        }
+
+        body:has(.poin-page) .points-breadcrumb {
+            display: none;
+        }
+
+        .poin-page {
+            max-width: 80rem;
+            padding: 0.75rem 1rem 1.25rem;
+            color: #2c1810;
+        }
+
+        .poin-page .points-intro {
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .poin-page .points-intro > div {
+            margin-bottom: 0.25rem !important;
+        }
+
+        .poin-page .points-intro h1 {
+            margin: 0.25rem 0;
+            font-size: 1.2rem;
+            line-height: 1.2;
+        }
+
+        .poin-page .points-intro > p {
+            max-width: 42rem;
+            margin: 0;
+            font-size: 0.58rem;
+            line-height: 1.45;
+        }
+
+        .poin-page .points-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(15rem, 0.95fr);
+            align-items: start;
+            gap: 0.65rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .poin-page .points-layout > div {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .poin-page .points-summary,
+        .poin-page .points-reward,
+        .poin-page .points-guide,
+        .poin-page .points-redeem,
+        .poin-page .points-history,
+        .poin-page .points-shipping {
+            min-width: 0;
+            margin: 0 !important;
+            border: 1px solid #e8dfcf !important;
+            border-radius: 0.5rem !important;
+            background: #fff !important;
+            padding: 0.7rem !important;
+            box-shadow: 0 1px 3px rgb(44 24 16 / 6%) !important;
+        }
+
+        .poin-page .points-summary {
+            background: linear-gradient(115deg, #fff 0%, #fbfaf5 58%, #f5f8ee 100%) !important;
+        }
+
+        .poin-page .points-summary > .flex.items-start.justify-between {
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.55rem !important;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f1ece2;
+        }
+
+        .poin-page .points-summary .w-12.h-12 {
+            width: 1.8rem;
+            height: 1.8rem;
+            font-size: 0.7rem;
+        }
+
+        .poin-page .points-summary h3 {
+            font-size: 0.72rem;
+            line-height: 1.2;
+        }
+
+        .poin-page .points-summary .grid.md\:grid-cols-2 {
+            gap: 0.5rem;
+        }
+
+        .poin-page .points-balance,
+        .poin-page .points-rule,
+        .poin-page .points-progress,
+        .poin-page .points-status,
+        .poin-page .points-guide-note,
+        .poin-page .points-redeem-note {
+            border-radius: 0.35rem !important;
+            padding: 0.55rem !important;
+        }
+
+        .poin-page .points-balance > div > span:first-child {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .poin-page .points-balance > div > span:last-child {
+            font-size: 0.62rem;
+        }
+
+        .poin-page .points-balance > p:last-child {
+            font-size: 0.5rem;
+        }
+
+        .poin-page .points-rule > p:nth-of-type(1) {
+            font-size: 0.62rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-rule > p:last-child {
+            font-size: 0.48rem;
+        }
+
+        .poin-page .points-progress {
+            margin-top: 0.5rem !important;
+        }
+
+        .poin-page .points-progress > div:first-child {
+            margin-bottom: 0.35rem !important;
+        }
+
+        .poin-page .points-progress > div:first-child p,
+        .poin-page .points-progress > div:last-child {
+            font-size: 0.48rem;
+        }
+
+        .poin-page .points-progress .h-3 {
+            height: 0.35rem;
+            margin-bottom: 0.3rem !important;
+        }
+
+        .poin-page .points-status {
+            margin-top: 0.5rem !important;
+            border-left: 3px solid #d6aa52 !important;
+        }
+
+        .poin-page .points-status p {
+            font-size: 0.5rem;
+            line-height: 1.45;
+        }
+
+        .poin-page .points-reward-heading {
+            align-items: flex-start;
+            gap: 0.45rem;
+            margin-bottom: 0.55rem !important;
+        }
+
+        .poin-page .points-reward-heading h3 {
+            margin-top: 0.15rem !important;
+            font-size: 0.78rem;
+            line-height: 1.25;
+        }
+
+        .poin-page .points-reward-heading p {
+            margin-top: 0.15rem;
+            font-size: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-reward-product {
+            gap: 0.55rem;
+            margin-bottom: 0.55rem !important;
+            padding: 0.55rem !important;
+        }
+
+        .poin-page .points-reward-art {
+            width: 3.2rem;
+            height: 3.2rem;
+            border: 1px solid #eee5d7;
+            background: radial-gradient(circle at 50% 35%, #fff 0, #f3eddf 72%);
+        }
+
+        .poin-page .points-reward-product h4 {
+            margin-bottom: 0.2rem !important;
+            font-size: 0.62rem;
+            line-height: 1.3;
+        }
+
+        .poin-page .points-reward-product p {
+            margin-bottom: 0.3rem !important;
+            font-size: 0.48rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-reward-footer {
+            gap: 0.4rem;
+        }
+
+        .poin-page .points-reward-footer p {
+            font-size: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-guide h3,
+        .poin-page .points-redeem h3 {
+            font-size: 0.72rem;
+        }
+
+        .poin-page .points-guide > h4,
+        .poin-page .points-redeem > div > h4 {
+            margin-bottom: 0.45rem !important;
+            font-size: 0.58rem;
+        }
+
+        .poin-page .points-guide-steps {
+            gap: 0.5rem !important;
+        }
+
+        .poin-page .points-guide-steps p,
+        .poin-page .points-guide-note p,
+        .poin-page .points-redeem p {
+            font-size: 0.49rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-guide-note,
+        .poin-page .points-redeem-note {
+            margin-top: 0.55rem !important;
+        }
+
+        .poin-page .points-redeem-description {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .poin-page .points-redeem input {
+            padding: 0.45rem 0.55rem;
+            font-size: 0.55rem;
+        }
+
+        .poin-page .points-redeem button {
+            padding: 0.45rem 0.65rem;
+            font-size: 0.55rem;
+        }
+
+        .poin-page .points-history-heading {
+            gap: 0.5rem;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .poin-page .points-history-heading h3 {
+            font-size: 0.8rem;
+        }
+
+        .poin-page .points-history-heading p,
+        .poin-page .points-history td,
+        .poin-page .points-history th {
+            font-size: 0.48rem;
+            line-height: 1.35;
+        }
+
+        .poin-page .points-history th,
+        .poin-page .points-history td {
+            padding: 0.4rem 0.5rem !important;
+        }
+
+        .poin-page .points-history td p {
+            font-size: 0.5rem;
+        }
+
+        .poin-page .points-history-footer {
+            gap: 0.5rem;
+            margin-top: 0.5rem !important;
+            padding-top: 0.45rem !important;
+        }
+
+        .poin-page .points-shipping h4 {
+            font-size: 0.7rem;
+        }
+
+        .poin-page .points-shipping p,
+        .poin-page .points-shipping a {
+            font-size: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .poin-page .points-shipping a {
+            padding: 0.45rem 0.65rem;
+        }
+
+        @media (max-width: 900px) {
+            .poin-page .points-layout {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.55rem;
+            }
+
+            .poin-page .points-layout > div {
+                display: contents;
+            }
+
+            .poin-page .points-summary {
+                order: 1;
+            }
+
+            .poin-page .points-guide {
+                order: 2;
+            }
+
+            .poin-page .points-reward {
+                order: 3;
+            }
+
+            .poin-page .points-redeem {
+                order: 4;
+            }
+
+            .poin-page .points-reward-heading > span {
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .poin-page .points-reward-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .poin-page .points-history-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .poin-page .points-shipping > div {
+                align-items: flex-start;
+            }
+        }
+    </style>
     {{-- Breadcrumb --}}
-    <div class="bg-white border-b border-gray-200">
+    <div class="points-breadcrumb bg-white border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center gap-2 text-sm">
                 <a href="{{ route('home') }}" class="text-[#718078] hover:text-[#8B1E1E]">Beranda</a>
@@ -14,9 +365,9 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="poin-page mx-auto w-full px-4 sm:px-6 lg:px-8">
         {{-- Header --}}
-        <div class="mb-8">
+        <div class="points-intro">
             <div class="flex items-center gap-2 mb-2">
                 <svg class="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -48,13 +399,13 @@
         @endif
 
         {{-- ✅ GRID UTAMA: Panel Kiri (2/3) + Panel Kanan (1/3) --}}
-        <div class="grid lg:grid-cols-3 gap-6 mb-6">
+        <div class="points-layout">
 
             {{-- PANEL KIRI (col-span-2) --}}
-            <div class="lg:col-span-2 space-y-6">
+            <div class="space-y-6">
 
                 {{-- Kartu Info User & Poin --}}
-                <div class="bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
+                <div class="points-summary bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
                     <div class="flex items-start justify-between mb-6">
                         <div class="flex items-center gap-3">
                             <div
@@ -73,14 +424,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span class="text-xs font-semibold text-green-800 bg-green-100 px-2 py-1 rounded">Akun Aktif
-                                Terverifikasi</span>
+                            <span class="rounded px-2 py-1 text-[8px] font-semibold {{ $membershipStatus['bg'] }} {{ $membershipStatus['color'] }}">
+                                {{ $membershipStatus['label'] }}
+                            </span>
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
                         {{-- Saldo Poin --}}
-                        <div class="bg-white rounded-lg p-5 shadow-sm">
+                        <div class="points-balance bg-white rounded-lg p-5 shadow-sm">
                             <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-2">Saldo Poin Saat
                                 Ini</p>
                             <div class="flex items-baseline gap-2">
@@ -92,7 +444,7 @@
                         </div>
 
                         {{-- Aturan Hadiah --}}
-                        <div class="bg-[#E8F5E9] rounded-lg p-5 border border-[#C8E6C9]">
+                        <div class="points-rule bg-[#E8F5E9] rounded-lg p-5 border border-[#C8E6C9]">
                             <div class="flex items-center gap-2 mb-2">
                                 <svg class="w-5 h-5 text-[#2E7D32]" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -114,7 +466,7 @@
                     </div>
 
                     {{-- Progress Bar --}}
-                    <div class="mt-6 bg-white rounded-lg p-5 shadow-sm">
+                    <div class="points-progress mt-6 bg-white rounded-lg p-5 shadow-sm">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-[#8B1E1E]" fill="none" stroke="currentColor"
@@ -140,7 +492,7 @@
 
                     {{-- Status --}}
                     <div
-                        class="mt-6 bg-white rounded-lg p-5 shadow-sm border-l-4 {{ $kurangPoin > 0 ? 'border-yellow-500' : 'border-green-500' }}">
+                        class="points-status mt-6 bg-white rounded-lg p-5 shadow-sm {{ $kurangPoin > 0 ? 'border-yellow-500' : 'border-green-500' }}">
                         <div class="flex items-start gap-3">
                             @if ($kurangPoin > 0)
                                 <svg class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none"
@@ -172,8 +524,8 @@
                 </div>
 
                 {{-- ✅ SECTION KLAIM HADIAH (DIPINDAH KE SINI - di dalam Panel Kiri) --}}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <div class="points-reward bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="points-reward-heading flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
                             <div class="bg-[#E8F5E9] p-2 rounded-lg">
                                 <svg class="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor"
@@ -197,14 +549,18 @@
                     </div>
 
                     {{-- Produk Hadiah --}}
-                    <div class="bg-[#FAF9F6] rounded-lg p-5 mb-6">
+                    <div class="points-reward-product bg-[#FAF9F6] rounded-lg p-5 mb-6">
                         <div class="flex items-start gap-4">
                             <div class="relative flex-shrink-0">
-                                <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                <div class="points-reward-art w-24 h-24 rounded-lg flex items-center justify-center">
+                                    <svg class="h-10 w-10" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ilustrasi lilin refill">
+                                        <path d="M32 5c-6 8-4 12 0 15 4-3 6-7 0-15Z" fill="#E99B43" />
+                                        <path d="M32 10c-2 3-2 5 0 7 2-2 2-4 0-7Z" fill="#FFF1BC" />
+                                        <path d="M32 19v5" stroke="#604A35" stroke-width="2" />
+                                        <path d="M17 25h30l-3 29a5 5 0 01-5 5H25a5 5 0 01-5-5l-3-29Z" fill="#536044" stroke="#B6AA91" stroke-width="2" />
+                                        <ellipse cx="32" cy="25" rx="15" ry="4" fill="#E9DFC9" stroke="#B6AA91" stroke-width="2" />
+                                        <path d="M22 36h20v10H22z" fill="#F8F2E3" />
+                                        <path d="M25 40h14M25 43h10" stroke="#8B7658" stroke-width="1.5" stroke-linecap="round" />
                                     </svg>
                                 </div>
                                 <span
@@ -233,7 +589,7 @@
                     </div>
 
                     {{-- Status Hadiah + Form Klaim --}}
-                    <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="points-reward-footer flex flex-wrap items-center justify-between gap-4">
                         <div class="flex items-start gap-3 flex-1 min-w-[300px]">
                             @if ($kurangPoin > 0)
                                 <svg class="w-6 h-6 text-gray-400 flex-shrink-0 mt-0.5" fill="none"
@@ -279,8 +635,14 @@
                         @else
                             <div
                                 class="bg-[#FAF9F6] border-2 border-dashed border-[#8B1E1E]/30 rounded-lg px-5 py-3 text-center flex-1 min-w-[300px]">
-                                <p class="text-sm font-semibold text-[#8B1E1E]">🕯️ Ayo kumpulkan poin lagi untuk
-                                    mendapatkan lilin gratis!</p>
+                                <p class="flex items-center gap-1 text-sm font-semibold text-[#8B1E1E]">
+                                    <svg class="h-3 w-3 shrink-0" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                                        <path d="M16 3c-3 4-2 6 0 8 2-2 3-4 0-8Z" fill="#E99B43" />
+                                        <rect x="8" y="12" width="16" height="16" rx="3" fill="#536044" />
+                                        <path d="M11 19h10v5H11z" fill="#E9DFC9" />
+                                    </svg>
+                                    Ayo kumpulkan poin lagi untuk mendapatkan lilin gratis!
+                                </p>
                                 <p class="text-xs text-[#718078] mt-1">Tinggal {{ $kurangPoin }} poin lagi menuju hadiah
                                     refill.</p>
                             </div>
@@ -292,7 +654,7 @@
             {{-- PANEL KANAN (col-span-1) --}}
             <div class="space-y-6">
                 {{-- Panduan Tambah Poin --}}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="points-guide bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4">
                         <svg class="w-5 h-5 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -302,7 +664,7 @@
                     </div>
                     <h4 class="font-semibold text-[#2C1810] mb-4">Tips Panen Poin Lilin Apel</h4>
 
-                    <div class="space-y-4">
+                    <div class="points-guide-steps space-y-4">
                         <div class="flex items-start gap-3">
                             <div
                                 class="w-6 h-6 rounded-full bg-[#FCE4EC] text-[#8B1E1E] flex items-center justify-center text-xs font-bold flex-shrink-0">
@@ -337,7 +699,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 bg-[#FAF9F6] rounded-lg p-4 border border-gray-200">
+                    <div class="points-guide-note mt-6 bg-[#FAF9F6] rounded-lg p-4 border border-gray-200">
                         <p class="text-[10px] font-semibold uppercase tracking-wider text-[#2E7D32] mb-2">Komitmen Alami
                         </p>
                         <p class="text-xs text-[#718078] italic">"Kebaikan aroma murni apel Malang yang menemani setiap
@@ -346,7 +708,7 @@
                 </div>
 
                 {{-- Tukarkan Redeem Code --}}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="points-redeem bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center gap-2 mb-4">
                         <svg class="w-5 h-5 text-[#8B1E1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -357,10 +719,10 @@
 
                     <div class="mb-6">
                         <h4 class="font-semibold text-[#2C1810] mb-2">Punya Kode Promo / Voucher Event?</h4>
-                        <p class="text-xs text-[#718078] mb-4">Tukarkan kode promosi festival kriya atau kartu hadiah
+                        <p class="points-redeem-description text-xs text-[#718078] mb-4">Tukarkan kode promosi festival kriya atau kartu hadiah
                             khusus untuk langsung menikmati lilin aromaterapi aroma apel Malang.</p>
 
-                        <div class="bg-[#FCE4EC] rounded-lg p-4 border border-[#F8BBD0]">
+                        <div class="points-redeem-note bg-[#FCE4EC] rounded-lg p-4 border border-[#F8BBD0]">
                             <div class="flex items-start gap-2 mb-2">
                                 <svg class="w-4 h-4 text-[#8B1E1E] flex-shrink-0 mt-0.5" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -406,8 +768,8 @@
             </div>
         </div>
         {{-- ✅ RIWAYAT POIN (Full Width) --}}
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <div class="flex items-center justify-between mb-6">
+        <div class="points-history bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="points-history-heading flex items-center justify-between mb-6">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">Aktivitas & Log Perolehan
                     </p>
@@ -490,8 +852,11 @@
                                     @php
                                         $statusColors = [
                                             'pending' => 'bg-yellow-100 text-yellow-800',
+                                            'Menunggu Persetujuan' => 'bg-yellow-100 text-yellow-800',
                                             'disetujui' => 'bg-green-100 text-green-800',
+                                            'Disetujui' => 'bg-green-100 text-green-800',
                                             'ditolak' => 'bg-red-100 text-red-800',
+                                            'Ditolak' => 'bg-red-100 text-red-800',
                                             'Selesai' => 'bg-green-100 text-green-800',
                                             'Bonus Diberikan' => 'bg-[#E8F5E9] text-[#2E7D32]',
                                         ];
@@ -521,7 +886,7 @@
                 </table>
             </div>
 
-            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+            <div class="points-history-footer flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                 <p class="text-xs text-[#718078] flex items-center gap-1">
                     <svg class="w-3 h-3 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -534,7 +899,7 @@
         </div>
 
         {{-- ✅ BANNER BEBAS ONGKIR (Full Width) --}}
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="points-shipping bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-[#8B1E1E] flex items-center justify-center flex-shrink-0">

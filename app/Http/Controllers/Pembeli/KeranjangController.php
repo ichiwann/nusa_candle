@@ -74,7 +74,8 @@ class KeranjangController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+        return redirect()->route('keranjang.index')
+            ->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
     public function update(Request $request, int $id): RedirectResponse

@@ -108,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
 
     // halaman produk untuk pembeli
     Route::get('/produk', [PembeliProdukController::class, 'index'])->name('produk.index');
+    Route::get('/produk/pratinjau/{index}', [PembeliProdukController::class, 'preview'])->name('produk.preview');
     Route::get('/produk/{id}', [PembeliProdukController::class, 'show'])->name('produk.show');
 
     // Keranjang (perlu login)
@@ -120,6 +121,9 @@ Route::middleware(['auth'])->group(function () {
     // Di dalam Route::middleware(['auth'])->group(...)
     Route::get('/pesanan', [PembeliPesananController::class, 'index'])->name('pembeli.pesanan.index');
     Route::get('/pesanan/{id}', [PembeliPesananController::class, 'show'])->name('pembeli.pesanan.show');
+    Route::get('/pesanan/pratinjau/{id}', [PembeliPesananController::class, 'preview'])
+        ->whereNumber('id')
+        ->name('pembeli.pesanan.preview');
     Route::post('/pesanan/{id}/reorder', [PembeliPesananController::class, 'reorder'])->name('pembeli.pesanan.reorder');
     // Halaman checkout (pilih metode pembayaran)
     Route::get('/checkout', [PembeliPesananController::class, 'showCheckout'])->name('pembeli.checkout.show');
