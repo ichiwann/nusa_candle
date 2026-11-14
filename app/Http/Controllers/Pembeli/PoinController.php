@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hadiah;
 use App\Models\KodeRedeem;
-use carbon\Carbon;
+use Carbon\Carbon;
 
 class PoinController extends Controller
 {

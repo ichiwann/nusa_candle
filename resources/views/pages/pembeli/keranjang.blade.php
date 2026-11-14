@@ -820,65 +820,45 @@
         // ✅ HITUNG ULANG RINGKASAN BELANJA BERDASARKAN CHECKBOX
         function updateRingkasanBelanja() {
             const checkboxes = document.querySelectorAll('input[name="selected[]"]');
-            const selectedIds = Array.from(checkboxes)
-                .filter(cb => cb.checked)
-                .map(cb => cb.value);
 
-            // Data item dari PHP (disimpan di data attributes)
-            const items = [];
-            checkboxes.forEach(cb => {
-                const article = cb.closest('article');
-                if (article) {
-                    const hargaSatuan = parseInt(article.dataset.hargaSatuan) || 0;
-                    const jumlah = parseInt(article.dataset.jumlah) || 0;
-                    items.push({
-                        id: cb.value,
-                        harga: hargaSatuan,
-                        qty: jumlah,
-                        selected: cb.checked
-                    });
-                }
-            });
+            // Keranjang server kosong → jangan timpa ringkasan keranjang demo (localStorage)
+            if (checkboxes.length === 0) return;
 
-            // Hitung total dari item yang dicentang
             let totalItem = 0;
             let totalHarga = 0;
 
-            items.forEach(item => {
-                if (item.selected) {
-                    totalItem += item.qty;
-                    totalHarga += (item.harga * item.qty);
+            checkboxes.forEach(cb => {
+                const article = cb.closest('article');
+                if (!article) return;
+
+                const hargaSatuan = parseInt(article.dataset.hargaSatuan) || 0;
+                const jumlah = parseInt(article.dataset.jumlah) || 0;
+                const subtotalEl = article.querySelector('[data-subtotal]');
+
+                if (cb.checked) {
+                    totalItem += jumlah;
+                    totalHarga += hargaSatuan * jumlah;
+
+                    if (subtotalEl) {
+                        subtotalEl.textContent = 'Rp ' + (hargaSatuan * jumlah).toLocaleString('id-ID');
+                        subtotalEl.classList.remove('text-gray-400', 'line-through');
+                        subtotalEl.classList.add('text-[#8B1E1E]');
+                    }
+                } else if (subtotalEl) {
+                    subtotalEl.textContent = 'Rp 0';
+                    subtotalEl.classList.add('text-gray-400', 'line-through');
+                    subtotalEl.classList.remove('text-[#8B1E1E]');
                 }
             });
 
             const ongkir = {{ $ongkir }};
             const packaging = {{ $packaging }};
-            const totalBelanja = totalHarga + ongkir + packaging;
+            // Ongkir & kemasan hanya dihitung kalau ada item yang dipilih
+            const totalBelanja = totalItem > 0 ? totalHarga + ongkir + packaging : 0;
 
-            // Update tampilan ringkasan
             document.getElementById('summary-quantity').textContent = totalItem;
             document.getElementById('summary-product-total').textContent = 'Rp ' + totalHarga.toLocaleString('id-ID');
             document.getElementById('summary-grand-total').textContent = 'Rp ' + totalBelanja.toLocaleString('id-ID');
-
-            // Update subtotal per item (tampilkan 0 jika tidak dicentang)
-            checkboxes.forEach(cb => {
-                const article = cb.closest('article');
-                if (article) {
-                    const subtotalEl = article.querySelector('[data-subtotal]');
-                    const hargaSatuan = parseInt(article.dataset.hargaSatuan) || 0;
-                    const jumlah = parseInt(article.dataset.jumlah) || 0;
-
-                    if (cb.checked) {
-                        subtotalEl.textContent = 'Rp ' + (hargaSatuan * jumlah).toLocaleString('id-ID');
-                        subtotalEl.classList.remove('text-gray-400', 'line-through');
-                        subtotalEl.classList.add('text-[#8B1E1E]');
-                    } else {
-                        subtotalEl.textContent = 'Rp 0';
-                        subtotalEl.classList.add('text-gray-400', 'line-through');
-                        subtotalEl.classList.remove('text-[#8B1E1E]');
-                    }
-                }
-            });
 
             // Disable tombol checkout jika tidak ada yang dicentang
             const checkoutBtn = document.querySelector('button[form="checkout-form"]');
@@ -887,33 +867,17 @@
             }
         }
 
-        // Listen perubahan checkbox
+        // ✅ Inisialisasi ringkasan + listener checkbox
         document.addEventListener('DOMContentLoaded', function() {
-            // Tambahkan data attributes ke setiap item
-            document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
-                const article = cb.closest('article');
-                if (article) {
-                    const hargaText = article.querySelector('.text-[10px].font-semibold.text-[#2C1810]')
-                        ?.textContent || '0';
-                    const jumlahInput = article.querySelector('input[name="jumlah"]');
-
-                    // Parse harga (hapus "Rp " dan titik)
-                    const hargaSatuan = parseInt(hargaText.replace(/[^0-9]/g, '')) || 0;
-                    const jumlah = parseInt(jumlahInput?.value) || 0;
-
-                    article.dataset.hargaSatuan = hargaSatuan;
-                    article.dataset.jumlah = jumlah;
-                }
-            });
-
-            // Initial calculation
+            // Hitung awal sesuai checkbox yang tercentang
             updateRingkasanBelanja();
 
-            // Listen perubahan checkbox
+            // Setiap centang item berubah → hitung ulang
             document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
                 cb.addEventListener('change', updateRingkasanBelanja);
             });
 
+            // "Pilih Semua" → hitung ulang (jalan setelah toggleSelectAll)
             document.getElementById('select-all')?.addEventListener('change', updateRingkasanBelanja);
         });
     </script>
