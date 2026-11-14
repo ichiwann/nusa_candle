@@ -9,6 +9,7 @@ use App\Models\Hadiah;
 use App\Models\Produk;
 use App\Models\PenukaranHadiah;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class HadiahController extends Controller
 {
@@ -110,11 +111,11 @@ class HadiahController extends Controller
     }
 
     /**
-     * Reject klaim hadiah (kembalikan poin ke user)
+     * Reject klaim hadiah (kembalikan poin + stok)
      */
     public function reject(Request $request, int $id): RedirectResponse
     {
-        $penukaran = PenukaranHadiah::findOrFail($id);
+        $penukaran = PenukaranHadiah::with(['user', 'hadiah.produk'])->findOrFail($id);
 
         if ($penukaran->status_klaim !== 'pending') {
             return back()->withErrors(['status' => 'Hanya klaim berstatus pending yang bisa ditolak.']);
@@ -124,18 +125,30 @@ class HadiahController extends Controller
             'alasan_tolak' => ['nullable', 'string', 'max:500'],
         ]);
 
-        // Kembalikan poin ke user
-        $user = $penukaran->user;
-        if ($user) {
-            $user->increment('total_poin', $penukaran->poin_ditukar);
+        DB::beginTransaction();
+        try {
+            // Kembalikan poin ke user
+            if ($penukaran->user) {
+                $penukaran->user->increment('total_poin', $penukaran->poin_ditukar);
+            }
+
+            // ✅ KEMBALIKAN STOK PRODUK (stok sudah dipotong saat klaim)
+            if ($penukaran->hadiah?->produk) {
+                $penukaran->hadiah->produk->increment('stok');
+            }
+
+            // Update status + simpan alasan di kolom catatan
+            $penukaran->update([
+                'status_klaim' => 'ditolak',
+                'catatan' => ($penukaran->catatan ? $penukaran->catatan . ' | ' : '') . 'Ditolak: ' . ($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
 
-        // Update status + simpan alasan di kolom catatan
-        $penukaran->update([
-            'status_klaim' => 'ditolak',
-            'catatan' => ($penukaran->catatan ? $penukaran->catatan . ' | ' : '') . 'Ditolak: ' . ($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
-        ]);
-
-        return back()->with('success', 'Klaim hadiah ditolak. Poin user telah dikembalikan.');
+        return back()->with('success', 'Klaim hadiah ditolak. Poin dan stok telah dikembalikan.');
     }
 }
