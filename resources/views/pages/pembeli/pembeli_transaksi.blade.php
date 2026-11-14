@@ -709,22 +709,6 @@
         </div>
 
         <div class="transactions-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {{-- Notifikasi --}}
-            @if (session('success'))
-                <div class="transactions-alert mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="transactions-alert mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
-                    <ul class="list-inside list-disc space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <div class="transactions-grid grid lg:grid-cols-2 gap-6 mb-8">
                 {{-- TRANSAKSI BERJALAN --}}

@@ -38,23 +38,6 @@
             <p class="mt-1 text-[9px] text-[#796d5d] sm:text-[10px]">Kelola data pribadi &amp; preferensi keamanan akun NusaCandle Anda</p>
         </div>
 
-        {{-- Notifikasi --}}
-        @if (session('success'))
-            <div class="mb-4 rounded-md border border-[#cfe3c7] bg-[#edf6e9] px-3 py-2 text-[9px] text-[#276236]">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="mb-4 rounded-md border border-[#edcaca] bg-[#fff1f1] px-3 py-2 text-[9px] text-[#8B1E1E]">
-                <ul class="list-inside list-disc space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         {{-- BAGIAN 01 - Data Diri Pelanggan --}}
         <div class="mb-4 rounded-xl border border-[#e8dfcf] bg-white p-4 shadow-sm sm:p-5">
             <div class="mb-4 flex flex-wrap items-center justify-between gap-3">

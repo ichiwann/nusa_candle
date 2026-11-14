@@ -116,19 +116,23 @@ class PembeliPesananController extends Controller
     {
         $validated = $request->validate([
             'metode_pembayaran' => ['required', 'in:bca,mandiri,gopay,dana,shopeepay,cod'],
+            'selected' => ['required', 'array', 'min:1'],          // ✅ wajib pilih min 1
+            'selected.*' => ['integer', 'exists:keranjang,id_keranjang'],
         ]);
 
         $user = Auth::user();
 
+        // ✅ Ambil HANYA item yang dicentang DAN milik user ini (aman dari manipulasi id)
         $keranjangItems = Keranjang::with('produk')
             ->where('id_user', $user->id_user)
+            ->whereIn('id_keranjang', $validated['selected'])
             ->get();
 
         if ($keranjangItems->isEmpty()) {
-            return back()->withErrors(['checkout' => 'Keranjang Anda kosong.']);
+            return back()->withErrors(['checkout' => 'Tidak ada item yang dipilih.']);
         }
 
-        // ✅ VALIDASI STOK SEBELUM PROSES
+        // ✅ VALIDASI STOK (hanya untuk item terpilih)
         foreach ($keranjangItems as $item) {
             if ($item->produk->stok < $item->jumlah) {
                 return back()->withErrors([
@@ -137,7 +141,7 @@ class PembeliPesananController extends Controller
             }
         }
 
-        // Hitung total
+        // Hitung total dari item terpilih saja
         $totalHargaProduk = 0;
         foreach ($keranjangItems as $item) {
             $totalHargaProduk += ($item->produk->harga * $item->jumlah);
@@ -149,19 +153,16 @@ class PembeliPesananController extends Controller
 
         DB::beginTransaction();
         try {
-            // Tentukan status pesanan berdasarkan metode pembayaran
             $statusPesanan = $validated['metode_pembayaran'] === 'cod'
                 ? 'diproses'
                 : 'menunggu_pembayaran';
 
-            // A. Buat Pesanan
             $pesanan = Pesanan::create([
                 'id_user' => $user->id_user,
                 'total_harga' => $totalBelanja,
                 'status_pesanan' => $statusPesanan,
             ]);
 
-            // B. Buat Detail Pesanan & ✅ KURANGI STOK
             foreach ($keranjangItems as $item) {
                 DetailPesanan::create([
                     'id_pesanan' => $pesanan->id_pesanan,
@@ -170,19 +171,20 @@ class PembeliPesananController extends Controller
                     'harga_satuan' => $item->produk->harga,
                 ]);
 
-                // ✅ KURANGI STOK PRODUK
+                // Kurangi stok hanya untuk item terpilih
                 $item->produk->decrement('stok', $item->jumlah);
             }
 
-            // C. Buat Transaksi
             Transaksi::create([
                 'id_pesanan' => $pesanan->id_pesanan,
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'status_pembayaran' => 'menunggu',
             ]);
 
-            // D. Hapus Keranjang
-            Keranjang::where('id_user', $user->id_user)->delete();
+            // ✅ HAPUS HANYA item yang dicentang — sisanya tetap di keranjang
+            Keranjang::where('id_user', $user->id_user)
+                ->whereIn('id_keranjang', $validated['selected'])
+                ->delete();
 
             DB::commit();
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hadiah;
 use App\Models\KodeRedeem;
+use carbon\Carbon;
 
 class PoinController extends Controller
 {
@@ -111,7 +112,7 @@ class PoinController extends Controller
         return back()->with('success', "Klaim hadiah berhasil! Menunggu persetujuan admin. {$targetPoin} poin telah dikurangi.");
     }
 
-    /**
+        /**
      * Proses redeem kode untuk dapat poin
      */
     public function redeem(Request $request): \Illuminate\Http\RedirectResponse
@@ -124,7 +125,7 @@ class PoinController extends Controller
         ]);
 
         // Cari kode redeem di database (status masih 'tersedia')
-        $kodeRedeem = \App\Models\KodeRedeem::where('kode', strtoupper(trim($validated['kode_redeem'])))
+        $kodeRedeem = KodeRedeem::where('kode', strtoupper(trim($validated['kode_redeem'])))
             ->where('status', 'tersedia')
             ->first();
 
@@ -134,16 +135,17 @@ class PoinController extends Controller
         }
 
         // Validasi: kode kadaluarsa
-        if ($kodeRedeem->berlaku_hingga && \Carbon\Carbon::parse($kodeRedeem->berlaku_hingga)->isPast()) {
+        if ($kodeRedeem->berlaku_hingga && Carbon::parse($kodeRedeem->berlaku_hingga)->isPast()) {
             return back()->withErrors(['redeem' => 'Kode redeem sudah kadaluarsa.']);
         }
 
         // Tambahkan poin ke user
         $user->increment('total_poin', $kodeRedeem->poin);
 
-        // Update status kode redeem menjadi 'terpakai'
+        // ✅ Update status + CATAT SIAPA YANG MEMAKAI
         $kodeRedeem->update([
             'status' => 'terpakai',
+            'id_user' => $user->id_user,        // ← INI YANG KURANG!
             'dipakai_pada' => now(),
         ]);
 

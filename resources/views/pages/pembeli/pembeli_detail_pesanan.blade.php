@@ -100,15 +100,6 @@
                 </div>
             @endif
 
-            @if (session('success'))
-                <div class="mb-3 flex items-center gap-2 rounded-lg border border-[#cfe3c7] bg-[#edf6e9] px-3 py-2 text-[9px] text-[#276236]" role="status">
-                    <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {{ session('success') }}
-                </div>
-            @endif
-
             @if ($pesanan->status_pesanan === 'dibatalkan')
                 <div class="mb-3 rounded-lg border border-[#edcaca] bg-[#fff1f1] px-3 py-2 text-[9px] text-[#8B1E1E]" role="status">
                     Pesanan ini dibatalkan. Hubungi penjual jika Anda memerlukan bantuan.

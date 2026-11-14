@@ -22,9 +22,43 @@
     {{-- Navbar Component --}}
     <x-pembeli.navbar />
 
-    {{-- Konten Utama (flex-grow agar footer selalu di bawah jika konten sedikit) --}}
-    <main class="flex-grow">
+    {{-- Konten Utama --}}
+    <main class="flex-grow w-full relative">
+        
+        {{-- ✅ NOTIFIKASI GLOBAL SUCCESS --}}
+        @if (session('success'))
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div role="status" class="flex items-center gap-3 border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 rounded-lg shadow-sm animate-fade-in-down">
+                    <svg class="w-5 h-5 flex-shrink-0 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="font-medium">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+
+        {{-- ✅ NOTIFIKASI GLOBAL ERROR --}}
+        @if ($errors->any())
+            <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div role="alert" class="flex items-start gap-3 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 rounded-lg shadow-sm animate-fade-in-down">
+                    <svg class="w-5 h-5 flex-shrink-0 text-red-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <p class="font-semibold mb-1">Mohon periksa kembali:</p>
+                        <ul class="list-inside list-disc space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        {{-- Konten Halaman --}}
         @yield('content')
+        
     </main>
 
     {{-- Footer Component --}}

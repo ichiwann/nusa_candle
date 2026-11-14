@@ -91,12 +91,6 @@
         </header>
 
         <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
-            {{-- Notifikasi --}}
-            @if (session('success'))
-                <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md">
-                    {{ session('success') }}
-                </div>
-            @endif
 
             {{-- SECTION: PESANAN AKTIF --}}
             <section class="mb-6 sm:mb-8">
