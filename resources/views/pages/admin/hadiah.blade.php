@@ -191,7 +191,7 @@
                             </td>
                             <td class="px-5 py-4">
                                 <p class="font-semibold text-[#30483a]">{{ $penukaran['nama_user'] }}</p>
-                                <p class="text-[10px] text-[#87948b]">@{{ $penukaran['username'] }}</p>
+                                <p class="text-[10px] text-[#87948b]">{{ $penukaran['username'] }}</p>
                             </td>
                             <td class="px-5 py-4">
                                 <div class="min-w-[140px]">

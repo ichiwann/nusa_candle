@@ -125,6 +125,9 @@ Route::middleware(['auth'])->group(function () {
         ->whereNumber('id')
         ->name('pembeli.pesanan.preview');
     Route::post('/pesanan/{id}/reorder', [PembeliPesananController::class, 'reorder'])->name('pembeli.pesanan.reorder');
+    // ✅ Pembeli menyelesaikan pesanan yang sudah dikirim
+    Route::post('/pesanan/{id}/selesai', [PembeliPesananController::class, 'selesai'])->name('pembeli.pesanan.selesai');
+
     // Halaman checkout (pilih metode pembayaran)
     Route::get('/checkout', [PembeliPesananController::class, 'showCheckout'])->name('pembeli.checkout.show');
     // Proses checkout setelah pilih metode

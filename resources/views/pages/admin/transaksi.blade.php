@@ -190,10 +190,25 @@
                                     @else
                                         <span class="text-[10px] text-[#87948b]">-</span>
                                     @endif
-                                    <button
-                                        onclick="openStatusModal({{ $transaksi->id_transaksi }}, '{{ $transaksi->status_pembayaran }}')"
+                                    @php
+                                        $detailPayload = [
+                                            'id' => $transaksi->id_transaksi,
+                                            'pelanggan' => $transaksi->pesanan->user->nama_lengkap ?? 'Unknown',
+                                            'metode' => $transaksi->metode_label,
+                                            'total' =>
+                                                'Rp ' .
+                                                number_format($transaksi->pesanan->total_harga ?? 0, 0, ',', '.'),
+                                            'tanggal' => $transaksi->created_at->format('d M Y H:i'),
+                                            'statusPembayaran' => $transaksi->status_pembayaran,
+                                            'statusPesanan' => $transaksi->pesanan->status_pesanan ?? '-',
+                                            'bukti' => $transaksi->bukti_pembayaran
+                                                ? asset('storage/' . $transaksi->bukti_pembayaran)
+                                                : null,
+                                        ];
+                                    @endphp
+                                    <button onclick='openDetailModal(@json($detailPayload))'
                                         class="bg-[#103a2a] hover:bg-[#315d41] text-white px-3 py-1.5 rounded text-[10px] font-semibold transition">
-                                        Update Status
+                                        Detail Transaksi
                                     </button>
                                 </div>
                             </td>
@@ -224,19 +239,47 @@
         @endif
     </section>
 
-    <!-- Modal Update Status -->
+    <!-- Modal Detail Transaksi -->
     <div id="status-modal"
         class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0b251b]/60 p-4 backdrop-blur-sm">
-        <div class="w-full max-w-md bg-white rounded-lg shadow-2xl">
+        <div class="w-full max-w-lg bg-white rounded-lg shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="border-b border-[#edf0eb] px-6 py-4 flex items-center justify-between">
                 <div>
-                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Update Status Transaksi
-                    </p>
-                    <h2 class="display-font mt-1 text-xl font-semibold text-[#183b2c]">Transaksi #<span
+                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Detail Transaksi</p>
+                    <h2 class="display-font mt-1 text-xl font-semibold text-[#183b2c]">TRX-<span
                             id="modal-transaksi-id"></span></h2>
                 </div>
                 <button onclick="closeStatusModal()"
                     class="text-2xl text-[#718078] hover:text-[#30483a] transition">&times;</button>
+            </div>
+
+            <div class="px-6 pt-4 grid grid-cols-2 gap-3 text-xs">
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Pelanggan</p>
+                    <p id="modal-pelanggan" class="font-semibold text-[#30483a]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Tanggal</p>
+                    <p id="modal-tanggal" class="font-semibold text-[#30483a]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Metode</p>
+                    <p id="modal-metode" class="font-semibold text-[#30483a]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Total</p>
+                    <p id="modal-total" class="font-semibold text-[#183b2c]"></p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-[10px] uppercase text-[#87948b]">Status Pesanan Saat Ini</p>
+                    <p id="modal-status-pesanan" class="font-semibold text-[#30483a] capitalize"></p>
+                </div>
+                <div id="modal-bukti-wrap" class="col-span-2 hidden">
+                    <a id="modal-bukti-link" href="#" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 rounded-md border border-[#dce7dc] bg-[#f9fcf9] px-3 py-2 text-[11px] font-semibold text-[#103a2a] hover:border-[#103a2a] transition">
+                        📎 Lihat Bukti Pembayaran (buka file)
+                    </a>
+                </div>
             </div>
 
             <form id="status-form" method="POST" class="p-6 space-y-4">
@@ -247,13 +290,28 @@
                     <label class="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#64835d] mb-2">Status
                         Pembayaran</label>
                     <select name="status_pembayaran" id="status_pembayaran" required
-                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] focus:ring-1 focus:ring-[#103a2a]/20 outline-none">
-                        <option value="menunggu">Menunggu Pembayaran</option>
+                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] outline-none">
+                        <option value="menunggu">Menunggu Verifikasi</option>
                         <option value="berhasil">Berhasil</option>
                         <option value="gagal">Gagal</option>
                     </select>
-                    <p class="mt-2 text-[10px] text-[#87948b]">⚠️ Mengubah status menjadi "Berhasil" akan otomatis mengubah
-                        status pesanan menjadi "Diproses".</p>
+                    <p class="mt-2 text-[10px] text-[#87948b]">⚠️ "Berhasil" otomatis mengubah pesanan jadi "Diproses"
+                        (jika masih menunggu pembayaran).</p>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#64835d] mb-2">Status
+                        Pesanan (opsional)</label>
+                    <select name="status_pesanan" id="status_pesanan"
+                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] outline-none">
+                        <option value="">— Tidak diubah —</option>
+                        <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
+                        <option value="diproses">Diproses</option>
+                        <option value="dikirim">Dikirim</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                    <p class="mt-2 text-[10px] text-[#87948b]">ℹ️ Khusus COD: menandai "Selesai" otomatis melunasi
+                        pembayaran.</p>
                 </div>
 
                 <div class="flex justify-end gap-2 border-t border-[#edf0eb] pt-4">
@@ -268,10 +326,25 @@
     </div>
 
     <script>
-        function openStatusModal(transaksiId, currentStatus) {
-            document.getElementById('modal-transaksi-id').textContent = transaksiId;
-            document.getElementById('status-form').action = `/admin/transaksi/${transaksiId}/status`;
-            document.getElementById('status_pembayaran').value = currentStatus;
+        function openDetailModal(data) {
+            document.getElementById('modal-transaksi-id').textContent = String(data.id).padStart(4, '0');
+            document.getElementById('modal-pelanggan').textContent = data.pelanggan;
+            document.getElementById('modal-metode').textContent = data.metode;
+            document.getElementById('modal-total').textContent = data.total;
+            document.getElementById('modal-tanggal').textContent = data.tanggal;
+            document.getElementById('modal-status-pesanan').textContent = data.statusPesanan.replace(/_/g, ' ');
+
+            const buktiWrap = document.getElementById('modal-bukti-wrap');
+            if (data.bukti) {
+                document.getElementById('modal-bukti-link').href = data.bukti;
+                buktiWrap.classList.remove('hidden');
+            } else {
+                buktiWrap.classList.add('hidden');
+            }
+
+            document.getElementById('status-form').action = `/admin/transaksi/${data.id}/status`;
+            document.getElementById('status_pembayaran').value = data.statusPembayaran;
+            document.getElementById('status_pesanan').value = '';
             document.getElementById('status-modal').classList.remove('hidden');
         }
 
@@ -280,9 +353,7 @@
         }
 
         document.getElementById('status-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeStatusModal();
-            }
+            if (e.target === this) closeStatusModal();
         });
     </script>
 @endsection

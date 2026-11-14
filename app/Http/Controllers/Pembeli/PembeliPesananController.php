@@ -116,13 +116,13 @@ class PembeliPesananController extends Controller
     {
         $validated = $request->validate([
             'metode_pembayaran' => ['required', 'in:bca,mandiri,gopay,dana,shopeepay,cod'],
-            'selected' => ['required', 'array', 'min:1'],          // ✅ wajib pilih min 1
+            'selected' => ['required', 'array', 'min:1'],
             'selected.*' => ['integer', 'exists:keranjang,id_keranjang'],
         ]);
 
         $user = Auth::user();
 
-        // ✅ Ambil HANYA item yang dicentang DAN milik user ini (aman dari manipulasi id)
+        // Ambil HANYA item yang dicentang DAN milik user ini
         $keranjangItems = Keranjang::with('produk')
             ->where('id_user', $user->id_user)
             ->whereIn('id_keranjang', $validated['selected'])
@@ -132,7 +132,7 @@ class PembeliPesananController extends Controller
             return back()->withErrors(['checkout' => 'Tidak ada item yang dipilih.']);
         }
 
-        // ✅ VALIDASI STOK (hanya untuk item terpilih)
+        // Validasi stok (hanya untuk item terpilih)
         foreach ($keranjangItems as $item) {
             if ($item->produk->stok < $item->jumlah) {
                 return back()->withErrors([
@@ -175,23 +175,28 @@ class PembeliPesananController extends Controller
                 $item->produk->decrement('stok', $item->jumlah);
             }
 
-            Transaksi::create([
+            // ✅ PATCH 2a: ditampung ke variabel $transaksi
+            $transaksi = Transaksi::create([
                 'id_pesanan' => $pesanan->id_pesanan,
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'status_pembayaran' => 'menunggu',
             ]);
 
-            // ✅ HAPUS HANYA item yang dicentang — sisanya tetap di keranjang
+            // Hapus HANYA item yang dicentang — sisanya tetap di keranjang
             Keranjang::where('id_user', $user->id_user)
                 ->whereIn('id_keranjang', $validated['selected'])
                 ->delete();
 
             DB::commit();
 
-            return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
-                ->with('success', $validated['metode_pembayaran'] === 'cod'
-                    ? 'Pesanan COD berhasil dibuat! Pesanan akan segera diproses.'
-                    : 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
+            // ✅ PATCH 2b: if/else DI DALAM try, setelah commit (catch di bawah tetap)
+            if ($validated['metode_pembayaran'] === 'cod') {
+                return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
+                    ->with('success', 'Pesanan COD berhasil dibuat! Pesanan akan segera diproses.');
+            }
+
+            return redirect()->route('pembeli.transaksi.show', $transaksi->id_transaksi)
+                ->with('success', 'Pesanan berhasil dibuat! Silakan bayar dan unggah bukti pembayarannya.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['checkout' => 'Terjadi kesalahan: ' . $e->getMessage()]);
@@ -249,5 +254,42 @@ class PembeliPesananController extends Controller
             'pesanan' => $pesanan,
             'isPreview' => true,
         ]);
+    }
+
+    /**
+     * ✅ Pembeli menyelesaikan pesanan — hanya saat status "dikirim".
+     */
+    public function selesai(int $id): RedirectResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $pesanan = Pesanan::with('transaksi')
+            ->where('id_pesanan', $id)
+            ->where('id_user', $user->id_user)
+            ->firstOrFail();
+
+        if ($pesanan->status_pesanan !== 'dikirim') {
+            return back()->withErrors(['selesai' => 'Pesanan hanya bisa diselesaikan setelah statusnya "Dikirim".']);
+        }
+
+        DB::beginTransaction();
+        try {
+            $pesanan->update(['status_pesanan' => 'selesai']);
+
+            // ✅ COD: pembayaran dianggap lunas saat barang diterima & dibayar
+            $transaksi = $pesanan->transaksi->first();
+            if ($transaksi && $transaksi->metode_pembayaran === 'cod') {
+                $transaksi->update(['status_pembayaran' => 'berhasil']);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['selesai' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+
+        return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
+            ->with('success', 'Terima kasih! Pesanan telah diselesaikan.');
     }
 }
