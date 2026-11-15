@@ -24,8 +24,6 @@
                 <a href="{{ route('poin.index') }}"
                     class="px-4 py-2 rounded-md text-sm font-medium {{ request()->routeIs('poin.index') ? 'bg-[#8B1E1E] text-white' : 'text-[#2C1810] hover:bg-gray-100' }}">Poin
                     Saya</a>
-                <a href="{{ route('profil.index') }}"
-                    class="px-4 py-2 rounded-md text-sm font-medium {{ request()->routeIs('profil.index') ? 'bg-[#8B1E1E] text-white' : 'text-[#2C1810] hover:bg-gray-100' }}">Profil</a>
             </div>
 
             <!-- Icon Actions -->
@@ -56,13 +54,13 @@
                         </span>
                     @endif
                 </a>
-
                 @auth
                     <div class="flex items-center gap-2">
-                        <div
-                            class="h-8 w-8 rounded-full bg-[#8B1E1E] text-white flex items-center justify-center text-sm font-semibold">
+                        {{-- ✅ Avatar bulat: klik langsung ke halaman profil --}}
+                        <a href="{{ route('profil.index') }}" title="Profil Saya" aria-label="Profil Saya"
+                            class="h-8 w-8 rounded-full bg-[#8B1E1E] text-white flex items-center justify-center text-sm font-semibold transition hover:opacity-90 {{ request()->routeIs('profil.*') ? 'ring-2 ring-[#8B1E1E] ring-offset-2' : '' }}">
                             {{ mb_substr(auth()->user()->nama_lengkap, 0, 1) }}
-                        </div>
+                        </a>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="p-2 text-[#2C1810] hover:bg-gray-100 rounded-md" title="Logout">
