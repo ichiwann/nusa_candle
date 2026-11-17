@@ -12,12 +12,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .font-serif { font-family: 'Playfair Display', serif; }
-    </style>
 </head>
-<body class="bg-[#FAF9F6] text-[#2C1810] flex flex-col min-h-screen">
+<body class="font-buyer flex min-h-screen flex-col bg-[#FAF9F6] text-[#2C1810] print:bg-white">
 
     {{-- Navbar Component --}}
     <x-pembeli.navbar />

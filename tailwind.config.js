@@ -13,6 +13,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                buyer: ['Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
+                display: ['Playfair Display', ...defaultTheme.fontFamily.serif],
             },
         },
     },

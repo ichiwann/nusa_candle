@@ -40,30 +40,7 @@
             ],
         ];
     @endphp
-
-    <style>
-        body {
-            background-color: #faf7ed;
-        }
-
-        body > nav {
-            background-color: #faf7ed !important;
-            border-top: 3px solid #8b1e1e;
-            box-shadow: none !important;
-        }
-
-        body > main {
-            background-color: #faf7ed;
-        }
-
-        body > footer {
-            background-color: #f5f0e2 !important;
-            border-top-color: #e8dfcd !important;
-            margin-top: 2rem !important;
-        }
-    </style>
-
-    <div class="bg-[#faf7ed]">
+<div class="bg-[#faf7ed]">
         <div class="mx-auto max-w-7xl px-4 pb-8 pt-3 sm:px-6 lg:px-8">
             <nav aria-label="Jejak halaman" class="mb-3 flex items-center gap-2 text-[8px] text-[#796d5d] sm:text-[9px]">
                 <a href="{{ route('pembeli.pesanan.index') }}" class="inline-flex items-center gap-1 transition hover:text-[#8B1E1E]">
@@ -81,7 +58,7 @@
                     <p class="mb-1 text-[7px] font-semibold uppercase tracking-[0.16em] text-[#2E7D32] sm:text-[8px]">
                         NusaCandle · Lilin Aroma Terapi Apel
                     </p>
-                    <h1 class="font-serif text-xl font-bold leading-tight text-[#2C1810] sm:text-2xl">Detail Pesanan</h1>
+                    <h1 class="font-display text-xl font-bold leading-tight text-[#2C1810] sm:text-2xl">Detail Pesanan</h1>
                     <p class="mt-1 text-[8px] text-[#796d5d] sm:text-[9px]">
                         #NC-{{ $pesanan->created_at->format('Y') }}-{{ str_pad($pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}
                         <span class="px-1" aria-hidden="true">·</span>
@@ -119,7 +96,7 @@
                 <div class="mb-7 flex flex-wrap items-end justify-between gap-3">
                     <div>
                         <p class="mb-1 text-[7px] font-bold uppercase tracking-[0.16em] text-[#47784a] sm:text-[8px]">Perjalanan Lilin Anda</p>
-                        <h2 id="order-progress-title" class="font-serif text-sm font-bold text-[#2C1810] sm:text-base">Status Pengiriman Terkini</h2>
+                        <h2 id="order-progress-title" class="font-display text-sm font-bold text-[#2C1810] sm:text-base">Status Pengiriman Terkini</h2>
                     </div>
                     <div class="rounded-md bg-[#f7f4ec] px-2.5 py-1.5 text-right text-[7px] text-[#796d5d] sm:text-[8px]">
                         Estimasi tiba
@@ -129,7 +106,11 @@
                 <div class="overflow-x-auto pb-1">
                     <ol class="relative grid min-w-[700px] grid-cols-5">
                         <li aria-hidden="true" class="absolute left-[10%] right-[10%] top-3.5 h-0.5 rounded-full bg-[#ece8df]">
-                            <span class="absolute left-0 top-0 h-full rounded-full bg-[#47784a]" style="width: {{ max(0, min($progressIndex, 4)) * 25 }}%;"></span>
+                            @php
+                                $orderProgressWidths = ['w-0', 'w-1/4', 'w-1/2', 'w-3/4', 'w-full'];
+                                $orderProgressWidth = $orderProgressWidths[min(4, max(0, $progressIndex))];
+                            @endphp
+                            <span class="absolute left-0 top-0 h-full rounded-full bg-[#47784a] {{ $orderProgressWidth }}"></span>
                         </li>
                         @foreach ($progressSteps as $index => $step)
                             @php
@@ -182,7 +163,7 @@
                 <div class="min-w-0 space-y-4">
                     <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                         <div class="mb-3 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                            <h2 class="font-serif text-[11px] font-bold text-[#2C1810] sm:text-xs">Produk dalam Pesanan</h2>
+                            <h2 class="font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Produk dalam Pesanan</h2>
                             <span class="rounded-full bg-[#e8f2e2] px-2 py-0.5 text-[7px] font-semibold text-[#2E7D32] sm:text-[8px]">
                                 {{ $totalItem }} Barang
                             </span>
@@ -211,7 +192,7 @@
 
                                     <div class="min-w-0 flex-1">
                                         <span class="mb-1 inline-flex rounded-full bg-[#e8f2e2] px-1.5 py-0.5 text-[6px] font-semibold text-[#2E7D32] sm:text-[7px]">NusaCandle · Lilin Alami</span>
-                                        <h3 class="font-serif text-[9px] font-bold leading-snug text-[#2C1810] sm:text-[10px]">
+                                        <h3 class="font-display text-[9px] font-bold leading-snug text-[#2C1810] sm:text-[10px]">
                                             {{ $detail->produk->nama_produk }}
                                         </h3>
                                         <p class="mt-1 text-[7px] text-[#796d5d] sm:text-[8px]">
@@ -237,7 +218,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             </span>
-                            <h2 class="font-serif text-[11px] font-bold text-[#2C1810] sm:text-xs">Informasi Pengiriman & Pelacakan</h2>
+                            <h2 class="font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Informasi Pengiriman & Pelacakan</h2>
                         </div>
 
                         @if ($isPreview)
@@ -282,7 +263,7 @@
                 <aside class="min-w-0 space-y-3">
                     <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                         <div class="mb-2 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                            <h2 class="font-serif text-[11px] font-bold text-[#2C1810] sm:text-xs">Informasi Pesanan</h2>
+                            <h2 class="font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Informasi Pesanan</h2>
                             <svg class="h-3.5 w-3.5 text-[#8B1E1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
@@ -335,7 +316,7 @@
                     </section>
 
                     <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
-                        <h2 class="mb-2 font-serif text-[11px] font-bold text-[#2C1810] sm:text-xs">Ringkasan Pembayaran</h2>
+                        <h2 class="mb-2 font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Ringkasan Pembayaran</h2>
                         <div class="space-y-1.5 border-b border-[#f1ece2] pb-2 text-[7px] sm:text-[8px]">
                             <div class="flex justify-between gap-2">
                                 <span class="text-[#796d5d]">Total Harga Produk</span>
@@ -354,12 +335,12 @@
                         </div>
                         <div class="flex items-center justify-between gap-2 pt-2">
                             <span class="text-[8px] font-semibold text-[#796d5d] sm:text-[9px]">Total Tagihan</span>
-                            <span class="font-serif text-sm font-bold text-[#8B1E1E] sm:text-base">Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</span>
+                            <span class="font-display text-sm font-bold text-[#8B1E1E] sm:text-base">Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</span>
                         </div>
                     </section>
 
                     <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
-                        <h2 class="mb-2 font-serif text-[11px] font-bold text-[#2C1810] sm:text-xs">Tindakan Pesanan</h2>
+                        <h2 class="mb-2 font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Tindakan Pesanan</h2>
                         <div class="space-y-1.5">
                             @if ($isPreview)
                                 <p class="rounded-md bg-[#faf7ed] px-2.5 py-2 text-[8px] leading-relaxed text-[#796d5d] sm:text-[9px]">

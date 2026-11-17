@@ -101,578 +101,9 @@
     @if ($showDemoTransactionDetail)
         @include('pages.pembeli.partials.detail_transaksi_content', ['transaksi' => $demoDetailTransaksi, 'isDemoPreview' => true])
     @else
-    <style>
-        body:has(.transactions-page) {
-            background: #f7f4eb;
-        }
-
-        body:has(.transactions-page) nav:not(#catalog-pagination) {
-            border-top: 3px solid #8b1e1e;
-            background: #faf7ed;
-            box-shadow: none;
-        }
-
-        body:has(.transactions-page) nav a[href="/transaksi"] {
-            background: #a92f2d;
-            color: #fff;
-        }
-
-        body:has(.transactions-page) footer {
-            display: none;
-        }
-
-        .transactions-page {
-            min-height: 100vh;
-            background: #f7f4eb;
-            color: #2c1810;
-        }
-
-        .transactions-page .transactions-header {
-            border: 0;
-            background: transparent;
-        }
-
-        .transactions-page .transactions-header-inner,
-        .transactions-page .transactions-content {
-            width: 87.2vw;
-            max-width: 90rem;
-            margin-right: auto;
-            margin-left: auto;
-            padding-right: 0;
-            padding-left: 0;
-        }
-
-        .transactions-page .transactions-header-inner {
-            padding-top: 1.2rem;
-            padding-bottom: 0.45rem;
-        }
-
-        .transactions-page .transactions-header-inner > .flex {
-            flex-wrap: nowrap;
-        }
-
-        .transactions-page .transactions-header-inner > div:first-child > div:first-child {
-            margin-bottom: 0.25rem !important;
-            padding: 0.15rem 0.4rem;
-        }
-
-        .transactions-page .transactions-header-inner > div:first-child > div:first-child span,
-        .transactions-page .transactions-security {
-            font-size: 0.75rem;
-        }
-
-        .transactions-page .transactions-header-inner h1 {
-            font-size: 1.25rem;
-            line-height: 1.2;
-            color: #8b1e1e;
-        }
-
-        .transactions-page .transactions-header-inner p {
-            margin-top: 0.2rem !important;
-            font-size: 0.75rem;
-            line-height: 1.4;
-        }
-
-        .transactions-page .transactions-security {
-            gap: 0.5rem;
-            border: 1px solid #e8dfcf;
-            border-radius: 9999px;
-            background: #fff;
-            padding: 0.35rem 0.55rem;
-        }
-
-        .transactions-page .transactions-security svg {
-            width: 0.65rem;
-            height: 0.65rem;
-        }
-
-        .transactions-page .transactions-content {
-            padding-top: 0.35rem;
-            padding-bottom: 1rem;
-        }
-
-        .transactions-page .transactions-alert {
-            margin-bottom: 0.5rem !important;
-            padding: 0.4rem 0.55rem;
-            font-size: 0.72rem;
-        }
-
-        .transactions-page .transactions-grid {
-            grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
-            gap: 1.3rem;
-            margin-bottom: 1.8rem !important;
-        }
-
-        .transactions-page .transactions-card,
-        .transactions-page .transactions-confirmation,
-        .transactions-page .transactions-history {
-            border: 1px solid #e8dfcf;
-            border-radius: 0.45rem;
-            background: #fff;
-            box-shadow: 0 1px 3px rgb(44 24 16 / 6%);
-        }
-
-        .transactions-page .transactions-card {
-            margin-bottom: 0.5rem !important;
-        }
-
-        .transactions-page .transactions-demo-label {
-            border: 1px solid #e8dfcf;
-            border-radius: 9999px;
-            background: #fff;
-            color: #806c54;
-            padding: 0.15rem 0.35rem;
-            font-size: 0.48rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            white-space: nowrap;
-        }
-
-        .transactions-page .transactions-demo-product-art {
-            display: grid;
-            width: 3.5rem;
-            height: 4rem;
-            place-items: center;
-            overflow: hidden;
-            border-radius: 0.375rem;
-            background: linear-gradient(145deg, #72806b, #d6c6a5 52%, #efe3cd);
-        }
-
-        .transactions-page .transactions-demo-product-art svg {
-            width: 2rem;
-            height: 2rem;
-        }
-
-        .transactions-page .transactions-card-header {
-            gap: 0.5rem;
-            padding: 0.5rem 0.9rem;
-            background: #fbf8f0;
-        }
-
-        .transactions-page .transactions-card-header p:first-child {
-            margin-bottom: 0.1rem !important;
-            font-size: 0.62rem;
-        }
-
-        .transactions-page .transactions-card-header p:nth-child(2) {
-            font-size: 0.75rem;
-        }
-
-        .transactions-page .transactions-card-header p:last-child {
-            margin-top: 0.1rem !important;
-            font-size: 0.65rem;
-        }
-
-        .transactions-page .transactions-card-header > span {
-            padding: 0.15rem 0.35rem;
-            font-size: 0.62rem;
-            white-space: nowrap;
-        }
-
-        .transactions-page .transactions-product {
-            gap: 0.45rem;
-            padding: 0.5rem 0.9rem;
-        }
-
-        .transactions-page .transactions-product img,
-        .transactions-page .transactions-product-placeholder {
-            width: 3.5rem;
-            height: 4rem;
-        }
-
-        .transactions-page .transactions-product-placeholder svg {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        .transactions-page .transactions-product p {
-            font-size: 0.65rem;
-            line-height: 1.35;
-        }
-
-        .transactions-page .transactions-product h3 {
-            font-size: 0.78rem;
-            line-height: 1.25;
-        }
-
-        .transactions-page .transactions-payment {
-            padding: 0.5rem 0.9rem;
-            background: #fbf8f0;
-        }
-
-        .transactions-page .transactions-payment > div:first-child p,
-        .transactions-page .transactions-payment > div:nth-child(2) > p,
-        .transactions-page .transactions-payment > div:last-child p:first-child {
-            font-size: 0.68rem;
-        }
-
-        .transactions-page .transactions-va {
-            margin-bottom: 0.4rem !important;
-        }
-
-        .transactions-page .transactions-va > div {
-            padding: 0.25rem 0.4rem;
-        }
-
-        .transactions-page .transactions-va p {
-            font-size: 0.78rem;
-        }
-
-        .transactions-page .transactions-va button {
-            padding: 0.2rem 0.4rem;
-            font-size: 0.62rem;
-        }
-
-        .transactions-page .transactions-payment > div:last-child {
-            padding-top: 0.4rem;
-        }
-
-        .transactions-page .transactions-payment > div:last-child p:last-child {
-            font-size: 1.05rem;
-        }
-
-        .transactions-page .transactions-card-footer {
-            gap: 0.35rem;
-            padding: 0.4rem 0.8rem;
-        }
-
-        .transactions-page .transactions-card-footer a,
-        .transactions-page .transactions-card-footer button,
-        .transactions-page .transactions-card-footer span {
-            gap: 0.25rem;
-            padding: 0.35rem 0.45rem;
-            font-size: 0.66rem;
-        }
-
-        .transactions-page .transactions-card-footer button,
-        .transactions-page .transactions-confirmation form > button {
-            background: #bf3833;
-        }
-
-        .transactions-page .transactions-confirmation .transactions-form-body > button {
-            background: #bf3833;
-        }
-
-        .transactions-page .transactions-card-footer button:hover,
-        .transactions-page .transactions-confirmation form > button:hover,
-        .transactions-page .transactions-confirmation .transactions-form-body > button:hover {
-            background: #a92f2d;
-        }
-
-        .transactions-page .transactions-card-footer svg {
-            width: 0.65rem;
-            height: 0.65rem;
-        }
-
-        .transactions-page .transactions-confirmation {
-            position: static;
-            padding: 1rem;
-        }
-
-        .transactions-page .transactions-confirmation-heading {
-            margin-bottom: 0.45rem !important;
-        }
-
-        .transactions-page .transactions-confirmation h2 {
-            font-size: 1.1rem;
-            line-height: 1.2;
-        }
-
-        .transactions-page .transactions-confirmation-heading p {
-            font-size: 0.65rem;
-            line-height: 1.4;
-        }
-
-        .transactions-page .transactions-confirmation-heading > div:last-child {
-            width: 1.6rem;
-            height: 1.6rem;
-        }
-
-        .transactions-page .transactions-confirmation-heading svg {
-            width: 0.8rem;
-            height: 0.8rem;
-        }
-
-        .transactions-page .transactions-confirmation form,
-        .transactions-page .transactions-confirmation .transactions-form-body {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .transactions-page .transactions-confirmation .transactions-form-row {
-            gap: 0.35rem;
-        }
-
-        .transactions-page .transactions-confirmation label {
-            margin-bottom: 0.12rem !important;
-            font-size: 0.62rem;
-        }
-
-        .transactions-page .transactions-confirmation input:not([type="file"]) {
-            min-width: 0;
-            padding: 0.35rem 0.4rem;
-            font-size: 0.66rem;
-        }
-
-        .transactions-page .transactions-upload {
-            padding: 0.9rem;
-        }
-
-        .transactions-page .transactions-upload svg {
-            width: 1.15rem;
-            height: 1.15rem;
-            margin-bottom: 0.2rem !important;
-        }
-
-        .transactions-page .transactions-upload p {
-            font-size: 0.64rem;
-            line-height: 1.35;
-        }
-
-        .transactions-page .transactions-privacy {
-            font-size: 0.64rem;
-        }
-
-        .transactions-page .transactions-confirmation form > button {
-            padding: 0.4rem 0.55rem;
-            font-size: 0.68rem;
-        }
-
-        .transactions-page .transactions-confirmation .transactions-form-body > button {
-            padding: 0.4rem 0.55rem;
-            font-size: 0.68rem;
-        }
-
-        .transactions-page .transactions-guarantee {
-            display: none;
-        }
-
-        .transactions-page .transactions-history-heading {
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-        }
-
-        .transactions-page .transactions-history-heading h2 {
-            font-size: 1rem;
-        }
-
-        .transactions-page .transactions-history-heading p {
-            font-size: 0.62rem;
-        }
-
-        .transactions-page .transactions-history-heading > div:last-child {
-            gap: 0.2rem;
-        }
-
-        .transactions-page .transactions-history-heading span {
-            padding: 0.15rem 0.3rem;
-            font-size: 0.6rem;
-            white-space: nowrap;
-        }
-
-        .transactions-page .transactions-history-heading span:last-child {
-            background: #f3f0e9;
-            color: #6b6258;
-        }
-
-        .transactions-page .transactions-history-row {
-            gap: 0.45rem;
-            padding: 0.45rem 0.75rem;
-            background: #fbf8f0;
-            border: 1px solid #eee6d4;
-            border-radius: 0.4rem;
-            margin: 0.35rem 0.6rem;
-        }
-
-        .transactions-page .transactions-history-row + .transactions-history-row {
-            border-top: 1px solid #eee6d4;
-        }
-
-        .transactions-page .transactions-history-icon {
-            width: 1.7rem;
-            height: 1.7rem;
-        }
-
-        .transactions-page .transactions-history-icon svg {
-            width: 0.9rem;
-            height: 0.9rem;
-        }
-
-        .transactions-page .transactions-history-info > div:first-child {
-            flex-wrap: wrap;
-            gap: 0.2rem;
-            margin-bottom: 0.1rem !important;
-        }
-
-        .transactions-page .transactions-history-info p:first-child {
-            font-size: 0.66rem;
-        }
-
-        .transactions-page .transactions-history-info p,
-        .transactions-page .transactions-history-total p:first-child {
-            font-size: 0.6rem;
-        }
-
-        .transactions-page .transactions-history-info p:nth-child(2) {
-            font-size: 0.68rem;
-        }
-
-        .transactions-page .transactions-history-info span {
-            font-size: 0.58rem;
-        }
-
-        .transactions-page .transactions-history-total p:last-child {
-            font-size: 0.86rem;
-        }
-
-        .transactions-page .transactions-history-row > a,
-        .transactions-page .transactions-history-row > span {
-            gap: 0.2rem;
-            padding: 0.3rem 0.4rem;
-            font-size: 0.64rem;
-        }
-
-        .transactions-page .transactions-empty {
-            padding: 1.4rem 0.75rem;
-        }
-
-        .transactions-page .transactions-history .transactions-empty {
-            padding: 1.2rem 0.75rem;
-        }
-
-        .transactions-page .transactions-empty svg {
-            width: 2.5rem;
-            height: 2.5rem;
-            margin-bottom: 0.35rem !important;
-        }
-
-        .transactions-page .transactions-empty p:first-of-type {
-            font-size: 0.75rem;
-        }
-
-        .transactions-page .transactions-empty p:last-of-type {
-            font-size: 0.68rem;
-        }
-
-        @media (min-width: 500px) and (max-width: 767px) {
-            body:has(.transactions-page) nav > div {
-                max-width: none;
-                padding-right: 0.5rem;
-                padding-left: 0.5rem;
-            }
-
-            body:has(.transactions-page) nav > div > div {
-                height: 2.5rem;
-                gap: 0.25rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > a img {
-                width: 1.6rem;
-                height: 1.6rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > a h1 {
-                font-size: 0.75rem;
-                line-height: 1.1;
-            }
-
-            body:has(.transactions-page) nav > div > div > a p {
-                font-size: 0.35rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > div:nth-child(2) {
-                display: flex;
-                gap: 0;
-            }
-
-            body:has(.transactions-page) nav > div > div > div:nth-child(2) a {
-                padding: 0.25rem 0.2rem;
-                font-size: 0.5rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > div:nth-child(3) {
-                gap: 0.2rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > div:nth-child(3) svg {
-                width: 0.8rem;
-                height: 0.8rem;
-            }
-
-            body:has(.transactions-page) nav > div > div > div:nth-child(3) > div > div {
-                width: 1.1rem;
-                height: 1.1rem;
-                font-size: 0.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .transactions-page .transactions-header-inner,
-            .transactions-page .transactions-content {
-                width: calc(100% - 1.4rem);
-                margin-right: 0.7rem;
-                margin-left: 0.7rem;
-                padding-right: 0;
-                padding-left: 0;
-            }
-
-            .transactions-page .transactions-header-inner > .flex {
-                flex-wrap: wrap;
-            }
-
-            .transactions-page .transactions-grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
-
-            .transactions-page .transactions-security {
-                flex-wrap: wrap;
-            }
-
-            .transactions-page .transactions-history-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .transactions-page .transactions-history-row {
-                flex-wrap: wrap;
-            }
-
-            .transactions-page .transactions-history-info {
-                flex-basis: calc(100% - 2rem);
-            }
-
-            .transactions-page .transactions-history-total {
-                margin-left: 2rem;
-            }
-
-            .transactions-page .transactions-history-row > a,
-            .transactions-page .transactions-history-row > span {
-                margin-left: auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .transactions-page .transactions-header-inner > div {
-                gap: 0.35rem;
-            }
-
-            .transactions-page .transactions-confirmation .transactions-form-row {
-                grid-template-columns: minmax(0, 1fr);
-            }
-
-            .transactions-page .transactions-card-footer {
-                flex-direction: column;
-            }
-
-            .transactions-page .transactions-card-footer > * {
-                width: 100%;
-            }
-        }
-    </style>
-    <div class="transactions-page">
+<div class="transactions-page min-h-screen bg-[#faf7ed] text-[#2c1810]">
         {{-- Header --}}
-        <div class="transactions-header bg-white border-b border-gray-200">
+        <div class="transactions-header border-b border-[#e8dfcd] bg-transparent">
             <div class="transactions-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex flex-wrap items-start justify-between gap-4">
                     <div>
@@ -682,7 +113,7 @@
                             </svg>
                             <span class="text-xs font-semibold text-[#2E7D32]">Portal Pembayaran Pelanggan</span>
                         </div>
-                        <h1 class="font-serif text-4xl font-bold text-[#2C1810]">Transaksi Saya</h1>
+                        <h1 class="font-display text-4xl font-bold text-[#2C1810]">Transaksi Saya</h1>
                         <p class="text-[#718078] mt-2 max-w-2xl">Daftar riwayat pembayaran dan konfirmasi transaksi lilin aromaterapi Anda. Kelola tagihan aktif dengan verifikasi aman.</p>
                     </div>
 
@@ -701,7 +132,7 @@
                             <span>Verifikasi Otomatis</span>
                         </div>
                         @if ($showDemoPreview)
-                            <span class="transactions-demo-label">PRATINJAU DEMO</span>
+                            <span class="transactions-demo-label rounded-full bg-[#f7eee3] px-2 py-1 text-[10px] font-bold tracking-wider text-[#8B1E1E]">PRATINJAU DEMO</span>
                         @endif
                     </div>
                 </div>
@@ -726,7 +157,7 @@
                 </div>
             @endif
 
-            <div class="transactions-grid grid lg:grid-cols-2 gap-6 mb-8">
+            <div class="transactions-grid mb-8 grid gap-6 lg:grid-cols-[0.7fr_1fr]">
                 {{-- TRANSAKSI BERJALAN --}}
                 @if($displayTransaksiBerjalan->count() > 0)
                 <section>
@@ -750,8 +181,8 @@
                         <div class="transactions-product px-6 py-4 flex gap-4 border-b border-gray-100">
                             <div class="flex-shrink-0">
                                 @if ($showDemoPreview)
-                                    <div class="transactions-demo-product-art" aria-label="Ilustrasi lilin aroma apel">
-                                        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                    <div class="transactions-demo-product-art flex h-16 w-16 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#e7eedf] to-[#d6c6a9] p-3" aria-label="Ilustrasi lilin aroma apel">
+                                        <svg class="h-full w-full" viewBox="0 0 48 48" fill="none" aria-hidden="true">
                                             <path d="M8 32c5-9 10-12 17-11-2 7-7 12-17 11Z" fill="#46634B"/>
                                             <path d="M40 35c-5-8-10-10-16-9 2 7 7 10 16 9Z" fill="#5D7654"/>
                                             <path d="M22 18c0-3 2-5 2-8 3 3 4 6 2 9" fill="#D98C43"/>
@@ -772,7 +203,7 @@
                             </div>
                             <div class="flex-1">
                                 <p class="text-[10px] font-semibold uppercase tracking-wider text-[#718078] mb-1">100% Natural Soy Wax</p>
-                                <h3 class="font-serif text-base font-bold text-[#2C1810]">{{ $detail->produk->nama_produk }}</h3>
+                                <h3 class="font-display text-base font-bold text-[#2C1810]">{{ $detail->produk->nama_produk }}</h3>
                                 <p class="text-xs text-[#718078] mt-1">Jumlah: {{ $detail->jumlah }} Pcs ({{ $detail->jumlah * 200 }} gr)</p>
                                 <p class="text-xs text-[#718078]">Tanggal: {{ $transaksi->created_at->format('d F Y, H:i') }} WIB</p>
                             </div>
@@ -798,7 +229,7 @@
                             @endif
                             <div class="flex items-center justify-between pt-3 border-t border-gray-200">
                                 <p class="text-sm font-semibold text-[#718078]">Total Tagihan</p>
-                                <p class="font-serif text-2xl font-bold text-[#8B1E1E]">Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}</p>
+                                <p class="font-display text-2xl font-bold text-[#8B1E1E]">Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}</p>
                             </div>
                         </div>
 
@@ -853,7 +284,7 @@
                     <div class="transactions-confirmation bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24">
                         <div class="transactions-confirmation-heading flex items-start justify-between mb-4">
                             <div>
-                                <h2 class="font-serif text-2xl font-bold text-[#2C1810]">Konfirmasi Pembayaran</h2>
+                                <h2 class="font-display text-2xl font-bold text-[#2C1810]">Konfirmasi Pembayaran</h2>
                                 <p class="text-xs text-[#718078] mt-1">Kirim bukti transfer bank bila sistem belum memperbarui status pesanan Anda secara otomatis.</p>
                             </div>
                             <div class="w-10 h-10 rounded-full bg-[#FCE4EC] flex items-center justify-center">
@@ -985,7 +416,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-serif text-lg font-bold text-[#2C1810] mb-2">Garansi Kesegaran Atsiri</h3>
+                        <h3 class="font-display text-lg font-bold text-[#2C1810] mb-2">Garansi Kesegaran Atsiri</h3>
                         <p class="text-sm text-[#718078] leading-relaxed">Lilin dikemas dengan lapisan kedap udara dan lilin kedelai organik murni langsung dari perkebunan apel Batu, Malang.</p>
                     </div>
                 </div>
@@ -995,7 +426,7 @@
             <section class="transactions-history bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <div class="transactions-history-heading px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                     <div>
-                        <h2 class="font-serif text-2xl font-bold text-[#2C1810]">Riwayat Transaksi</h2>
+                        <h2 class="font-display text-2xl font-bold text-[#2C1810]">Riwayat Transaksi</h2>
                         <p class="text-xs text-[#718078] mt-1">Semua catatan pembayaran pemesanan aroma apel NusaCandle.</p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -1046,7 +477,7 @@
                         {{-- Total --}}
                         <div class="transactions-history-total text-right flex-shrink-0">
                             <p class="text-xs text-[#718078] mb-1">{{ $transaksi->status_pembayaran === 'gagal' ? 'Nilai Tagihan' : 'Total Dibayar' }}</p>
-                            <p class="font-serif text-lg font-bold {{ $transaksi->status_pembayaran === 'gagal' ? 'text-gray-500' : 'text-[#8B1E1E]' }}">
+                            <p class="font-display text-lg font-bold {{ $transaksi->status_pembayaran === 'gagal' ? 'text-gray-500' : 'text-[#8B1E1E]' }}">
                                 Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}
                             </p>
                         </div>

@@ -3,24 +3,7 @@
 @section('title', (($isPreview ?? false) ? 'NusaCandle - Lilin Aroma Terapi Aroma Apel' : $produk->nama_produk) . ' - NusaCandle')
 
 @section('content')
-    <style>
-        body > nav {
-            background-color: #faf7ed !important;
-            border-top: 3px solid #8b1e1e;
-            box-shadow: none !important;
-        }
-
-        body > main {
-            background-color: #faf7ed;
-        }
-
-        body > footer {
-            background-color: #f5f0e2 !important;
-            border-top-color: #e8dfcd !important;
-        }
-    </style>
-
-    {{-- Breadcrumb --}}
+{{-- Breadcrumb --}}
     <div class="bg-[#faf7ed]">
         <div class="mx-auto max-w-6xl px-4 py-3 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center gap-2 text-[10px] text-[#796d5d] sm:text-xs">
@@ -173,7 +156,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-serif text-[12px] font-bold text-[#2C1810] sm:text-sm">Profil Aroma Khas Batu & Malang</h3>
+                            <h3 class="font-display text-[12px] font-bold text-[#2C1810] sm:text-sm">Profil Aroma Khas Batu & Malang</h3>
                             <p class="text-[9px] leading-snug text-[#718078] sm:text-[10px]">Awal: Apel Malang Segar • Tengah: Bunga Melati Putih • Dasar:
                                 Vanili Lembut</p>
                         </div>
@@ -193,7 +176,7 @@
                 </div>
 
                 {{-- Judul --}}
-                <h1 class="mb-2 font-serif text-[21px] font-bold leading-[1.15] text-[#2C1810] sm:text-2xl">
+                <h1 class="mb-2 font-display text-[21px] font-bold leading-[1.15] text-[#2C1810] sm:text-2xl">
                     {{ ($isPreview ?? false) ? 'NusaCandle - Lilin Aroma Terapi Aroma Apel' : $produk->nama_produk }}
                 </h1>
 
@@ -222,7 +205,7 @@
                         <span class="rounded bg-[#FCE4EC] px-2 py-1 text-[9px] font-semibold text-[#8B1E1E]">Hemat 22%</span>
                     </div>
                     <div class="flex flex-wrap items-baseline gap-2">
-                        <span class="font-serif text-2xl font-bold text-[#8B1E1E] sm:text-3xl">Rp
+                        <span class="font-display text-2xl font-bold text-[#8B1E1E] sm:text-3xl">Rp
                             {{ number_format($produk->harga, 0, ',', '.') }}</span>
                         <span class="text-[11px] text-[#8f8374] line-through">Rp
                             {{ number_format($produk->harga + (($isPreview ?? false) ? 26000 : 25000), 0, ',', '.') }}</span>
@@ -242,7 +225,7 @@
 
                 {{-- Tentang Produk --}}
                 <div class="mb-3">
-                    <h3 class="mb-1.5 font-serif text-[10px] font-bold tracking-wide text-[#2C1810]">TENTANG PRODUK</h3>
+                    <h3 class="mb-1.5 font-display text-[10px] font-bold tracking-wide text-[#2C1810]">TENTANG PRODUK</h3>
                     <p class="text-[10px] leading-[1.5] text-[#625b50]">
                         Lilin aroma terapi NusaCandle dibuat dengan tangan menggunakan 100% lilin kedelai alami
                         dan minyak esensial apel khas perkebunan Malang. Menghadirkan aroma manis, segar, dan menenangkan
@@ -400,7 +383,7 @@
         {{-- Panduan Perawatan --}}
         <section class="rounded-xl border border-[#eee5d7] bg-[#f7f3e8] p-5 sm:p-7">
             <p class="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8B1E1E]">Panduan Perawatan</p>
-            <h2 class="mb-2 font-serif text-lg font-bold text-[#2C1810] sm:text-xl">Tips Menikmati Lilin Aromaterapi NusaCandle</h2>
+            <h2 class="mb-2 font-display text-lg font-bold text-[#2C1810] sm:text-xl">Tips Menikmati Lilin Aromaterapi NusaCandle</h2>
             <p class="max-w-4xl text-[10px] leading-relaxed text-[#625b50] sm:text-[11px]">
                 Agar aroma buah apel Malang menguap optimal, biarkan lilin menyala selama minimal 2 jam pada pembakaran
                 pertama hingga permukaan lilin mencair merata ke tepi wadah. Potong sumbu katun menjadi 5mm sebelum

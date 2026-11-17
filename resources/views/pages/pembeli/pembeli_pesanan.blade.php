@@ -37,31 +37,7 @@
             ])
             : $riwayatPesanan;
     @endphp
-
-    <style>
-        body {
-            background-color: #faf7ed;
-        }
-
-        body > nav {
-            background-color: #faf7ed !important;
-            border-top: 3px solid #8b1e1e;
-            box-shadow: none !important;
-        }
-
-        body > main {
-            background-color: #faf7ed;
-        }
-
-        body > footer {
-            background-color: #f5f0e2 !important;
-            border-top-color: #e8dfcd !important;
-            margin-top: 2rem !important;
-        }
-
-    </style>
-
-    <div class="bg-[#faf7ed]">
+<div class="bg-[#faf7ed]">
         <header class="bg-[#faf7ed]">
             <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -73,7 +49,7 @@
                             </svg>
                             <span class="text-[8px] font-semibold text-[#2E7D32] sm:text-[9px]">NusaCandle - Lilin Aroma Terapi Aroma Apel</span>
                         </div>
-                        <h1 class="font-serif text-xl font-bold leading-tight text-[#2C1810] sm:text-2xl">Pesanan Saya</h1>
+                        <h1 class="font-display text-xl font-bold leading-tight text-[#2C1810] sm:text-2xl">Pesanan Saya</h1>
                         <p class="mt-1 text-[9px] text-[#718078] sm:text-[10px]">Lacak status pesanan aktif dan riwayat pesanan lilin aromaterapi Anda.</p>
                     </div>
 
@@ -101,7 +77,7 @@
             {{-- SECTION: PESANAN AKTIF --}}
             <section class="mb-6 sm:mb-8">
                 <div class="mb-2 flex items-center justify-between gap-3 sm:mb-3">
-                    <h2 class="flex items-center gap-2 font-serif text-sm font-bold text-[#2C1810] sm:text-base">
+                    <h2 class="flex items-center gap-2 font-display text-sm font-bold text-[#2C1810] sm:text-base">
                         <span class="h-2 w-2 rounded-full bg-[#8B1E1E]"></span>
                         Pesanan Aktif
                     </h2>
@@ -170,7 +146,7 @@
                                         </div>
 
                                         <div class="min-w-[180px] flex-1">
-                                            <h3 class="font-serif text-[10px] font-bold leading-snug text-[#2C1810] sm:text-xs">
+                                            <h3 class="font-display text-[10px] font-bold leading-snug text-[#2C1810] sm:text-xs">
                                                 {{ $detail->produk->nama_produk }}</h3>
                                             <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[8px] text-[#718078] sm:gap-2 sm:text-[9px]">
                                                 <span>Jumlah: <strong class="text-[#2C1810]">{{ $detail->jumlah }} Pcs</strong></span>
@@ -182,7 +158,7 @@
 
                                         <div class="min-w-[115px] rounded-md bg-[#faf7ed] px-3 py-2 text-right sm:min-w-[130px]">
                                             <p class="mb-0.5 text-[7px] text-[#718078] sm:text-[8px]">Total Pembayaran</p>
-                                            <p class="font-serif text-sm font-bold text-[#8B1E1E] sm:text-base">
+                                            <p class="font-display text-sm font-bold text-[#8B1E1E] sm:text-base">
                                                 Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</p>
                                         </div>
                                     </div>
@@ -226,7 +202,7 @@
             {{-- SECTION: RIWAYAT PESANAN --}}
             <section>
                 <div class="mb-2 flex items-center justify-between gap-3 sm:mb-3">
-                    <h2 class="flex items-center gap-1.5 font-serif text-sm font-bold text-[#2C1810] sm:text-base">
+                    <h2 class="flex items-center gap-1.5 font-display text-sm font-bold text-[#2C1810] sm:text-base">
                         <svg class="h-4 w-4 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -284,7 +260,7 @@
                                             @endif
                                         </div>
                                         <div class="flex-1">
-                                            <h3 class="font-serif text-[9px] font-bold leading-snug text-[#2C1810] sm:text-[10px]">
+                                            <h3 class="font-display text-[9px] font-bold leading-snug text-[#2C1810] sm:text-[10px]">
                                                 {{ $detail->produk->nama_produk }}</h3>
                                             <p class="mt-1 text-[7px] text-[#718078] sm:text-[8px]">Jumlah: <strong
                                                     class="text-[#2C1810]">{{ $detail->jumlah }} Pcs</strong></p>
@@ -299,7 +275,7 @@
                                     <div class="mb-2 flex items-center justify-between">
                                         <div>
                                             <p class="text-[7px] text-[#718078] sm:text-[8px]">Total Pembayaran</p>
-                                            <p class="font-serif text-sm font-bold text-[#8B1E1E] sm:text-base">
+                                            <p class="font-display text-sm font-bold text-[#8B1E1E] sm:text-base">
                                                 Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</p>
                                         </div>
                                     </div>

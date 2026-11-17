@@ -3,359 +3,8 @@
 @section('title', 'Poin & Loyalitas Saya - NusaCandle')
 
 @section('content')
-    <style>
-        body:has(.poin-page) {
-            background: #faf7ed;
-        }
-
-        body:has(.poin-page) nav:not(#catalog-pagination) {
-            border-top: 3px solid #8b1e1e;
-            background: #faf7ed;
-            box-shadow: none;
-        }
-
-        body:has(.poin-page) footer {
-            margin-top: 1.5rem;
-            border-top-color: #e8dfcf;
-            background: #f5f0e2;
-        }
-
-        body:has(.poin-page) .points-breadcrumb {
-            display: none;
-        }
-
-        .poin-page {
-            max-width: 80rem;
-            padding: 0.75rem 1rem 1.25rem;
-            color: #2c1810;
-        }
-
-        .poin-page .points-intro {
-            display: block;
-            margin-bottom: 0.75rem;
-        }
-
-        .poin-page .points-intro > div {
-            margin-bottom: 0.25rem !important;
-        }
-
-        .poin-page .points-intro h1 {
-            margin: 0.25rem 0;
-            font-size: 1.2rem;
-            line-height: 1.2;
-        }
-
-        .poin-page .points-intro > p {
-            max-width: 42rem;
-            margin: 0;
-            font-size: 0.58rem;
-            line-height: 1.45;
-        }
-
-        .poin-page .points-layout {
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(15rem, 0.95fr);
-            align-items: start;
-            gap: 0.65rem;
-            margin-bottom: 0.65rem;
-        }
-
-        .poin-page .points-layout > div {
-            display: flex;
-            min-width: 0;
-            flex-direction: column;
-            gap: 0.65rem;
-        }
-
-        .poin-page .points-summary,
-        .poin-page .points-reward,
-        .poin-page .points-guide,
-        .poin-page .points-redeem,
-        .poin-page .points-history,
-        .poin-page .points-shipping {
-            min-width: 0;
-            margin: 0 !important;
-            border: 1px solid #e8dfcf !important;
-            border-radius: 0.5rem !important;
-            background: #fff !important;
-            padding: 0.7rem !important;
-            box-shadow: 0 1px 3px rgb(44 24 16 / 6%) !important;
-        }
-
-        .poin-page .points-summary {
-            background: linear-gradient(115deg, #fff 0%, #fbfaf5 58%, #f5f8ee 100%) !important;
-        }
-
-        .poin-page .points-summary > .flex.items-start.justify-between {
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.55rem !important;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #f1ece2;
-        }
-
-        .poin-page .points-summary .w-12.h-12 {
-            width: 1.8rem;
-            height: 1.8rem;
-            font-size: 0.7rem;
-        }
-
-        .poin-page .points-summary h3 {
-            font-size: 0.72rem;
-            line-height: 1.2;
-        }
-
-        .poin-page .points-summary .grid.md\:grid-cols-2 {
-            gap: 0.5rem;
-        }
-
-        .poin-page .points-balance,
-        .poin-page .points-rule,
-        .poin-page .points-progress,
-        .poin-page .points-status,
-        .poin-page .points-guide-note,
-        .poin-page .points-redeem-note {
-            border-radius: 0.35rem !important;
-            padding: 0.55rem !important;
-        }
-
-        .poin-page .points-balance > div > span:first-child {
-            font-size: 1.5rem;
-            line-height: 1;
-        }
-
-        .poin-page .points-balance > div > span:last-child {
-            font-size: 0.62rem;
-        }
-
-        .poin-page .points-balance > p:last-child {
-            font-size: 0.5rem;
-        }
-
-        .poin-page .points-rule > p:nth-of-type(1) {
-            font-size: 0.62rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-rule > p:last-child {
-            font-size: 0.48rem;
-        }
-
-        .poin-page .points-progress {
-            margin-top: 0.5rem !important;
-        }
-
-        .poin-page .points-progress > div:first-child {
-            margin-bottom: 0.35rem !important;
-        }
-
-        .poin-page .points-progress > div:first-child p,
-        .poin-page .points-progress > div:last-child {
-            font-size: 0.48rem;
-        }
-
-        .poin-page .points-progress .h-3 {
-            height: 0.35rem;
-            margin-bottom: 0.3rem !important;
-        }
-
-        .poin-page .points-status {
-            margin-top: 0.5rem !important;
-            border-left: 3px solid #d6aa52 !important;
-        }
-
-        .poin-page .points-status p {
-            font-size: 0.5rem;
-            line-height: 1.45;
-        }
-
-        .poin-page .points-reward-heading {
-            align-items: flex-start;
-            gap: 0.45rem;
-            margin-bottom: 0.55rem !important;
-        }
-
-        .poin-page .points-reward-heading h3 {
-            margin-top: 0.15rem !important;
-            font-size: 0.78rem;
-            line-height: 1.25;
-        }
-
-        .poin-page .points-reward-heading p {
-            margin-top: 0.15rem;
-            font-size: 0.5rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-reward-product {
-            gap: 0.55rem;
-            margin-bottom: 0.55rem !important;
-            padding: 0.55rem !important;
-        }
-
-        .poin-page .points-reward-art {
-            width: 3.2rem;
-            height: 3.2rem;
-            border: 1px solid #eee5d7;
-            background: radial-gradient(circle at 50% 35%, #fff 0, #f3eddf 72%);
-        }
-
-        .poin-page .points-reward-product h4 {
-            margin-bottom: 0.2rem !important;
-            font-size: 0.62rem;
-            line-height: 1.3;
-        }
-
-        .poin-page .points-reward-product p {
-            margin-bottom: 0.3rem !important;
-            font-size: 0.48rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-reward-footer {
-            gap: 0.4rem;
-        }
-
-        .poin-page .points-reward-footer p {
-            font-size: 0.5rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-guide h3,
-        .poin-page .points-redeem h3 {
-            font-size: 0.72rem;
-        }
-
-        .poin-page .points-guide > h4,
-        .poin-page .points-redeem > div > h4 {
-            margin-bottom: 0.45rem !important;
-            font-size: 0.58rem;
-        }
-
-        .poin-page .points-guide-steps {
-            gap: 0.5rem !important;
-        }
-
-        .poin-page .points-guide-steps p,
-        .poin-page .points-guide-note p,
-        .poin-page .points-redeem p {
-            font-size: 0.49rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-guide-note,
-        .poin-page .points-redeem-note {
-            margin-top: 0.55rem !important;
-        }
-
-        .poin-page .points-redeem-description {
-            margin-bottom: 0.5rem !important;
-        }
-
-        .poin-page .points-redeem input {
-            padding: 0.45rem 0.55rem;
-            font-size: 0.55rem;
-        }
-
-        .poin-page .points-redeem button {
-            padding: 0.45rem 0.65rem;
-            font-size: 0.55rem;
-        }
-
-        .poin-page .points-history-heading {
-            gap: 0.5rem;
-            margin-bottom: 0.5rem !important;
-        }
-
-        .poin-page .points-history-heading h3 {
-            font-size: 0.8rem;
-        }
-
-        .poin-page .points-history-heading p,
-        .poin-page .points-history td,
-        .poin-page .points-history th {
-            font-size: 0.48rem;
-            line-height: 1.35;
-        }
-
-        .poin-page .points-history th,
-        .poin-page .points-history td {
-            padding: 0.4rem 0.5rem !important;
-        }
-
-        .poin-page .points-history td p {
-            font-size: 0.5rem;
-        }
-
-        .poin-page .points-history-footer {
-            gap: 0.5rem;
-            margin-top: 0.5rem !important;
-            padding-top: 0.45rem !important;
-        }
-
-        .poin-page .points-shipping h4 {
-            font-size: 0.7rem;
-        }
-
-        .poin-page .points-shipping p,
-        .poin-page .points-shipping a {
-            font-size: 0.5rem;
-            line-height: 1.4;
-        }
-
-        .poin-page .points-shipping a {
-            padding: 0.45rem 0.65rem;
-        }
-
-        @media (max-width: 900px) {
-            .poin-page .points-layout {
-                grid-template-columns: minmax(0, 1fr);
-                gap: 0.55rem;
-            }
-
-            .poin-page .points-layout > div {
-                display: contents;
-            }
-
-            .poin-page .points-summary {
-                order: 1;
-            }
-
-            .poin-page .points-guide {
-                order: 2;
-            }
-
-            .poin-page .points-reward {
-                order: 3;
-            }
-
-            .poin-page .points-redeem {
-                order: 4;
-            }
-
-            .poin-page .points-reward-heading > span {
-                flex-shrink: 0;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .poin-page .points-reward-footer {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .poin-page .points-history-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .poin-page .points-shipping > div {
-                align-items: flex-start;
-            }
-        }
-    </style>
-    {{-- Breadcrumb --}}
-    <div class="points-breadcrumb bg-white border-b border-gray-200">
+{{-- Breadcrumb --}}
+    <div class="points-breadcrumb hidden border-b border-gray-200 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center gap-2 text-sm">
                 <a href="{{ route('home') }}" class="text-[#718078] hover:text-[#8B1E1E]">Beranda</a>
@@ -365,7 +14,8 @@
         </div>
     </div>
 
-    <div class="poin-page mx-auto w-full px-4 sm:px-6 lg:px-8">
+    <div class="w-full bg-[#faf7ed]">
+        <div class="poin-page mx-auto w-full max-w-7xl px-4 py-4 text-[#2c1810] sm:px-6 lg:px-8">
         {{-- Header --}}
         <div class="points-intro">
             <div class="flex items-center gap-2 mb-2">
@@ -377,7 +27,7 @@
                     class="text-xs font-semibold uppercase tracking-wider text-[#2E7D32] bg-[#E8F5E9] px-2 py-0.5 rounded">Program
                     Loyalitas Artisan Malang</span>
             </div>
-            <h1 class="font-serif text-4xl font-bold text-[#2C1810] mb-2">Poin & Loyalitas Saya</h1>
+            <h1 class="font-display text-4xl font-bold text-[#2C1810] mb-2">Poin & Loyalitas Saya</h1>
             <p class="text-[#718078] max-w-3xl">Kumpulkan poin dari setiap pembelian dan nikmati lilin aromaterapi aroma
                 apel gratis yang dituangkan hangat dari kota Batu & Malang.</p>
         </div>
@@ -399,10 +49,10 @@
         @endif
 
         {{-- ✅ GRID UTAMA: Panel Kiri (2/3) + Panel Kanan (1/3) --}}
-        <div class="points-layout">
+        <div class="points-layout mb-4 grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(15rem,0.95fr)]">
 
             {{-- PANEL KIRI (col-span-2) --}}
-            <div class="space-y-6">
+            <div class="flex min-w-0 flex-col gap-4">
 
                 {{-- Kartu Info User & Poin --}}
                 <div class="points-summary bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
@@ -413,7 +63,7 @@
                                 {{ mb_substr($user->nama_lengkap, 0, 1) }}
                             </div>
                             <div>
-                                <h3 class="font-serif text-xl font-bold text-[#2C1810]">{{ $user->nama_lengkap }}</h3>
+                                <h3 class="font-display text-xl font-bold text-[#2C1810]">{{ $user->nama_lengkap }}</h3>
                                 <p class="text-xs text-[#718078]">ID Anggota:
                                     #NC-MBR-{{ str_pad($user->id_user, 4, '0', STR_PAD_LEFT) }}-{{ $user->created_at->format('Y') }}
                                 </p>
@@ -437,7 +87,7 @@
                                 Ini</p>
                             <div class="flex items-baseline gap-2">
                                 <span
-                                    class="font-serif text-5xl font-bold text-[#8B1E1E]">{{ number_format($currentPoin) }}</span>
+                                    class="font-display text-5xl font-bold text-[#8B1E1E]">{{ number_format($currentPoin) }}</span>
                                 <span class="text-lg text-[#718078]">Poin</span>
                             </div>
                             <p class="text-xs text-[#718078] mt-2">Terkumpul dari pembelian Lilin Apel Kota Batu.</p>
@@ -480,8 +130,11 @@
                                 ({{ number_format($progressPercentage) }}%)</p>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-3 mb-3">
-                            <div class="bg-gradient-to-r from-[#8B1E1E] to-[#2E7D32] h-3 rounded-full transition-all duration-500"
-                                style="width: {{ $progressPercentage }}%"></div>
+                            @php
+                                $pointProgressWidths = ['w-0', 'w-1/12', 'w-1/6', 'w-1/4', 'w-1/3', 'w-5/12', 'w-1/2', 'w-7/12', 'w-2/3', 'w-3/4', 'w-5/6', 'w-11/12', 'w-full'];
+                                $pointProgressWidth = $pointProgressWidths[min(12, max(0, (int) round($progressPercentage / (100 / 12))))];
+                            @endphp
+                            <div class="h-3 rounded-full bg-gradient-to-r from-[#8B1E1E] to-[#2E7D32] transition-all duration-500 {{ $pointProgressWidth }}"></div>
                         </div>
                         <div class="flex justify-between text-xs text-[#718078]">
                             <span>0 Poin</span>
@@ -538,7 +191,7 @@
                                 <span
                                     class="text-xs font-semibold uppercase tracking-wider text-[#2E7D32] bg-[#E8F5E9] px-2 py-0.5 rounded">Section
                                     Klaim Hadiah</span>
-                                <h3 class="font-serif text-2xl font-bold text-[#2C1810] mt-1">1x Refill Lilin Aroma Terapi
+                                <h3 class="font-display text-2xl font-bold text-[#2C1810] mt-1">1x Refill Lilin Aroma Terapi
                                     Aroma Apel Gratis</h3>
                                 <p class="text-xs text-[#718078]">Hadiah eksklusif bagi pelanggan setia pecinta wangi
                                     botanikal apel Batu & Malang.</p>
@@ -570,7 +223,7 @@
                             <div class="flex-1">
                                 <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">Varian
                                     Tunggal Eksklusif</p>
-                                <h4 class="font-serif text-lg font-bold text-[#2C1810] mb-2">NusaCandle - Lilin Aroma
+                                <h4 class="font-display text-lg font-bold text-[#2C1810] mb-2">NusaCandle - Lilin Aroma
                                     Terapi Aroma Apel</h4>
                                 <p class="text-xs text-[#718078] leading-relaxed mb-3">200gr 100% Natural Soy Wax dengan
                                     minyak atsiri apel manalagi Malang murni. Ramah lingkungan, bebas racun, pembakaran
@@ -660,7 +313,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <h3 class="font-serif text-lg font-bold text-[#2C1810]">Panduan Tambah Poin</h3>
+                        <h3 class="font-display text-lg font-bold text-[#2C1810]">Panduan Tambah Poin</h3>
                     </div>
                     <h4 class="font-semibold text-[#2C1810] mb-4">Tips Panen Poin Lilin Apel</h4>
 
@@ -714,7 +367,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                         </svg>
-                        <h3 class="font-serif text-lg font-bold text-[#2C1810]">Tukarkan Redeem Code</h3>
+                        <h3 class="font-display text-lg font-bold text-[#2C1810]">Tukarkan Redeem Code</h3>
                     </div>
 
                     <div class="mb-6">
@@ -773,14 +426,14 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">Aktivitas & Log Perolehan
                     </p>
-                    <h3 class="font-serif text-2xl font-bold text-[#2C1810]">Riwayat Poin & Hadiah</h3>
+                    <h3 class="font-display text-2xl font-bold text-[#2C1810]">Riwayat Poin & Hadiah</h3>
                     <p class="text-xs text-[#718078]">Semua catatan perolehan dan penukaran poin dari setiap transaksi
                         Lilin Aroma Terapi Apel di NusaCandle.</p>
                 </div>
                 <div class="bg-[#FAF9F6] px-4 py-2 rounded-lg border border-gray-200">
                     <p class="text-[10px] text-[#718078] mb-1">Total Akumulasi</p>
                     <div class="flex items-center gap-2">
-                        <p class="font-serif text-2xl font-bold text-[#8B1E1E]">{{ number_format($currentPoin) }} Poin</p>
+                        <p class="font-display text-2xl font-bold text-[#8B1E1E]">{{ number_format($currentPoin) }} Poin</p>
                         <svg class="w-6 h-6 text-[#8B1E1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -909,7 +562,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="font-serif text-xl font-bold text-[#2C1810]">Bebas Ongkir untuk Pengambilan Hadiah</h4>
+                        <h4 class="font-display text-xl font-bold text-[#2C1810]">Bebas Ongkir untuk Pengambilan Hadiah</h4>
                         <p class="text-sm text-[#718078]">Hadiah refill gratis dapat digabungkan dengan pesanan Anda
                             berikutnya atau dikirim langsung tanpa biaya tambahan.</p>
                     </div>
@@ -923,6 +576,7 @@
                     Belanja Lilin Apel Sekarang
                 </a>
             </div>
+        </div>
         </div>
     </div>
 @endsection

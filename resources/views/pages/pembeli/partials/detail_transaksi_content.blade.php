@@ -58,38 +58,7 @@
         default => 'bg-[#f3e7c7] text-[#80652d]',
     };
 @endphp
-
-<style>
-    body:has(.transaction-detail-page) {
-        background: #faf7ed;
-    }
-
-    body:has(.transaction-detail-page) > nav:not(#catalog-pagination) {
-        border-top: 3px solid #8b1e1e;
-        background: #faf7ed;
-        box-shadow: none;
-    }
-
-    body:has(.transaction-detail-page) footer {
-        border-top-color: #e8dfcd;
-        background: #f5f0e2;
-    }
-
-    @media print {
-        body:has(.transaction-detail-page) nav,
-        body:has(.transaction-detail-page) footer,
-        .transaction-detail-no-print {
-            display: none !important;
-        }
-
-        body:has(.transaction-detail-page),
-        .transaction-detail-page {
-            background: #fff !important;
-        }
-    }
-</style>
-
-<div class="transaction-detail-page min-h-screen bg-[#faf7ed] text-[#2C1810]">
+<div class="transaction-detail-page min-h-screen bg-[#faf7ed] text-[#2C1810] print:bg-white">
     <div class="mx-auto max-w-7xl px-4 pb-8 pt-3 sm:px-6 lg:px-8">
         <nav aria-label="Jejak halaman" class="mb-3 flex flex-wrap items-center gap-2 text-[9px] text-[#796d5d]">
             <a href="{{ route('home') }}" class="transition hover:text-[#8B1E1E]">Beranda</a>
@@ -102,7 +71,7 @@
         <header class="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="mb-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-[#2E7D32]">NusaCandle · Rincian Pembayaran</p>
-                <h1 class="font-serif text-xl font-bold leading-tight text-[#8B1E1E] sm:text-2xl">Detail Transaksi</h1>
+                <h1 class="font-display text-xl font-bold leading-tight text-[#8B1E1E] sm:text-2xl">Detail Transaksi</h1>
                 <p class="mt-1 text-[9px] text-[#796d5d]">
                     TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}
                     <span class="px-1" aria-hidden="true">·</span>
@@ -156,7 +125,7 @@
                 </span>
                 <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center gap-2">
-                        <h2 id="transaction-status-title" class="font-serif text-sm font-bold leading-tight sm:text-base">{{ $statusPresentation['title'] }}</h2>
+                        <h2 id="transaction-status-title" class="font-display text-sm font-bold leading-tight sm:text-base">{{ $statusPresentation['title'] }}</h2>
                         <span class="rounded-full px-2 py-0.5 text-[7px] font-bold sm:text-[8px] {{ $statusBadgeClasses }}">{{ $statusPresentation['badge'] }}</span>
                     </div>
                     <p class="mt-1 text-[8px] leading-relaxed opacity-90 sm:text-[9px]">{{ $statusPresentation['description'] }}</p>
@@ -165,7 +134,11 @@
             <div class="overflow-x-auto pb-1">
                 <ol class="relative grid min-w-[620px] grid-cols-4">
                     <li aria-hidden="true" class="absolute left-[12.5%] right-[12.5%] top-3.5 h-0.5 rounded-full bg-[#e9e9e2]">
-                        <span class="absolute left-0 top-0 h-full rounded-full bg-[#47784a]" style="width: {{ min($progressIndex, 3) * 33.333 }}%;"></span>
+                        @php
+                            $transactionProgressWidths = ['w-0', 'w-1/3', 'w-2/3', 'w-full'];
+                            $transactionProgressWidth = $transactionProgressWidths[min(3, max(0, $progressIndex))];
+                        @endphp
+                        <span class="absolute left-0 top-0 h-full rounded-full bg-[#47784a] {{ $transactionProgressWidth }}"></span>
                     </li>
                     @foreach ($progressSteps as $index => $step)
                         @php
@@ -205,7 +178,7 @@
             <div class="min-w-0 space-y-4">
                 <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                     <div class="mb-3 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                        <h2 class="font-serif text-[11px] font-bold sm:text-xs">Informasi Transaksi</h2>
+                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Informasi Transaksi</h2>
                         <span class="rounded-full px-2 py-0.5 text-[7px] font-semibold {{ $transaksi->status_color }}">{{ $transaksi->status_label }}</span>
                     </div>
                     <dl class="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -248,7 +221,7 @@
 
                 <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                     <div class="mb-3 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                        <h2 class="font-serif text-[11px] font-bold sm:text-xs">Rincian Lilin Botanikal</h2>
+                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Rincian Lilin Botanikal</h2>
                         <span class="rounded-full bg-[#e8f2e2] px-2 py-0.5 text-[7px] font-semibold text-[#2E7D32]">{{ $totalItem }} Barang</span>
                     </div>
                     <div class="space-y-2.5">
@@ -271,7 +244,7 @@
                                 @endif
                                 <div class="min-w-0 flex-1">
                                     <span class="mb-1 inline-flex rounded-full bg-[#e8f2e2] px-1.5 py-0.5 text-[6px] font-semibold text-[#2E7D32] sm:text-[7px]">NusaCandle · Lilin Alami</span>
-                                    <h3 class="font-serif text-[9px] font-bold leading-snug sm:text-[10px]">{{ $detail->produk?->nama_produk ?? 'Produk' }}</h3>
+                                    <h3 class="font-display text-[9px] font-bold leading-snug sm:text-[10px]">{{ $detail->produk?->nama_produk ?? 'Produk' }}</h3>
                                     <p class="mt-1 text-[7px] text-[#796d5d] sm:text-[8px]">
                                         {{ $detail->jumlah }} pcs <span class="px-1" aria-hidden="true">·</span>
                                         Rp{{ number_format($detail->harga_satuan, 0, ',', '.') }} / pcs
@@ -292,7 +265,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </span>
-                        <h2 class="font-serif text-[11px] font-bold sm:text-xs">Bukti Pembayaran Pelanggan</h2>
+                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Bukti Pembayaran Pelanggan</h2>
                         @if ($transaksi->bukti_pembayaran)
                             <span class="ml-auto rounded-full bg-[#e8f2e2] px-2 py-0.5 text-[7px] font-semibold text-[#2E7D32]">Bukti Tersedia</span>
                         @endif
@@ -321,7 +294,7 @@
             <aside class="min-w-0 space-y-3">
                 <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                     <div class="mb-2 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                        <h2 class="font-serif text-[11px] font-bold sm:text-xs">Rincian Pembayaran</h2>
+                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Rincian Pembayaran</h2>
                         <svg class="h-3.5 w-3.5 text-[#8B1E1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
@@ -342,7 +315,7 @@
                     </dl>
                     <div class="flex items-center justify-between gap-2 pt-3">
                         <span class="text-[9px] font-semibold">Total Tagihan</span>
-                        <span class="font-serif text-sm font-bold text-[#8B1E1E] sm:text-base">Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</span>
+                        <span class="font-display text-sm font-bold text-[#8B1E1E] sm:text-base">Rp{{ number_format($pesanan->total_harga, 0, ',', '.') }}</span>
                     </div>
                 </section>
             </aside>

@@ -1,12 +1,12 @@
-<nav class="bg-white shadow-sm sticky top-0 z-50">
+<nav class="sticky top-0 z-50 border-t-[3px] border-[#8b1e1e] bg-[#faf7ed] shadow-none print:hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-3">
                 <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle" class="h-10 w-10 object-contain"
-                    onerror="this.style.display='none'">
+                    onerror="this.classList.add('hidden')">
                 <div>
-                    <h1 class="font-serif text-xl font-bold text-[#8B1E1E]">NusaCandle</h1>
+                    <h1 class="font-display text-xl font-bold text-[#8B1E1E]">NusaCandle</h1>
                     <p class="text-[9px] text-[#718078] uppercase tracking-wider">Malang Botanical Artisan</p>
                 </div>
             </a>

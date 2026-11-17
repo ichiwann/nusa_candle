@@ -3,24 +3,7 @@
 @section('title', 'Keranjang Belanja Anda - NusaCandle')
 
 @section('content')
-    <style>
-        body > nav {
-            background-color: #faf7ed !important;
-            border-top: 3px solid #8b1e1e;
-            box-shadow: none !important;
-        }
-
-        body > main {
-            background-color: #faf7ed;
-        }
-
-        body > footer {
-            background-color: #f5f0e2 !important;
-            border-top-color: #e8dfcd !important;
-        }
-    </style>
-
-    <div class="bg-[#faf7ed]">
+<div class="bg-[#faf7ed]">
         <div class="mx-auto max-w-7xl px-4 pb-10 pt-2 sm:px-6 lg:px-8">
             <nav aria-label="Jejak halaman" class="mb-5 flex items-center gap-2 text-[10px] text-[#796d5d] sm:text-xs">
                 <a href="{{ route('home') }}" class="transition hover:text-[#8B1E1E]">Beranda</a>
@@ -33,7 +16,7 @@
                     <span aria-hidden="true">✦</span>
                     Perajin Lilin Alami Malang
                 </p>
-                <h1 class="mb-1 font-serif text-2xl font-bold leading-tight text-[#8B1E1E] sm:text-3xl">Keranjang Belanja Anda</h1>
+                <h1 class="mb-1 font-display text-2xl font-bold leading-tight text-[#8B1E1E] sm:text-3xl">Keranjang Belanja Anda</h1>
                 <p class="text-[10px] text-[#796d5d] sm:text-xs">
                     Periksa kembali pilihan lilin aromaterapi apel Malang sebelum melanjutkan pemesanan.
                 </p>
@@ -110,7 +93,7 @@
                                                     <span class="rounded-full bg-[#f8e6e5] px-2 py-0.5 text-[8px] font-semibold text-[#8B1E1E]">Khas Malang</span>
                                                     <span class="rounded-full bg-[#e8f2e2] px-2 py-0.5 text-[8px] font-semibold text-[#2E7D32]">Stok Tersedia</span>
                                                 </div>
-                                                <h3 class="font-serif text-[11px] font-bold leading-snug text-[#2C1810] sm:text-sm">
+                                                <h3 class="font-display text-[11px] font-bold leading-snug text-[#2C1810] sm:text-sm">
                                                     {{ $item->produk->nama_produk }}
                                                 </h3>
                                                 <p class="mt-1 text-[8px] text-[#796d5d] sm:text-[10px]">Varian: Apel Manalagi 220 g • Mutu C1</p>
@@ -174,7 +157,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5m1.6 8l-1.2 2.2a1 1 0 00.9 1.5H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <p class="mb-1 font-serif text-base font-bold text-[#2C1810]">Keranjang Anda Kosong</p>
+                                <p class="mb-1 font-display text-base font-bold text-[#2C1810]">Keranjang Anda Kosong</p>
                                 <p class="mb-4 text-xs text-[#796d5d]">Mulai belanja untuk menambahkan produk ke keranjang.</p>
                                 <a href="{{ route('produk.index') }}"
                                     class="inline-flex items-center rounded-md bg-[#8B1E1E] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#6B1515]">
@@ -207,7 +190,7 @@
                                         <div class="flex items-start justify-between gap-2">
                                             <div class="min-w-0">
                                                 <span class="mb-1 inline-flex rounded-full bg-[#f8e6e5] px-2 py-0.5 text-[8px] font-semibold text-[#8B1E1E]">Khas Malang</span>
-                                                <h3 data-demo-name class="font-serif text-[11px] font-bold leading-snug text-[#2C1810] sm:text-sm"></h3>
+                                                <h3 data-demo-name class="font-display text-[11px] font-bold leading-snug text-[#2C1810] sm:text-sm"></h3>
                                                 <p class="mt-1 text-[8px] text-[#796d5d] sm:text-[10px]">Produk pratinjau • Aroma apel</p>
                                             </div>
                                             <button type="button" data-demo-remove aria-label="Hapus produk demo"
@@ -254,7 +237,7 @@
                                             </svg>
                                         </span>
                                         <div>
-                                            <h2 class="font-serif text-sm font-bold text-[#2C1810] sm:text-base">Pilih Metode Pembayaran</h2>
+                                            <h2 class="font-display text-sm font-bold text-[#2C1810] sm:text-base">Pilih Metode Pembayaran</h2>
                                             <p class="text-[8px] text-[#796d5d] sm:text-[9px]">Pilih cara pembayaran pesanan Anda.</p>
                                         </div>
                                     </div>
@@ -402,7 +385,7 @@
                             </svg>
                         </span>
                         <div>
-                            <h2 class="mb-1 font-serif text-[10px] font-bold text-[#2C1810] sm:text-xs">Sentuhan Tangan Perajin Khas Apel</h2>
+                            <h2 class="mb-1 font-display text-[10px] font-bold text-[#2C1810] sm:text-xs">Sentuhan Tangan Perajin Khas Apel</h2>
                             <p class="text-[8px] leading-relaxed text-[#796d5d] sm:text-[9px]">
                                 Lilin Anda dibuat perlahan menggunakan minyak atsiri murni dari perkebunan lokal Batu.
                                 Ramah lingkungan dan tidak meninggalkan jelaga hitam.
@@ -414,7 +397,7 @@
                 <aside class="min-w-0">
                     <section class="rounded-xl border border-[#e8dfcf] bg-[#fffefa] p-3 shadow-sm sm:sticky sm:top-24 sm:p-4">
                         <div class="mb-4 flex items-center justify-between gap-2">
-                            <h2 class="font-serif text-sm font-bold text-[#2C1810] sm:text-base">Ringkasan Belanja</h2>
+                            <h2 class="font-display text-sm font-bold text-[#2C1810] sm:text-base">Ringkasan Belanja</h2>
                             <svg class="h-4 w-4 text-[#8B1E1E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5m1.6 8l-1.2 2.2a1 1 0 00.9 1.5H17" />
@@ -461,7 +444,7 @@
                             <div class="flex items-start justify-between gap-2">
                                 <span class="pt-1 text-[9px] text-[#796d5d] sm:text-[10px]">Total Belanja</span>
                                 <div class="text-right">
-                                    <p id="summary-grand-total" class="font-serif text-xl font-bold text-[#8B1E1E] sm:text-2xl">Rp {{ number_format($totalBelanja, 0, ',', '.') }}</p>
+                                    <p id="summary-grand-total" class="font-display text-xl font-bold text-[#8B1E1E] sm:text-2xl">Rp {{ number_format($totalBelanja, 0, ',', '.') }}</p>
                                     <p class="text-[8px] text-[#796d5d]">Termasuk biaya lokal</p>
                                 </div>
                             </div>

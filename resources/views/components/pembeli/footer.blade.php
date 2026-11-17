@@ -1,10 +1,13 @@
-<footer class="bg-white border-t border-gray-200 mt-16">
+<footer @class([
+    'mt-8 border-t border-[#e8dfcd] bg-[#f5f0e2] print:hidden',
+    'hidden' => request()->routeIs('pembeli.transaksi.index'),
+])>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Brand -->
             <div>
                 <div class="flex items-center gap-2 mb-4">
-                    <h3 class="font-serif text-xl font-bold text-[#8B1E1E]">NusaCandle</h3>
+                    <h3 class="font-display text-xl font-bold text-[#8B1E1E]">NusaCandle</h3>
                     <span class="bg-[#E8F5E9] text-[#2E7D32] text-[10px] font-semibold px-2 py-0.5 rounded">Authentic
                         Malang</span>
                 </div>

@@ -3,28 +3,7 @@
 @section('title', 'Profil Akun Pelanggan - NusaCandle')
 
 @section('content')
-    <style>
-        body:has(.profile-page) {
-            background: #faf7ed;
-        }
-
-        body:has(.profile-page) > nav:not(#catalog-pagination) {
-            border-top: 3px solid #8b1e1e;
-            background: #faf7ed;
-            box-shadow: none;
-        }
-
-        body:has(.profile-page) > main {
-            background: #faf7ed;
-        }
-
-        body:has(.profile-page) > footer {
-            border-top-color: #e8dfcd;
-            background: #f5f0e2;
-        }
-    </style>
-
-    <div class="profile-page min-h-screen bg-[#faf7ed]">
+<div class="profile-page min-h-screen bg-[#faf7ed]">
     <div class="mx-auto max-w-5xl px-4 pb-8 pt-3 sm:px-6 lg:px-8">
         <nav aria-label="Jejak halaman" class="mb-3 flex items-center gap-2 text-[9px] text-[#796d5d]">
             <a href="{{ route('home') }}" class="transition hover:text-[#8B1E1E]">Beranda</a>
@@ -34,7 +13,7 @@
 
         {{-- Header --}}
         <div class="mb-5">
-            <h1 class="font-serif text-xl font-bold text-[#2C1810] sm:text-2xl">Profil Akun Pelanggan</h1>
+            <h1 class="font-display text-xl font-bold text-[#2C1810] sm:text-2xl">Profil Akun Pelanggan</h1>
             <p class="mt-1 text-[9px] text-[#796d5d] sm:text-[10px]">Kelola data pribadi &amp; preferensi keamanan akun NusaCandle Anda</p>
         </div>
 
@@ -68,7 +47,7 @@
                             Terverifikasi
                         </span>
                     </div>
-                    <h2 class="font-serif text-base font-bold text-[#2C1810] sm:text-lg">Data Diri Pelanggan</h2>
+                    <h2 class="font-display text-base font-bold text-[#2C1810] sm:text-lg">Data Diri Pelanggan</h2>
                 </div>
                 <button type="button" onclick="toggleEditSection()"
                     class="inline-flex items-center gap-1.5 rounded-md border border-[#8B1E1E] px-3 py-1.5 text-[8px] font-semibold text-[#8B1E1E] transition hover:bg-[#8B1E1E] hover:text-white sm:text-[9px]">
@@ -82,7 +61,7 @@
 
             <div class="flex flex-col gap-3 sm:flex-row">
                 <div class="flex shrink-0 items-center gap-2 sm:w-24 sm:flex-col sm:justify-center sm:gap-1.5">
-                    <div class="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-[#e8f2e2] font-serif text-xl font-bold text-[#47784a] shadow-sm ring-1 ring-[#e8dfcf]"
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-[#e8f2e2] font-display text-xl font-bold text-[#47784a] shadow-sm ring-1 ring-[#e8dfcf]"
                         role="img" aria-label="Inisial {{ $user->nama_lengkap }}">
                         {{ strtoupper(substr(trim($user->nama_lengkap), 0, 1)) }}
                     </div>
@@ -127,7 +106,7 @@
                     <div class="mb-1.5 flex items-center gap-2">
                         <span class="rounded bg-[#8B1E1E] px-2 py-0.5 text-[7px] font-semibold text-white">BAGIAN 02</span>
                     </div>
-                    <h2 class="font-serif text-base font-bold text-[#2C1810] sm:text-lg">Update Data Diri</h2>
+                    <h2 class="font-display text-base font-bold text-[#2C1810] sm:text-lg">Update Data Diri</h2>
                 </div>
                 <svg class="h-4 w-4 text-[#796d5d]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M7 12h10m-7 6h4M8 4v4m8 2v4m-6 2v4" />
@@ -213,7 +192,7 @@
                     <div class="mb-1.5 flex items-center gap-2">
                         <span class="rounded bg-[#8B1E1E] px-2 py-0.5 text-[7px] font-semibold text-white">BAGIAN 03</span>
                     </div>
-                    <h2 class="font-serif text-base font-bold text-[#2C1810] sm:text-lg">Update Password</h2>
+                    <h2 class="font-display text-base font-bold text-[#2C1810] sm:text-lg">Update Password</h2>
                 </div>
                 <svg class="h-4 w-4 text-[#796d5d]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
