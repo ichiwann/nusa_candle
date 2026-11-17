@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22' # Diperbarui dari 20 untuk menghindari warning deprecation
           cache: 'npm'
 
       - name: Cache Composer Dependencies
@@ -41,6 +41,17 @@ jobs:
 
       - name: Install Composer Dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
+
+      # --- PERBAIKAN 1: Setup Environment & App Key ---
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      # --- PERBAIKAN 2: Pastikan Database Test Siap ---
+      - name: Setup Test Database
+        run: php artisan migrate --force
 
       - name: Install Frontend Dependencies
         run: npm ci || npm install
@@ -134,7 +145,7 @@ jobs:
               --name nusa-candle-app \
               --restart unless-stopped \
               --network voting-osis_default \
-              -p 127.0.0.1:8010:8000 \
+              -p 127.0.0.1:8000:8000 \
               --env-file /home/isaki/nusa_candle/.env.production \
               -v /home/isaki/nusa_candle/storage/app/public:/app/storage/app/public:rw \
               $IMAGE:latest
@@ -142,6 +153,6 @@ jobs:
             podman image prune -f
 
             echo "🌐 Verifikasi service..."
-            curl -I http://127.0.0.1:8010 || true
+            curl -I http://127.0.0.1:8000 || true
 
             echo "✅ Deployment selesai: https://nusacandle.neverlandstudio.web.id"
