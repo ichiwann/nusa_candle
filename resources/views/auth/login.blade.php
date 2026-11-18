@@ -23,7 +23,7 @@
 
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="{{ asset('images/logo-admin-nusacandle.jpeg') }}" alt="NusaCandle" class="w-16 h-16 object-contain mx-auto mb-4" onerror="this.style.display='none'">
+                <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle" class="w-16 h-16 object-contain mx-auto mb-4" onerror="this.style.display='none'">
                 <h1 class="text-2xl font-serif font-bold text-[#103a2a]">NusaCandle</h1>
                 <p class="text-xs text-stone-500 mt-1">LILIN AROMA TERAPI</p>
                 <p class="text-[10px] text-stone-400 italic mt-2">"Aroma Apel • Relaksasi Setiap Saat"</p>

@@ -185,10 +185,29 @@
                             </td>
                             <td class="px-5 py-4">
                                 <div class="flex justify-end">
-                                    <button
-                                        onclick="openStatusModal({{ $pesanan->id_pesanan }}, '{{ $pesanan->status_pesanan }}')"
+                                    @php
+                                        $detailPayload = [
+                                            'id' => $pesanan->id_pesanan,
+                                            'pelanggan' => $pesanan->user->nama_lengkap ?? 'Unknown',
+                                            'username' => $pesanan->user->username ?? '-',
+                                            'tanggal' => $pesanan->created_at->format('d M Y H:i'),
+                                            'total' => 'Rp ' . number_format($pesanan->total_harga, 0, ',', '.'),
+                                            'status' => $pesanan->status_pesanan,
+                                            'metode' => $pesanan->transaksi->first()?->metode_label ?? '-',
+                                            'items' => $pesanan->detailPesanan
+                                                ->map(
+                                                    fn($d) => [
+                                                        'nama' => $d->produk->nama_produk ?? 'Produk tidak tersedia',
+                                                        'jumlah' => $d->jumlah,
+                                                    ],
+                                                )
+                                                ->values()
+                                                ->all(),
+                                        ];
+                                    @endphp
+                                    <button onclick='openDetailModal(@json($detailPayload))'
                                         class="bg-[#103a2a] hover:bg-[#315d41] text-white px-3 py-1.5 rounded text-[10px] font-semibold transition">
-                                        Update Status
+                                        Lihat Detail
                                     </button>
                                 </div>
                             </td>
@@ -219,14 +238,13 @@
         @endif
     </section>
 
-    <!-- Modal Update Status -->
+    <!-- Modal Detail Pesanan -->
     <div id="status-modal"
         class="hidden fixed inset-0 z-50 flex items-center justify-center bg-[#0b251b]/60 p-4 backdrop-blur-sm">
-        <div class="w-full max-w-md bg-white rounded-lg shadow-2xl">
+        <div class="w-full max-w-lg bg-white rounded-lg shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="border-b border-[#edf0eb] px-6 py-4 flex items-center justify-between">
                 <div>
-                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Update Status Pesanan
-                    </p>
+                    <p class="text-[9px] font-semibold uppercase tracking-[0.17em] text-[#64835d]">Detail Pesanan</p>
                     <h2 class="display-font mt-1 text-xl font-semibold text-[#183b2c]">Pesanan #<span
                             id="modal-pesanan-id"></span></h2>
                 </div>
@@ -234,27 +252,48 @@
                     class="text-2xl text-[#718078] hover:text-[#30483a] transition">&times;</button>
             </div>
 
+            <div class="px-6 pt-4 grid grid-cols-2 gap-3 text-xs">
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Pelanggan</p>
+                    <p id="modal-pelanggan" class="font-semibold text-[#30483a]"></p>
+                    <p id="modal-username" class="text-[10px] text-[#87948b]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Tanggal</p>
+                    <p id="modal-tanggal" class="font-semibold text-[#30483a]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Metode Bayar</p>
+                    <p id="modal-metode" class="font-semibold text-[#30483a]"></p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase text-[#87948b]">Total</p>
+                    <p id="modal-total" class="font-semibold text-[#183b2c]"></p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-[10px] uppercase text-[#87948b] mb-1">Produk</p>
+                    <ul id="modal-items" class="space-y-1 text-[#30483a]"></ul>
+                </div>
+            </div>
+
             <form id="status-form" method="POST" class="p-6 space-y-4">
                 @csrf
                 @method('PATCH')
-
                 <div>
                     <label class="block text-[10px] font-semibold uppercase tracking-[0.15em] text-[#64835d] mb-2">Status
                         Pesanan</label>
                     <select name="status_pesanan" id="status_pesanan" required
-                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] focus:ring-1 focus:ring-[#103a2a]/20 outline-none">
+                        class="w-full px-3 py-2.5 bg-[#f9fcf9] border border-[#dce7dc] rounded-md text-sm focus:border-[#103a2a] outline-none">
                         <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
                         <option value="diproses">Diproses</option>
                         <option value="dikirim">Dikirim</option>
-                        <option value="selesai">Selesai</option>
-                        <option value="dibatalkan">Dibatalkan</option>
                     </select>
+                    <p id="status-note" class="mt-2 text-[10px] text-[#87948b]"></p>
                 </div>
-
                 <div class="flex justify-end gap-2 border-t border-[#edf0eb] pt-4">
                     <button type="button" onclick="closeStatusModal()"
                         class="border border-[#dce7dc] px-4 py-2 text-sm text-[#52645a] hover:bg-[#f7faf7] rounded-md transition">Batal</button>
-                    <button type="submit"
+                    <button type="submit" id="status-submit"
                         class="bg-[#103a2a] px-5 py-2 text-sm font-semibold text-white hover:bg-[#315d41] rounded-md transition">Simpan
                         Perubahan</button>
                 </div>
@@ -263,10 +302,39 @@
     </div>
 
     <script>
-        function openStatusModal(pesananId, currentStatus) {
-            document.getElementById('modal-pesanan-id').textContent = pesananId;
-            document.getElementById('status-form').action = `/admin/pesanan/${pesananId}/status`;
-            document.getElementById('status_pesanan').value = currentStatus;
+        function openDetailModal(data) {
+            document.getElementById('modal-pesanan-id').textContent = String(data.id).padStart(4, '0');
+            document.getElementById('modal-pelanggan').textContent = data.pelanggan;
+            document.getElementById('modal-username').textContent = data.username;
+            document.getElementById('modal-tanggal').textContent = data.tanggal;
+            document.getElementById('modal-metode').textContent = data.metode;
+            document.getElementById('modal-total').textContent = data.total;
+
+            const itemsEl = document.getElementById('modal-items');
+            itemsEl.innerHTML = '';
+            data.items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = '• ' + item.nama + ' (' + item.jumlah + 'x)';
+                itemsEl.appendChild(li);
+            });
+
+            document.getElementById('status-form').action = `/admin/pesanan/${data.id}/status`;
+
+            const allowed = ['menunggu_pembayaran', 'diproses', 'dikirim'];
+            const locked = !allowed.includes(data.status);
+            const select = document.getElementById('status_pesanan');
+            const submitBtn = document.getElementById('status-submit');
+
+            select.value = locked ? 'diproses' : data.status;
+            select.disabled = locked;
+            submitBtn.disabled = locked;
+            submitBtn.classList.toggle('opacity-50', locked);
+            submitBtn.classList.toggle('cursor-not-allowed', locked);
+
+            document.getElementById('status-note').textContent = locked ?
+                'Pesanan sudah selesai/dibatalkan — status tidak dapat diubah.' :
+                'ℹ️ Admin hanya bisa mengubah sampai "Dikirim". "Selesai" dikonfirmasi pembeli saat barang tiba, atau lewat halaman Transaksi.';
+
             document.getElementById('status-modal').classList.remove('hidden');
         }
 
@@ -274,11 +342,8 @@
             document.getElementById('status-modal').classList.add('hidden');
         }
 
-        // Close modal when clicking outside
         document.getElementById('status-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeStatusModal();
-            }
+            if (e.target === this) closeStatusModal();
         });
     </script>
 @endsection

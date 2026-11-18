@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: localhost/nusa_candle_app:latest
+    container_name: nusa-candle-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8010:8000"
+    env_file:
+      - ./.env.production
+    volumes:
+      - ./storage/app/public:/app/storage/app/public:rw
+    networks:
+      - voting-osis_default
+
+networks:
+  voting-osis_default:
+    external: true

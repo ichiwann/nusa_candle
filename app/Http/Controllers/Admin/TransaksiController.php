@@ -8,14 +8,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Transaksi;
 use App\Models\Pesanan;
+use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
-     public function index(Request $request): View
+    public function index(Request $request): View
     {
         $query = Transaksi::with(['pesanan.user']);
 
-        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -27,17 +27,14 @@ class TransaksiController extends Controller
             });
         }
 
-        // Filter Status
         if ($request->filled('status')) {
             $query->where('status_pembayaran', $request->status);
         }
 
-        // Filter Metode
         if ($request->filled('metode')) {
             $query->where('metode_pembayaran', $request->metode);
         }
 
-        // Sort (HANYA BERDASARKAN WAKTU, karena kolom 'total' tidak ada di tabel transaksi)
         $sortBy = $request->get('sort', 'terbaru');
         match ($sortBy) {
             'terlama' => $query->orderBy('created_at', 'asc'),
@@ -46,22 +43,14 @@ class TransaksiController extends Controller
 
         $transaksis = $query->paginate(10)->withQueryString();
 
-        // 🔥 PERBAIKAN STATISTIK DI SINI 🔥
         $totalTransaksi = Transaksi::count();
-        
-        // Hitung total pendapatan dari pesanan yang transaksinya BERHASIL
         $totalPendapatan = Pesanan::whereHas('transaksi', function ($q) {
             $q->where('status_pembayaran', 'berhasil');
         })->sum('total_harga');
-        
-        // Total terjual (pesanan yang sudah selesai)
         $totalTerjual = Pesanan::where('status_pesanan', 'selesai')->count();
 
         return view('pages.admin.transaksi', compact(
-            'transaksis',
-            'totalTransaksi',
-            'totalPendapatan',
-            'totalTerjual'
+            'transaksis', 'totalTransaksi', 'totalPendapatan', 'totalTerjual'
         ));
     }
 
@@ -69,14 +58,36 @@ class TransaksiController extends Controller
     {
         $validated = $request->validate([
             'status_pembayaran' => ['required', 'in:menunggu,berhasil,gagal'],
+            // ✅ Opsional: admin boleh set status pesanan sampai "selesai" dari detail transaksi
+            'status_pesanan' => ['nullable', 'in:menunggu_pembayaran,diproses,dikirim,selesai'],
         ]);
 
-        $transaksi = Transaksi::findOrFail($id);
-        $transaksi->update($validated);
+        $transaksi = Transaksi::with('pesanan')->findOrFail($id);
+        $pesanan = $transaksi->pesanan;
 
-        // Jika berhasil, update status pesanan jadi 'diproses'
-        if ($validated['status_pembayaran'] === 'berhasil') {
-            $transaksi->pesanan->update(['status_pesanan' => 'diproses']);
+        DB::beginTransaction();
+        try {
+            $transaksi->update(['status_pembayaran' => $validated['status_pembayaran']]);
+
+            // Verifikasi berhasil → otomatis diproses (hanya jika masih menunggu pembayaran)
+            if ($validated['status_pembayaran'] === 'berhasil' && $pesanan->status_pesanan === 'menunggu_pembayaran') {
+                $pesanan->update(['status_pesanan' => 'diproses']);
+            }
+
+            // ✅ Update status pesanan manual (sampai selesai) jika dipilih
+            if (!empty($validated['status_pesanan'])) {
+                $pesanan->update(['status_pesanan' => $validated['status_pesanan']]);
+
+                // COD diselesaikan admin → pembayaran otomatis lunas
+                if ($validated['status_pesanan'] === 'selesai' && $transaksi->metode_pembayaran === 'cod') {
+                    $transaksi->update(['status_pembayaran' => 'berhasil']);
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
 
         return back()->with('success', 'Status transaksi berhasil diperbarui.');

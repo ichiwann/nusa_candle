@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Hadiah;
 use App\Models\KodeRedeem;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PoinController extends Controller
 {
@@ -19,8 +21,15 @@ class PoinController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $targetPoin = 70;
+        // ✅ AMBIL SEMUA HADIAH DARI DATABASE (bukan cuma 1)
+        $hadiahList = Hadiah::with('produk')
+            ->orderBy('poin_dibutuhkan', 'asc')
+            ->get();
+
         $currentPoin = (int) $user->total_poin;
+
+        // Target progress bar = hadiah termurah (fallback 70 kalau belum ada hadiah)
+        $targetPoin = (int) ($hadiahList->min('poin_dibutuhkan') ?? 70);
         $progressPercentage = min(100, ($currentPoin / $targetPoin) * 100);
         $kurangPoin = max(0, $targetPoin - $currentPoin);
 
@@ -55,7 +64,8 @@ class PoinController extends Controller
             'progressPercentage',
             'kurangPoin',
             'membershipStatus',
-            'riwayatPoin'
+            'riwayatPoin',
+            'hadiahList' // ✅ INI YANG BARU
         ));
     }
 
@@ -76,39 +86,59 @@ class PoinController extends Controller
     }
 
     /**
-     * Klaim hadiah refill (tukar 70 poin)
+     * Klaim hadiah yang DIPILIH pembeli (tukar poin sesuai harga hadiahnya)
+     */
+    /**
+     * Klaim hadiah yang DIPILIH pembeli (tukar poin sesuai harga hadiahnya)
      */
     public function claimHadiah(Request $request)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $targetPoin = 70;
-
-        if ((int) $user->total_poin < $targetPoin) {
-            return back()->withErrors(['claim' => 'Poin Anda belum mencukupi untuk klaim hadiah.']);
-        }
-
-        // Cari hadiah yang butuh 70 poin di tabel 'hadiah'
-        $hadiah = Hadiah::where('poin_dibutuhkan', $targetPoin)->first();
-
-        if (!$hadiah) {
-            return back()->withErrors(['claim' => 'Hadiah tidak tersedia di sistem.']);
-        }
-
-        // ✅ SIMPAN KE TABEL penukaran_hadiah (Status pending dulu)
-        PenukaranHadiah::create([
-            'id_user' => $user->id_user,
-            'id_hadiah' => $hadiah->id_hadiah,
-            'poin_ditukar' => $targetPoin,
-            'poin_saat_klaim' => (int) $user->total_poin, // ✅ SNAPSHOT POIN SAAT KLAIM
-            'status_klaim' => 'pending',
-            'catatan' => $request->catatan ?? null, // Alamat/catatan dari user
+        $validated = $request->validate([
+            'id_hadiah' => ['required', 'integer', 'exists:hadiah,id_hadiah'],
+            'catatan' => ['nullable', 'string', 'max:500'],
         ]);
 
-        // Kurangi poin user
-        $user->decrement('total_poin', $targetPoin);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        return back()->with('success', "Klaim hadiah berhasil! Menunggu persetujuan admin. {$targetPoin} poin telah dikurangi.");
+        $hadiah = Hadiah::with('produk')->findOrFail($validated['id_hadiah']);
+        $biayaPoin = (int) $hadiah->poin_dibutuhkan;
+
+        if ((int) $user->total_poin < $biayaPoin) {
+            return back()->withErrors(['claim' => "Poin Anda belum mencukupi. Hadiah ini butuh {$biayaPoin} poin."]);
+        }
+
+        // ✅ CEK STOK: nggak bisa klaim kalau stok produk hadiahnya habis
+        if (!$hadiah->produk || (int) $hadiah->produk->stok < 1) {
+            return back()->withErrors(['claim' => 'Stok hadiah ini sedang habis.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            PenukaranHadiah::create([
+                'id_user' => $user->id_user,
+                'id_hadiah' => $hadiah->id_hadiah,
+                'poin_ditukar' => $biayaPoin,
+                'poin_saat_klaim' => (int) $user->total_poin,
+                'status_klaim' => 'pending',
+                'catatan' => $validated['catatan'] ?? null,
+            ]);
+
+            // Kurangi poin user
+            $user->decrement('total_poin', $biayaPoin);
+
+            // ✅ KURANGI STOK PRODUK HADIAH (1 pcs per klaim)
+            $hadiah->produk->decrement('stok');
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['claim' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+
+        $namaHadiah = $hadiah->produk->nama_produk ?? 'Hadiah';
+
+        return back()->with('success', "Klaim \"{$namaHadiah}\" berhasil! Menunggu persetujuan admin. {$biayaPoin} poin telah dikurangi.");
     }
 
     /**
@@ -124,7 +154,7 @@ class PoinController extends Controller
         ]);
 
         // Cari kode redeem di database (status masih 'tersedia')
-        $kodeRedeem = \App\Models\KodeRedeem::where('kode', strtoupper(trim($validated['kode_redeem'])))
+        $kodeRedeem = KodeRedeem::where('kode', strtoupper(trim($validated['kode_redeem'])))
             ->where('status', 'tersedia')
             ->first();
 
@@ -134,16 +164,17 @@ class PoinController extends Controller
         }
 
         // Validasi: kode kadaluarsa
-        if ($kodeRedeem->berlaku_hingga && \Carbon\Carbon::parse($kodeRedeem->berlaku_hingga)->isPast()) {
+        if ($kodeRedeem->berlaku_hingga && Carbon::parse($kodeRedeem->berlaku_hingga)->isPast()) {
             return back()->withErrors(['redeem' => 'Kode redeem sudah kadaluarsa.']);
         }
 
         // Tambahkan poin ke user
         $user->increment('total_poin', $kodeRedeem->poin);
 
-        // Update status kode redeem menjadi 'terpakai'
+        // ✅ Update status + CATAT SIAPA YANG MEMAKAI
         $kodeRedeem->update([
             'status' => 'terpakai',
+            'id_user' => $user->id_user,        // ← INI YANG KURANG!
             'dipakai_pada' => now(),
         ]);
 

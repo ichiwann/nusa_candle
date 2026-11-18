@@ -32,22 +32,6 @@
                 apel gratis yang dituangkan hangat dari kota Batu & Malang.</p>
         </div>
 
-        {{-- Notifikasi --}}
-        @if (session('success'))
-            <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md">
-                {{ session('success') }}</div>
-        @endif
-
-        @if ($errors->any())
-            <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
-                <ul class="list-inside list-disc space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         {{-- ✅ GRID UTAMA: Panel Kiri (2/3) + Panel Kanan (1/3) --}}
         <div class="points-layout mb-4 grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(15rem,0.95fr)]">
 
@@ -55,7 +39,8 @@
             <div class="flex min-w-0 flex-col gap-4">
 
                 {{-- Kartu Info User & Poin --}}
-                <div class="points-summary bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
+                <div
+                    class="points-summary bg-gradient-to-br from-[#FAF9F6] to-[#F5F5F5] rounded-lg p-6 border border-gray-200">
                     <div class="flex items-start justify-between mb-6">
                         <div class="flex items-center gap-3">
                             <div
@@ -74,7 +59,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span class="rounded px-2 py-1 text-[8px] font-semibold {{ $membershipStatus['bg'] }} {{ $membershipStatus['color'] }}">
+                            <span
+                                class="rounded px-2 py-1 text-[8px] font-semibold {{ $membershipStatus['bg'] }} {{ $membershipStatus['color'] }}">
                                 {{ $membershipStatus['label'] }}
                             </span>
                         </div>
@@ -176,7 +162,7 @@
                     </div>
                 </div>
 
-                {{-- ✅ SECTION KLAIM HADIAH (DIPINDAH KE SINI - di dalam Panel Kiri) --}}
+                {{-- ✅ SECTION KLAIM HADIAH — katalog semua hadiah, bisa pilih --}}
                 <div class="points-reward bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="points-reward-heading flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
@@ -197,8 +183,9 @@
                                     botanikal apel Batu & Malang.</p>
                             </div>
                         </div>
-                        <span class="text-xs font-semibold text-[#8B1E1E] bg-[#FCE4EC] px-3 py-1 rounded-full">Syarat:
-                            {{ $targetPoin }} Poin</span>
+                        <span
+                            class="text-xs font-semibold text-[#8B1E1E] bg-[#FCE4EC] px-3 py-1 rounded-full">{{ $hadiahList->count() }}
+                            Hadiah</span>
                     </div>
 
                     {{-- Produk Hadiah --}}
@@ -234,73 +221,72 @@
                                     <span class="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded">100% Cotton
                                         Wick</span>
                                     <span
-                                        class="text-[10px] bg-[#E8F5E9] text-[#2E7D32] border border-[#C8E6C9] px-2 py-1 rounded font-semibold">Rp0
-                                        (Tukar {{ $targetPoin }} Poin)</span>
+                                        class="absolute -top-2 -left-2 bg-[#8B1E1E] text-white text-[10px] font-bold px-2 py-0.5 rounded">{{ $biayaPoin }}
+                                        Poin</span>
+                                </div>
+
+                                <div class="flex-1">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">Hadiah
+                                        Loyalitas</p>
+                                    <h4 class="font-serif text-lg font-bold text-[#2C1810] mb-2">{{ $namaHadiah }}</h4>
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        <span
+                                            class="text-[10px] bg-[#E8F5E9] text-[#2E7D32] border border-[#C8E6C9] px-2 py-1 rounded font-semibold">Rp0
+                                            (Tukar {{ $biayaPoin }} Poin)
+                                        </span>
+                                        <span class="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded">Sisa
+                                            stok: {{ $stokHadiah }}</span>
+                                        @if ($stokHadiah < 1)
+                                            <span
+                                                class="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded text-red-600 font-semibold">📦
+                                                Stok habis</span>
+                                        @elseif ($poinCukup)
+                                            <span
+                                                class="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded text-[#2E7D32] font-semibold">✓
+                                                Poin cukup</span>
+                                        @else
+                                            <span
+                                                class="text-[10px] bg-white border border-gray-200 px-2 py-1 rounded text-orange-600 font-semibold">🔒
+                                                Kurang {{ $kurangUntukHadiah }} poin</span>
+                                        @endif
+                                    </div>
+
+                                    @if ($bisaKlaim)
+                                        {{-- ✅ Form per hadiah: kirim id_hadiah yang dipilih --}}
+                                        <form action="{{ route('poin.klaim') }}" method="POST" class="space-y-2"
+                                            onsubmit="return confirm('Tukarkan {{ $biayaPoin }} poin untuk hadiah ini? Poin akan berkurang {{ $biayaPoin }}.')">
+                                            @csrf
+                                            <input type="hidden" name="id_hadiah" value="{{ $hadiah->id_hadiah }}">
+                                            <input type="text" name="catatan"
+                                                placeholder="Catatan / alamat pengiriman (opsional)"
+                                                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-md text-xs focus:border-[#8B1E1E] focus:ring-1 focus:ring-[#8B1E1E]/20 outline-none">
+                                            <button type="submit"
+                                                class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-5 py-2.5 rounded-md text-xs font-semibold transition flex items-center gap-2 shadow-sm">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                                Klaim Hadiah Ini
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" disabled
+                                            class="bg-gray-200 text-gray-500 px-5 py-2.5 rounded-md text-xs font-semibold cursor-not-allowed flex items-center gap-2">
+                                            @if ($stokHadiah < 1)
+                                                📦 Stok Habis
+                                            @else
+                                                🔒 Terkunci — butuh {{ $biayaPoin }} poin
+                                            @endif
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- Status Hadiah + Form Klaim --}}
-                    <div class="points-reward-footer flex flex-wrap items-center justify-between gap-4">
-                        <div class="flex items-start gap-3 flex-1 min-w-[300px]">
-                            @if ($kurangPoin > 0)
-                                <svg class="w-6 h-6 text-gray-400 flex-shrink-0 mt-0.5" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-semibold text-[#2C1810]">Status Hadiah: <span
-                                            class="text-orange-600">Terkunci</span></p>
-                                    <p class="text-xs text-[#718078] mt-1">Kumpulkan {{ $targetPoin }} poin untuk
-                                        membuka hadiah (Kurang {{ $kurangPoin }} poin lagi).</p>
-                                </div>
-                            @else
-                                <svg class="w-6 h-6 text-[#2E7D32] flex-shrink-0 mt-0.5" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-semibold text-[#2C1810]">Status Hadiah: <span
-                                            class="text-[#2E7D32] font-bold">Siap Diklaim!</span></p>
-                                    <p class="text-xs text-[#2E7D32] mt-1">Selamat! Poin Anda sudah cukup untuk menukarkan
-                                        1x Refill Lilin Aroma Terapi Aroma Apel Gratis.</p>
-                                </div>
-                            @endif
-                        </div>
-
-                        @if ($kurangPoin <= 0)
-                            <form action="{{ route('poin.klaim') }}" method="POST"
-                                class="flex items-center gap-3 justify-end"
-                                onsubmit="return confirm('Tukarkan 70 poin untuk 1x Refill Lilin Aroma Apel Gratis? Poin akan berkurang 70.')">
-                                @csrf
-                                <button type="submit"
-                                    class="bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md text-sm font-semibold transition flex items-center gap-2 shadow-sm whitespace-nowrap">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
-                                    Klaim Hadiah
-                                </button>
-                            </form>
-                        @else
-                            <div
-                                class="bg-[#FAF9F6] border-2 border-dashed border-[#8B1E1E]/30 rounded-lg px-5 py-3 text-center flex-1 min-w-[300px]">
-                                <p class="flex items-center gap-1 text-sm font-semibold text-[#8B1E1E]">
-                                    <svg class="h-3 w-3 shrink-0" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                                        <path d="M16 3c-3 4-2 6 0 8 2-2 3-4 0-8Z" fill="#E99B43" />
-                                        <rect x="8" y="12" width="16" height="16" rx="3" fill="#536044" />
-                                        <path d="M11 19h10v5H11z" fill="#E9DFC9" />
-                                    </svg>
-                                    Ayo kumpulkan poin lagi untuk mendapatkan lilin gratis!
-                                </p>
-                                <p class="text-xs text-[#718078] mt-1">Tinggal {{ $kurangPoin }} poin lagi menuju hadiah
-                                    refill.</p>
-                            </div>
-                        @endif
-                    </div>
+                    @empty
+                        <p class="text-sm text-[#718078] text-center py-6">Belum ada hadiah yang tersedia. Nantikan update
+                            dari NusaCandle!</p>
+                    @endforelse
                 </div>
             </div>
 
@@ -372,7 +358,8 @@
 
                     <div class="mb-6">
                         <h4 class="font-semibold text-[#2C1810] mb-2">Punya Kode Promo / Voucher Event?</h4>
-                        <p class="points-redeem-description text-xs text-[#718078] mb-4">Tukarkan kode promosi festival kriya atau kartu hadiah
+                        <p class="points-redeem-description text-xs text-[#718078] mb-4">Tukarkan kode promosi festival
+                            kriya atau kartu hadiah
                             khusus untuk langsung menikmati lilin aromaterapi aroma apel Malang.</p>
 
                         <div class="points-redeem-note bg-[#FCE4EC] rounded-lg p-4 border border-[#F8BBD0]">

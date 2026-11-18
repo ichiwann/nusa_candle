@@ -12,9 +12,8 @@ class PesananController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Pesanan::with(['user', 'detailPesanan.produk']);
+        $query = Pesanan::with(['user', 'detailPesanan.produk', 'transaksi']);
 
-        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -26,12 +25,10 @@ class PesananController extends Controller
             });
         }
 
-        // Filter Status
         if ($request->filled('status')) {
             $query->where('status_pesanan', $request->status);
         }
 
-        // Sort
         $sortBy = $request->get('sort', 'terbaru');
         match ($sortBy) {
             'terlama' => $query->orderBy('created_at', 'asc'),
@@ -42,7 +39,6 @@ class PesananController extends Controller
 
         $pesanans = $query->paginate(10)->withQueryString();
 
-        // Statistik
         $totalPesanan = Pesanan::count();
         $menunggu = Pesanan::where('status_pesanan', 'menunggu_pembayaran')->count();
         $diproses = Pesanan::where('status_pesanan', 'diproses')->count();
@@ -51,23 +47,24 @@ class PesananController extends Controller
         $dibatalkan = Pesanan::where('status_pesanan', 'dibatalkan')->count();
 
         return view('pages.admin.pesanan', compact(
-            'pesanans',
-            'totalPesanan',
-            'menunggu',
-            'diproses',
-            'dikirim',
-            'selesai',
-            'dibatalkan'
+            'pesanans', 'totalPesanan', 'menunggu', 'diproses', 'dikirim', 'selesai', 'dibatalkan'
         ));
     }
 
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'status_pesanan' => ['required', 'in:menunggu_pembayaran,diproses,dikirim,selesai,dibatalkan'],
+            // ✅ Admin hanya boleh sampai "dikirim".
+            // "selesai" hanya via konfirmasi pembeli atau halaman Transaksi.
+            'status_pesanan' => ['required', 'in:menunggu_pembayaran,diproses,dikirim'],
         ]);
 
         $pesanan = Pesanan::findOrFail($id);
+
+        if (in_array($pesanan->status_pesanan, ['selesai', 'dibatalkan'])) {
+            return back()->withErrors(['status_pesanan' => 'Pesanan yang sudah selesai/dibatalkan tidak dapat diubah.']);
+        }
+
         $pesanan->update($validated);
 
         return back()->with('success', 'Status pesanan berhasil diperbarui.');

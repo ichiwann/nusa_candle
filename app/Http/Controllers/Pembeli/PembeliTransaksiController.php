@@ -16,7 +16,6 @@ class PembeliTransaksiController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Ambil semua transaksi user dengan relasi pesanan
         $transaksiList = Transaksi::with(['pesanan.detailPesanan.produk'])
             ->whereHas('pesanan', function ($query) use ($user) {
                 $query->where('id_user', $user->id_user);
@@ -24,60 +23,59 @@ class PembeliTransaksiController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Pisahkan transaksi berjalan (menunggu) dan riwayat
-        $transaksiBerjalan = $transaksiList->filter(function ($t) {
-            return $t->status_pembayaran === 'menunggu';
-        });
+        $transaksiBerjalan = $transaksiList->filter(fn ($t) => $t->status_pembayaran === 'menunggu');
+        $riwayatTransaksi = $transaksiList->filter(fn ($t) => in_array($t->status_pembayaran, ['berhasil', 'gagal']));
 
-        $riwayatTransaksi = $transaksiList->filter(function ($t) {
-            return in_array($t->status_pembayaran, ['berhasil', 'gagal']);
-        });
-
-        // Hitung statistik
         $totalBerhasil = $riwayatTransaksi->where('status_pembayaran', 'berhasil')->count();
         $totalMenunggu = $transaksiBerjalan->count();
         $totalDibatalkan = $riwayatTransaksi->where('status_pembayaran', 'gagal')->count();
 
-        // Ambil transaksi pertama yang menunggu untuk form konfirmasi
-        $transaksiKonfirmasi = $transaksiBerjalan->first();
+        $transaksiKonfirmasi = $transaksiBerjalan->firstWhere('metode_pembayaran', '!=', 'cod');
 
         return view('pages.pembeli.pembeli_transaksi', compact(
-            'transaksiBerjalan',
-            'riwayatTransaksi',
-            'totalBerhasil',
-            'totalMenunggu',
-            'totalDibatalkan',
-            'transaksiKonfirmasi'
+            'transaksiBerjalan', 'riwayatTransaksi',
+            'totalBerhasil', 'totalMenunggu', 'totalDibatalkan', 'transaksiKonfirmasi'
         ));
     }
 
+    /**
+     * Upload bukti pembayaran — hanya transfer bank / e-wallet, bukan COD.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'id_transaksi' => ['required', 'exists:transaksi,id_transaksi'],
             'nama_pemilik' => ['required', 'string', 'max:100'],
-            'bukti_pembayaran' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'], // Max 5MB
+            'bukti_pembayaran' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ]);
 
-        $transaksi = Transaksi::findOrFail($validated['id_transaksi']);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        // Pastikan transaksi milik user yang login
-        $transaksi->load('pesanan');
-        if ($transaksi->pesanan->id_user !== Auth::id()) {
-            return back()->withErrors(['id_transaksi' => 'Transaksi tidak ditemukan.']);
+        $transaksi = Transaksi::with('pesanan')
+            ->where('id_transaksi', $validated['id_transaksi'])
+            ->whereHas('pesanan', fn ($q) => $q->where('id_user', $user->id_user))
+            ->firstOrFail();
+
+        // ✅ COD tidak perlu bukti bayar
+        if ($transaksi->metode_pembayaran === 'cod') {
+            return back()->withErrors(['bukti_pembayaran' => 'Pesanan COD tidak memerlukan bukti pembayaran.']);
         }
 
-        // Upload bukti pembayaran
-        if ($request->hasFile('bukti_pembayaran')) {
-            $file = $request->file('bukti_pembayaran');
-            $path = $file->store('bukti_pembayaran', 'public');
-            $transaksi->update([
-                'bukti_pembayaran' => $path,
-                'status_pembayaran' => 'menunggu',
-            ]);
+        // ✅ Hanya bisa upload selama masih menunggu verifikasi
+        if ($transaksi->status_pembayaran !== 'menunggu') {
+            return back()->withErrors(['bukti_pembayaran' => 'Transaksi ini sudah diproses, bukti tidak dapat diunggah lagi.']);
         }
 
-        return back()->with('success', 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.');
+        $path = $request->file('bukti_pembayaran')->store('bukti_pembayaran', 'public');
+
+        $transaksi->update([
+            'bukti_pembayaran' => $path,
+            'status_pembayaran' => 'menunggu', // tetap menunggu verifikasi admin
+        ]);
+
+        return redirect()->route('pembeli.transaksi.show', $transaksi->id_transaksi)
+            ->with('success', 'Bukti pembayaran berhasil dikirim. Menunggu verifikasi admin.');
     }
 
     public function show(int $id): View
@@ -87,9 +85,7 @@ class PembeliTransaksiController extends Controller
 
         $transaksi = Transaksi::with(['pesanan.detailPesanan.produk'])
             ->where('id_transaksi', $id)
-            ->whereHas('pesanan', function ($query) use ($user) {
-                $query->where('id_user', $user->id_user);
-            })
+            ->whereHas('pesanan', fn ($q) => $q->where('id_user', $user->id_user))
             ->firstOrFail();
 
         return view('pages.pembeli.pembeli_detail_transaksi', compact('transaksi'));
