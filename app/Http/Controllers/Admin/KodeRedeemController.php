@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Models\KodeRedeem;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class KodeRedeemController extends Controller
 {
@@ -20,9 +20,9 @@ class KodeRedeemController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('kode', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($q) use ($search) {
-                      $q->where('nama_lengkap', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('nama_lengkap', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -42,16 +42,11 @@ class KodeRedeemController extends Controller
 
         $redeemCodes = $query->paginate(10)->withQueryString();
 
-        // Statistik
         $totalKode = KodeRedeem::count();
-        $tersedia = KodeRedeem::where('status', 'tersedia')->count();
-        $terpakai = KodeRedeem::where('status', 'terpakai')->count();
 
         return view('pages.admin.kode_redeem', compact(
             'redeemCodes',
-            'totalKode',
-            'tersedia',
-            'terpakai'
+            'totalKode'
         ));
     }
 

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Transaksi extends Model
 {
     protected $table = 'transaksi';
+
     protected $primaryKey = 'id_transaksi';
+
     public $incrementing = true;
 
     protected $fillable = [
@@ -16,6 +18,7 @@ class Transaksi extends Model
         'metode_pembayaran',
         'status_pembayaran',
         'bukti_pembayaran',
+        'catatan_admin',
     ];
 
     protected $casts = [
@@ -37,8 +40,8 @@ class Transaksi extends Model
         return match ($this->status_pembayaran) {
             'menunggu' => 'Menunggu Verifikasi',
             'berhasil' => 'Berhasil',
-            'gagal'    => 'Dibatalkan',
-            default    => ucfirst($this->status_pembayaran),
+            'gagal' => 'Dibatalkan',
+            default => ucfirst($this->status_pembayaran),
         };
     }
 
@@ -47,8 +50,8 @@ class Transaksi extends Model
         return match ($this->status_pembayaran) {
             'menunggu' => 'bg-yellow-100 text-yellow-800',
             'berhasil' => 'bg-green-100 text-green-800',
-            'gagal'    => 'bg-red-100 text-red-800',
-            default    => 'bg-gray-100 text-gray-800',
+            'gagal' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800',
         };
     }
 
@@ -57,21 +60,21 @@ class Transaksi extends Model
         return match ($this->status_pembayaran) {
             'menunggu' => '⏳',
             'berhasil' => '✓',
-            'gagal'    => '✕',
-            default    => '•',
+            'gagal' => '✕',
+            default => '•',
         };
     }
 
     public function getMetodeLabelAttribute(): string
     {
         return match ($this->metode_pembayaran) {
-            'bca'       => 'Transfer Bank BCA',
-            'mandiri'   => 'Transfer Manual Mandiri',
-            'gopay'     => 'GRIS Gopay',
-            'dana'      => 'DANA',
+            'bca' => 'Transfer Bank BCA',
+            'mandiri' => 'Transfer Manual Mandiri',
+            'gopay' => 'GRIS Gopay',
+            'dana' => 'DANA',
             'shopeepay' => 'ShopeePay',
-            'cod'      => 'Cod (Bayar di Tempat)',
-            default     => ucfirst($this->metode_pembayaran),
+            'cod' => 'Cod (Bayar di Tempat)',
+            default => ucfirst($this->metode_pembayaran),
         };
     }
 }

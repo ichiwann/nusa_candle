@@ -19,14 +19,22 @@
 </head>
 <body class="min-h-screen bg-[#f5f7f4] text-[#183b2c]">
 
-    <div class="min-h-screen grid grid-cols-[244px_1fr]">
+    <div @class([
+        'min-h-screen grid',
+        'grid-cols-1 md:grid-cols-[250px_minmax(0,1fr)]' => request()->routeIs('admin.*'),
+        'grid-cols-[244px_1fr]' => !request()->routeIs('admin.*'),
+    ])>
         
         {{-- Sidebar --}}
         <x-admin.sidebar />
 
         <main class="min-w-0 flex-1">
             {{-- Navbar --}}
-            <x-admin.navbar />
+            @if (request()->routeIs('admin.dashboard'))
+                <x-admin.navbar :total-orders="array_sum($chartData['orders'])" />
+            @else
+                <x-admin.navbar />
+            @endif
 
             <!-- Konten Utama (Fluid/Responsive) -->
             <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-9">

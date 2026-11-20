@@ -13,7 +13,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
 </head>
-<body class="font-buyer flex min-h-screen flex-col bg-[#FAF9F6] text-[#2C1810] print:bg-white">
+<body @class([
+    'font-buyer flex min-h-screen flex-col text-[#2C1810] print:bg-white',
+    'bg-[#f7f4eb]' => request()->routeIs('pembeli.transaksi.index'),
+    'bg-[#faf7ed]' => request()->routeIs('pembeli.transaksi.show'),
+    'bg-[#FAF9F6]' => !request()->routeIs('pembeli.transaksi.index') && !request()->routeIs('pembeli.transaksi.show'),
+])>
 
     {{-- Navbar Component --}}
     <x-pembeli.navbar />

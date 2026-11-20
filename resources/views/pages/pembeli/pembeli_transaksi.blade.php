@@ -1,6 +1,6 @@
 @extends('layouts.pembeli')
 
-@section('title', request()->has('demo_transaction') ? 'Detail Transaksi - NusaCandle' : 'Transaksi Saya - NusaCandle')
+@section('title', request()->has('demo_transaction') ? 'Detail Pembayaran - NusaCandle' : 'Pembayaran Saya - NusaCandle')
 
 @section('content')
     @php
@@ -136,315 +136,34 @@
                 : null;
         $showDemoTransactionDetail = $showDemoPreview && $demoDetailTransaksi !== null;
     @endphp
-
     @if ($showDemoTransactionDetail)
-        @include('pages.pembeli.partials.detail_transaksi_content', ['transaksi' => $demoDetailTransaksi, 'isDemoPreview' => true])
+        @include('pages.pembeli.partials.detail_transaksi_content', [
+            'transaksi' => $demoDetailTransaksi,
+            'isDemoPreview' => true,
+        ])
     @else
-<div class="transactions-page min-h-screen bg-[#faf7ed] text-[#2c1810]">
-        {{-- Header --}}
-        <div class="transactions-header border-b border-[#e8dfcd] bg-transparent">
-            <div class="transactions-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div class="flex flex-wrap items-start justify-between gap-4">
-                    <div>
-                        <div class="inline-flex items-center gap-2 bg-[#E8F5E9] px-3 py-1 rounded-full mb-3">
-                            <svg class="w-4 h-4 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="text-xs font-semibold text-[#2E7D32]">Portal Pembayaran Pelanggan</span>
-                        </div>
-                        <h1 class="font-display text-4xl font-bold text-[#2C1810]">Transaksi Saya</h1>
-                        <p class="text-[#718078] mt-2 max-w-2xl">Daftar riwayat pembayaran dan konfirmasi transaksi lilin aromaterapi Anda. Kelola tagihan aktif dengan verifikasi aman.</p>
-                    </div>
-
-            .transactions-page .transactions-confirmation label {
-                margin-bottom: 0.12rem !important;
-                font-size: 0.62rem;
-            }
-
-            .transactions-page .transactions-confirmation input:not([type="file"]) {
-                min-width: 0;
-                padding: 0.35rem 0.4rem;
-                font-size: 0.66rem;
-            }
-
-            .transactions-page .transactions-upload {
-                padding: 0.9rem;
-            }
-
-            .transactions-page .transactions-upload svg {
-                width: 1.15rem;
-                height: 1.15rem;
-                margin-bottom: 0.2rem !important;
-            }
-
-            .transactions-page .transactions-upload p {
-                font-size: 0.64rem;
-                line-height: 1.35;
-            }
-
-            .transactions-page .transactions-privacy {
-                font-size: 0.64rem;
-            }
-
-            .transactions-page .transactions-confirmation form>button {
-                padding: 0.4rem 0.55rem;
-                font-size: 0.68rem;
-            }
-
-            .transactions-page .transactions-confirmation .transactions-form-body>button {
-                padding: 0.4rem 0.55rem;
-                font-size: 0.68rem;
-            }
-
-            .transactions-page .transactions-guarantee {
-                display: none;
-            }
-
-            .transactions-page .transactions-history-heading {
-                gap: 0.5rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .transactions-page .transactions-history-heading h2 {
-                font-size: 1rem;
-            }
-
-            .transactions-page .transactions-history-heading p {
-                font-size: 0.62rem;
-            }
-
-            .transactions-page .transactions-history-heading>div:last-child {
-                gap: 0.2rem;
-            }
-
-            .transactions-page .transactions-history-heading span {
-                padding: 0.15rem 0.3rem;
-                font-size: 0.6rem;
-                white-space: nowrap;
-            }
-
-            .transactions-page .transactions-history-heading span:last-child {
-                background: #f3f0e9;
-                color: #6b6258;
-            }
-
-            .transactions-page .transactions-history-row {
-                gap: 0.45rem;
-                padding: 0.45rem 0.75rem;
-                background: #fbf8f0;
-                border: 1px solid #eee6d4;
-                border-radius: 0.4rem;
-                margin: 0.35rem 0.6rem;
-            }
-
-            .transactions-page .transactions-history-row+.transactions-history-row {
-                border-top: 1px solid #eee6d4;
-            }
-
-            .transactions-page .transactions-history-icon {
-                width: 1.7rem;
-                height: 1.7rem;
-            }
-
-            .transactions-page .transactions-history-icon svg {
-                width: 0.9rem;
-                height: 0.9rem;
-            }
-
-            .transactions-page .transactions-history-info>div:first-child {
-                flex-wrap: wrap;
-                gap: 0.2rem;
-                margin-bottom: 0.1rem !important;
-            }
-
-            .transactions-page .transactions-history-info p:first-child {
-                font-size: 0.66rem;
-            }
-
-            .transactions-page .transactions-history-info p,
-            .transactions-page .transactions-history-total p:first-child {
-                font-size: 0.6rem;
-            }
-
-            .transactions-page .transactions-history-info p:nth-child(2) {
-                font-size: 0.68rem;
-            }
-
-            .transactions-page .transactions-history-info span {
-                font-size: 0.58rem;
-            }
-
-            .transactions-page .transactions-history-total p:last-child {
-                font-size: 0.86rem;
-            }
-
-            .transactions-page .transactions-history-row>a,
-            .transactions-page .transactions-history-row>span {
-                gap: 0.2rem;
-                padding: 0.3rem 0.4rem;
-                font-size: 0.64rem;
-            }
-
-            .transactions-page .transactions-empty {
-                padding: 1.4rem 0.75rem;
-            }
-
-            .transactions-page .transactions-history .transactions-empty {
-                padding: 1.2rem 0.75rem;
-            }
-
-            .transactions-page .transactions-empty svg {
-                width: 2.5rem;
-                height: 2.5rem;
-                margin-bottom: 0.35rem !important;
-            }
-
-            .transactions-page .transactions-empty p:first-of-type {
-                font-size: 0.75rem;
-            }
-
-            .transactions-page .transactions-empty p:last-of-type {
-                font-size: 0.68rem;
-            }
-
-            @media (min-width: 500px) and (max-width: 767px) {
-                body:has(.transactions-page) nav>div {
-                    max-width: none;
-                    padding-right: 0.5rem;
-                    padding-left: 0.5rem;
-                }
-
-                body:has(.transactions-page) nav>div>div {
-                    height: 2.5rem;
-                    gap: 0.25rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>a img {
-                    width: 1.6rem;
-                    height: 1.6rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>a h1 {
-                    font-size: 0.75rem;
-                    line-height: 1.1;
-                }
-
-                body:has(.transactions-page) nav>div>div>a p {
-                    font-size: 0.35rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>div:nth-child(2) {
-                    display: flex;
-                    gap: 0;
-                }
-
-                body:has(.transactions-page) nav>div>div>div:nth-child(2) a {
-                    padding: 0.25rem 0.2rem;
-                    font-size: 0.5rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>div:nth-child(3) {
-                    gap: 0.2rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>div:nth-child(3) svg {
-                    width: 0.8rem;
-                    height: 0.8rem;
-                }
-
-                body:has(.transactions-page) nav>div>div>div:nth-child(3)>div>div {
-                    width: 1.1rem;
-                    height: 1.1rem;
-                    font-size: 0.6rem;
-                }
-            }
-
-            @media (max-width: 480px) {
-
-                .transactions-page .transactions-header-inner,
-                .transactions-page .transactions-content {
-                    width: calc(100% - 1.4rem);
-                    margin-right: 0.7rem;
-                    margin-left: 0.7rem;
-                    padding-right: 0;
-                    padding-left: 0;
-                }
-
-                .transactions-page .transactions-header-inner>.flex {
-                    flex-wrap: wrap;
-                }
-
-                .transactions-page .transactions-grid {
-                    grid-template-columns: minmax(0, 1fr);
-                }
-
-                .transactions-page .transactions-security {
-                    flex-wrap: wrap;
-                }
-
-                .transactions-page .transactions-history-heading {
-                    align-items: flex-start;
-                    flex-direction: column;
-                }
-
-                .transactions-page .transactions-history-row {
-                    flex-wrap: wrap;
-                }
-
-                .transactions-page .transactions-history-info {
-                    flex-basis: calc(100% - 2rem);
-                }
-
-                .transactions-page .transactions-history-total {
-                    margin-left: 2rem;
-                }
-
-                .transactions-page .transactions-history-row>a,
-                .transactions-page .transactions-history-row>span {
-                    margin-left: auto;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .transactions-page .transactions-header-inner>div {
-                    gap: 0.35rem;
-                }
-
-                .transactions-page .transactions-confirmation .transactions-form-row {
-                    grid-template-columns: minmax(0, 1fr);
-                }
-
-                .transactions-page .transactions-card-footer {
-                    flex-direction: column;
-                }
-
-                .transactions-page .transactions-card-footer>* {
-                    width: 100%;
-                }
-            }
-        </style>
-        <div class="transactions-page">
+        <div class="min-h-screen bg-[#f7f4eb] text-[#2c1810]">
             {{-- Header --}}
-            <div class="transactions-header bg-white border-b border-gray-200">
-                <div class="transactions-header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div class="flex flex-wrap items-start justify-between gap-4">
+            <div class="border-0 bg-transparent">
+                <div class="mx-auto w-[87.2vw] max-w-[90rem] px-0 pb-[0.45rem] pt-[1.2rem] max-[480px]:mx-[0.7rem] max-[480px]:w-[calc(100%_-_1.4rem)]">
+                    <div class="flex flex-nowrap items-start justify-between gap-4 max-[480px]:flex-wrap max-[480px]:gap-[0.35rem]">
                         <div>
-                            <div class="inline-flex items-center gap-2 bg-[#E8F5E9] px-3 py-1 rounded-full mb-3">
+                            <div class="mb-[0.25rem] inline-flex items-center gap-2 rounded-full bg-[#E8F5E9] px-[0.4rem] py-[0.15rem]">
                                 <svg class="w-4 h-4 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <span class="text-xs font-semibold text-[#2E7D32]">Portal Pembayaran Pelanggan</span>
                             </div>
-                            <h1 class="font-serif text-4xl font-bold text-[#2C1810]">Transaksi Saya</h1>
-                            <p class="text-[#718078] mt-2 max-w-2xl">Daftar riwayat pembayaran dan konfirmasi transaksi
+                            <h1 class="font-serif text-xl font-bold leading-[1.2] text-[#8b1e1e]">Pembayaran Saya</h1>
+                            <p class="mt-[0.2rem] max-w-2xl text-xs leading-[1.4] text-[#718078]">Daftar riwayat pembayaran dan konfirmasi pembayaran
                                 lilin aromaterapi Anda. Kelola tagihan aktif dengan verifikasi aman.</p>
                         </div>
 
                         {{-- Security Info --}}
-                        <div class="transactions-security flex items-center gap-4 text-xs text-[#718078]">
+                        <div class="flex items-center gap-2 rounded-full border border-[#e8dfcf] bg-white px-[0.55rem] py-[0.35rem] text-xs text-[#718078] max-[480px]:flex-wrap">
                             <div class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-[#2E7D32]" fill="none" stroke="currentColor"
+                                <svg class="h-[0.65rem] w-[0.65rem] text-[#2E7D32]" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -452,7 +171,7 @@
                                 <span>Enkripsi 256-Bit</span>
                             </div>
                             <div class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-[#8B1E1E]" fill="none" stroke="currentColor"
+                                <svg class="h-[0.65rem] w-[0.65rem] text-[#8B1E1E]" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -460,67 +179,185 @@
                                 <span>Verifikasi Otomatis</span>
                             </div>
                             @if ($showDemoPreview)
-                                <span class="transactions-demo-label">PRATINJAU DEMO</span>
+                                <span class="whitespace-nowrap rounded-full border border-[#e8dfcf] bg-white px-[0.35rem] py-[0.15rem] text-[0.48rem] font-bold tracking-[0.04em] text-[#806c54]">PRATINJAU DEMO</span>
                             @endif
                         </div>
-                        @if ($showDemoPreview)
-                            <span class="transactions-demo-label rounded-full bg-[#f7eee3] px-2 py-1 text-[10px] font-bold tracking-wider text-[#8B1E1E]">PRATINJAU DEMO</span>
-                        @endif
                     </div>
                 </div>
             </div>
 
-            <div class="transactions-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="mx-auto w-[87.2vw] max-w-[90rem] px-0 pb-4 pt-[0.35rem] max-[480px]:mx-[0.7rem] max-[480px]:w-[calc(100%_-_1.4rem)]">
 
-                <div class="transactions-grid grid lg:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 gap-6 mb-2">
                     {{-- TRANSAKSI BERJALAN --}}
                     @if ($displayTransaksiBerjalan->count() > 0)
                         <section>
                             @foreach ($displayTransaksiBerjalan as $transaksi)
                                 <div
-                                    class="transactions-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-4">
+                                    class="mb-2 overflow-hidden rounded-[0.45rem] border border-[#e8dfcf] bg-white shadow-sm">
                                     {{-- Header --}}
                                     <div
-                                        class="transactions-card-header px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#FAF9F6]">
+                                        class="flex items-center justify-between gap-2 border-b border-gray-100 bg-[#fbf8f0] px-[0.9rem] py-2">
                                         <div>
-                                            <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">
-                                                Transaksi Berjalan</p>
-                                            <p class="font-mono font-bold text-[#2C1810]">
+                                            <p class="mb-[0.1rem] text-[0.62rem] font-semibold uppercase tracking-wider text-[#718078]">
+                                                Pembayaran Berjalan</p>
+                                            <p class="text-xs font-mono font-bold text-[#2C1810]">
                                                 TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}</p>
-                                            <p class="text-xs text-[#718078] mt-1">Pesanan
+                                            <p class="mt-[0.1rem] text-[0.65rem] text-[#718078]">Pesanan
                                                 #NC-{{ $transaksi->pesanan->created_at->format('Y') }}-{{ str_pad($transaksi->pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}
                                             </p>
                                         </div>
                                         <span
-                                            class="inline-flex items-center gap-1 bg-[#FCE4EC] text-[#8B1E1E] px-3 py-1 rounded-full text-xs font-semibold">
+                                            class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-[#FCE4EC] px-[0.35rem] py-[0.15rem] text-[0.62rem] font-semibold text-[#8B1E1E]">
                                             <span class="w-2 h-2 rounded-full bg-[#8B1E1E]"></span>
                                             Menunggu Pembayaran
                                         </span>
                                     </div>
 
-            <div class="transactions-grid mb-8 grid gap-6 lg:grid-cols-[0.7fr_1fr]">
-                {{-- TRANSAKSI BERJALAN --}}
-                @if($displayTransaksiBerjalan->count() > 0)
-                <section>
-                    @foreach($displayTransaksiBerjalan as $transaksi)
-                    <div class="transactions-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-4">
-                        {{-- Header --}}
-                        <div class="transactions-card-header px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#FAF9F6]">
-                            <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-[#718078] mb-1">Transaksi Berjalan</p>
-                                <p class="font-mono font-bold text-[#2C1810]">TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}</p>
-                                <p class="text-xs text-[#718078] mt-1">Pesanan #NC-{{ $transaksi->pesanan->created_at->format('Y') }}-{{ str_pad($transaksi->pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}</p>
-                            </div>
-                            <span class="inline-flex items-center gap-1 bg-[#FCE4EC] text-[#8B1E1E] px-3 py-1 rounded-full text-xs font-semibold">
-                                <span class="w-2 h-2 rounded-full bg-[#8B1E1E]"></span>
-                                Menunggu Pembayaran
-                            </span>
+                                    {{-- Produk --}}
+                                    @foreach ($transaksi->pesanan->detailPesanan as $detail)
+                                        <div class="flex gap-[0.45rem] border-b border-gray-100 px-[0.9rem] py-2">
+                                            <div class="flex-shrink-0">
+                                                @if ($showDemoPreview)
+                                                    <div class="grid h-16 w-14 place-items-center overflow-hidden rounded-md bg-[linear-gradient(145deg,#72806b,#d6c6a5_52%,#efe3cd)]"
+                                                        aria-label="Ilustrasi lilin aroma apel">
+                                                        <svg class="h-8 w-8" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                                            <path d="M8 32c5-9 10-12 17-11-2 7-7 12-17 11Z"
+                                                                fill="#46634B" />
+                                                            <path d="M40 35c-5-8-10-10-16-9 2 7 7 10 16 9Z"
+                                                                fill="#5D7654" />
+                                                            <path d="M22 18c0-3 2-5 2-8 3 3 4 6 2 9" fill="#D98C43" />
+                                                            <rect x="17" y="19" width="15" height="22" rx="3"
+                                                                fill="#F4E8D0" />
+                                                            <path d="M20 24h9M20 27h9" stroke="#A98457" stroke-width="1.5"
+                                                                stroke-linecap="round" />
+                                                            <path d="M17 41h15" stroke="#775638" stroke-width="2"
+                                                                stroke-linecap="round" />
+                                                        </svg>
+                                                    </div>
+                                                @elseif($detail->produk->gambar)
+                                                    <img src="{{ asset('storage/' . $detail->produk->gambar) }}"
+                                                        alt="{{ $detail->produk->nama_produk }}"
+                                                        class="h-16 w-14 rounded-md object-cover">
+                                                @else
+                                                    <div
+                                                        class="flex h-16 w-14 items-center justify-center rounded-md bg-gray-200">
+                                                        <svg class="h-6 w-6 text-gray-400" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="flex-1">
+                                                <p
+                                                    class="mb-1 text-[0.65rem] font-semibold uppercase leading-[1.35] tracking-wider text-[#718078]">
+                                                    100% Natural Soy Wax</p>
+                                                <h3 class="font-serif text-[0.78rem] font-bold leading-[1.25] text-[#2C1810]">
+                                                    {{ $detail->produk->nama_produk }}</h3>
+                                                <p class="mt-1 text-[0.65rem] leading-[1.35] text-[#718078]">Jumlah: {{ $detail->jumlah }} Pcs
+                                                    ({{ $detail->jumlah * 200 }} gr)</p>
+                                                <p class="text-[0.65rem] leading-[1.35] text-[#718078]">Tanggal:
+                                                    {{ $transaksi->created_at->format('d F Y, H:i') }} WIB</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    {{-- Metode Pembayaran --}}
+                                    <div class="bg-[#fbf8f0] px-[0.9rem] py-2">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <p class="text-[0.68rem] font-semibold text-[#718078]">Metode Pembayaran</p>
+                                            <p class="text-[0.68rem] font-bold text-[#2C1810]">{{ $transaksi->metode_label }}</p>
+                                        </div>
+                                        @if (in_array($transaksi->metode_pembayaran, ['bca', 'mandiri']))
+                                            <div class="mb-[0.4rem]">
+                                                <p class="mb-1 text-[0.68rem] text-[#718078]">Nomor Virtual Account</p>
+                                                <div
+                                                    class="flex items-center justify-between rounded-md border border-gray-200 bg-white px-[0.4rem] py-1">
+                                                    <p class="font-mono text-[0.78rem] font-bold tracking-wider text-[#8B1E1E]">
+                                                        8271 0812 3456 7890</p>
+                                                    <button
+                                                        @if (!$showDemoPreview) onclick="copyToClipboard('8271081234567890')" @else disabled @endif
+                                                        class="rounded bg-[#8B1E1E] px-[0.4rem] py-[0.2rem] text-[0.62rem] text-white transition hover:bg-[#6B1515]">
+                                                        Salin
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="flex items-center justify-between border-t border-gray-200 pt-[0.4rem]">
+                                            <p class="text-[0.68rem] font-semibold text-[#718078]">Total Tagihan</p>
+                                            <p class="font-serif text-[1.05rem] font-bold text-[#8B1E1E]">
+                                                Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}</p>
+                                        </div>
+                                    </div>
+
+                                    {{-- Footer --}}
+                                    <div class="flex gap-[0.35rem] border-t border-gray-100 px-[0.8rem] py-[0.4rem] max-[480px]:flex-col">
+                                        @if ($showDemoPreview)
+                                            <a href="{{ route('pembeli.transaksi.index', ['demo_transaction' => $transaksi->id_transaksi]) }}"
+                                                class="flex-1 inline-flex items-center justify-center gap-[0.25rem] rounded-md border border-gray-200 bg-white px-[0.45rem] py-[0.35rem] text-[0.66rem] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E] max-[480px]:w-full">
+                                                <svg class="h-[0.65rem] w-[0.65rem]" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                Lihat Detail
+                                            </a>
+                                            <button type="button" disabled
+                                                class="flex-1 inline-flex items-center justify-center gap-[0.25rem] rounded-md bg-[#bf3833] px-[0.45rem] py-[0.35rem] text-[0.66rem] font-semibold text-white cursor-not-allowed max-[480px]:w-full">
+                                                <svg class="h-[0.65rem] w-[0.65rem]" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                                </svg>
+                                                Bayar Sekarang
+                                            </button>
+                                        @else
+                                            <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}"
+                                                class="flex-1 inline-flex items-center justify-center gap-[0.25rem] rounded-md border border-gray-200 bg-white px-[0.45rem] py-[0.35rem] text-[0.66rem] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E] max-[480px]:w-full">
+                                                <svg class="h-[0.65rem] w-[0.65rem]" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                                Lihat Detail
+                                            </a>
+                                            <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}"
+                                                class="flex-1 inline-flex items-center justify-center gap-[0.25rem] rounded-md bg-[#bf3833] px-[0.45rem] py-[0.35rem] text-[0.66rem] font-semibold text-white transition hover:bg-[#a92f2d] max-[480px]:w-full">
+                                                <svg class="h-[0.65rem] w-[0.65rem]" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                                </svg>
+                                                {{ $transaksi->metode_pembayaran === 'cod' ? 'Lihat Instruksi COD' : 'Bayar & Upload Bukti' }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </section>
+                    @else
+                        <div
+                            class="rounded-[0.45rem] border border-[#e8dfcf] bg-white px-3 py-[1.4rem] text-center shadow-sm">
+                            <svg class="mx-auto mb-[0.35rem] h-10 w-10 text-gray-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="mb-1 text-xs font-semibold text-[#2C1810]">Tidak ada pembayaran berjalan</p>
+                            <p class="text-[0.68rem] text-[#718078]">Semua pembayaran Anda sudah selesai diproses.</p>
                         </div>
                     @endif
                 </div>
 
                 {{-- Garansi Kesegaran Atsiri --}}
-                <div class="transactions-guarantee bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <div class="hidden rounded-[0.45rem] border border-[#e8dfcf] bg-white p-6 mb-8 shadow-sm">
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 bg-[#E8F5E9] rounded-full flex items-center justify-center flex-shrink-0">
                             <svg class="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor"
@@ -538,20 +375,20 @@
                 </div>
 
                 {{-- RIWAYAT TRANSAKSI --}}
-                <section class="transactions-history bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <section class="overflow-hidden rounded-[0.45rem] border border-[#e8dfcf] bg-white shadow-sm">
                     <div
-                        class="transactions-history-heading px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                        class="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-2 max-[480px]:items-start max-[480px]:flex-col">
                         <div>
-                            <h2 class="font-serif text-2xl font-bold text-[#2C1810]">Riwayat Transaksi</h2>
-                            <p class="text-xs text-[#718078] mt-1">Semua catatan pembayaran pemesanan aroma apel
+                            <h2 class="font-serif text-base font-bold text-[#2C1810]">Riwayat Pembayaran</h2>
+                            <p class="mt-1 text-[0.62rem] text-[#718078]">Semua catatan pembayaran pemesanan aroma apel
                                 NusaCandle.</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">•
+                        <div class="flex items-center gap-[0.2rem]">
+                            <span class="whitespace-nowrap rounded-full bg-green-100 px-[0.3rem] py-[0.15rem] text-[0.6rem] font-semibold text-green-800">•
                                 {{ $displayTotalBerhasil }} Berhasil</span>
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">•
+                            <span class="whitespace-nowrap rounded-full bg-yellow-100 px-[0.3rem] py-[0.15rem] text-[0.6rem] font-semibold text-yellow-800">•
                                 {{ $displayTotalMenunggu }} Menunggu Verifikasi</span>
-                            <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full">•
+                            <span class="whitespace-nowrap rounded-full bg-[#f3f0e9] px-[0.3rem] py-[0.15rem] text-[0.6rem] font-semibold text-[#6b6258]">
                                 {{ $displayTotalDibatalkan }} Dibatalkan</span>
                         </div>
                     </div>
@@ -559,24 +396,24 @@
                     <div class="divide-y divide-gray-100">
                         @forelse($displayRiwayatTransaksi as $transaksi)
                             <div
-                                class="transactions-history-row px-6 py-4 flex items-center gap-4 hover:bg-[#FAF9F6] transition">
+                                class="mx-[0.6rem] my-[0.35rem] flex items-center gap-[0.45rem] rounded-[0.4rem] border border-[#eee6d4] bg-[#fbf8f0] px-[0.75rem] py-[0.45rem] transition hover:bg-[#FAF9F6] max-[480px]:flex-wrap">
                                 {{-- Icon Status --}}
                                 <div
-                                    class="transactions-history-icon w-10 h-10 rounded-full {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100' : 'bg-gray-100') }} flex items-center justify-center flex-shrink-0">
+                                    class="flex h-[1.7rem] w-[1.7rem] flex-shrink-0 items-center justify-center rounded-full {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100' : 'bg-gray-100') }}">
                                     @if ($transaksi->status_pembayaran === 'berhasil')
-                                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
+                                        <svg class="h-[0.9rem] w-[0.9rem] text-green-600" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7" />
                                         </svg>
                                     @elseif($transaksi->status_pembayaran === 'menunggu')
-                                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor"
+                                        <svg class="h-[0.9rem] w-[0.9rem] text-amber-600" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     @else
-                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor"
+                                        <svg class="h-[0.9rem] w-[0.9rem] text-gray-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M6 18L18 6M6 6l12 12" />
@@ -584,57 +421,56 @@
                                     @endif
                                 </div>
 
-                                {{-- Info Transaksi --}}
-                                <div class="transactions-history-info flex-1 min-w-0">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <p class="font-mono font-bold text-[#2C1810]">
+                                {{-- Info Pembayaran --}}
+                                <div class="min-w-0 flex-1 max-[480px]:basis-[calc(100%_-_2rem)]">
+                                    <div class="mb-[0.1rem] flex flex-wrap items-center gap-[0.2rem]">
+                                        <p class="font-mono text-[0.66rem] font-bold text-[#2C1810]">
                                             TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}</p>
                                         <span class="text-xs text-[#718078]">•</span>
-                                        <p class="text-xs text-[#718078]">
+                                        <p class="text-[0.68rem] text-[#718078]">
                                             #NC-{{ $transaksi->pesanan->created_at->format('Y') }}-{{ str_pad($transaksi->pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}
                                         </p>
                                         <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100 text-green-700' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600') }}">
+                                            class="inline-flex items-center rounded px-2 py-0.5 text-[0.58rem] font-semibold {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100 text-green-700' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600') }}">
                                             {{ $transaksi->status_label }}
                                         </span>
                                     </div>
-                                    <p class="text-sm text-[#2C1810] font-semibold truncate">
+                                    <p class="truncate text-[0.68rem] font-semibold text-[#2C1810]">
                                         {{ $transaksi->pesanan->detailPesanan->first()?->produk->nama_produk ?? 'Produk' }}
                                         ({{ $transaksi->pesanan->detailPesanan->sum('jumlah') }} Pcs)
                                     </p>
-                                    <p class="text-xs text-[#718078] mt-1">
+                                    <p class="mt-1 text-[0.6rem] text-[#718078]">
                                         Metode: {{ $transaksi->metode_label }} •
                                         {{ $transaksi->created_at->format('d M Y') }}
                                     </p>
                                 </div>
 
                                 {{-- Total --}}
-                                <div class="transactions-history-total text-right flex-shrink-0">
-                                    <p class="text-xs text-[#718078] mb-1">
+                                <div class="ml-0 flex-shrink-0 text-right max-[480px]:ml-8">
+                                    <p class="mb-1 text-[0.6rem] text-[#718078]">
                                         {{ $transaksi->status_pembayaran === 'gagal' ? 'Nilai Tagihan' : 'Total Dibayar' }}
                                     </p>
                                     <p
-                                        class="font-serif text-lg font-bold {{ $transaksi->status_pembayaran === 'gagal' ? 'text-gray-500' : 'text-[#8B1E1E]' }}">
+                                        class="font-serif text-[0.86rem] font-bold {{ $transaksi->status_pembayaran === 'gagal' ? 'text-gray-500' : 'text-[#8B1E1E]' }}">
                                         Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}
                                     </p>
                                 </div>
 
                                 {{-- Tombol --}}
                                 @if ($showDemoPreview)
-                                    <div class="transactions-demo-product-art flex h-16 w-16 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#e7eedf] to-[#d6c6a9] p-3" aria-label="Ilustrasi lilin aroma apel">
-                                        <svg class="h-full w-full" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                                            <path d="M8 32c5-9 10-12 17-11-2 7-7 12-17 11Z" fill="#46634B"/>
-                                            <path d="M40 35c-5-8-10-10-16-9 2 7 7 10 16 9Z" fill="#5D7654"/>
-                                            <path d="M22 18c0-3 2-5 2-8 3 3 4 6 2 9" fill="#D98C43"/>
-                                            <rect x="17" y="19" width="15" height="22" rx="3" fill="#F4E8D0"/>
-                                            <path d="M20 24h9M20 27h9" stroke="#A98457" stroke-width="1.5" stroke-linecap="round"/>
-                                            <path d="M17 41h15" stroke="#775638" stroke-width="2" stroke-linecap="round"/>
+                                    <a href="{{ route('pembeli.transaksi.index', ['demo_transaction' => $transaksi->id_transaksi]) }}"
+                                        class="ml-0 inline-flex flex-shrink-0 items-center gap-[0.2rem] rounded-md border border-gray-200 bg-white px-[0.4rem] py-[0.3rem] text-[0.64rem] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E] max-[480px]:ml-auto">
+                                        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                         Lihat Detail
                                     </a>
                                 @else
                                     <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}"
-                                        class="inline-flex items-center gap-1 bg-white border border-gray-200 hover:border-[#8B1E1E] text-[#2C1810] px-4 py-2 rounded-md text-xs font-semibold transition flex-shrink-0">
+                                        class="ml-0 inline-flex flex-shrink-0 items-center gap-[0.2rem] rounded-md border border-gray-200 bg-white px-[0.4rem] py-[0.3rem] text-[0.64rem] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E] max-[480px]:ml-auto">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -645,202 +481,20 @@
                                     </a>
                                 @endif
                             </div>
-                            <div class="flex-1">
-                                <p class="text-[10px] font-semibold uppercase tracking-wider text-[#718078] mb-1">100% Natural Soy Wax</p>
-                                <h3 class="font-display text-base font-bold text-[#2C1810]">{{ $detail->produk->nama_produk }}</h3>
-                                <p class="text-xs text-[#718078] mt-1">Jumlah: {{ $detail->jumlah }} Pcs ({{ $detail->jumlah * 200 }} gr)</p>
-                                <p class="text-xs text-[#718078]">Tanggal: {{ $transaksi->created_at->format('d F Y, H:i') }} WIB</p>
-                            </div>
-                        </div>
-                        @endforeach
-
-                        {{-- Metode Pembayaran --}}
-                        <div class="transactions-payment px-6 py-4 bg-[#FAF9F6]">
-                            <div class="flex items-center justify-between mb-2">
-                                <p class="text-xs font-semibold text-[#718078]">Metode Pembayaran</p>
-                                <p class="text-sm font-bold text-[#2C1810]">{{ $transaksi->metode_label }}</p>
-                            </div>
-                            @if(in_array($transaksi->metode_pembayaran, ['bca', 'mandiri']))
-                            <div class="transactions-va mb-3">
-                                <p class="text-xs text-[#718078] mb-1">Nomor Virtual Account</p>
-                                <div class="flex items-center justify-between bg-white border border-gray-200 rounded-md px-4 py-2">
-                                    <p class="font-mono text-lg font-bold text-[#8B1E1E] tracking-wider">8271 0812 3456 7890</p>
-                                    <button @if (!$showDemoPreview) onclick="copyToClipboard('8271081234567890')" @else disabled @endif class="text-xs bg-[#8B1E1E] text-white px-3 py-1 rounded hover:bg-[#6B1515] transition">
-                                        Salin
-                                    </button>
-                                </div>
-                            </div>
-                            @endif
-                            <div class="flex items-center justify-between pt-3 border-t border-gray-200">
-                                <p class="text-sm font-semibold text-[#718078]">Total Tagihan</p>
-                                <p class="font-display text-2xl font-bold text-[#8B1E1E]">Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}</p>
-                            </div>
-                        </div>
-
-                        {{-- Footer --}}
-                        <div class="transactions-card-footer px-6 py-3 border-t border-gray-100 flex gap-2">
-                            @if ($showDemoPreview)
-                            <a href="{{ route('pembeli.transaksi.index', ['demo_transaction' => $transaksi->id_transaksi]) }}" class="flex-1 inline-flex items-center justify-center gap-2 bg-white border border-gray-200 text-[#2C1810] px-4 py-2 rounded-md text-sm font-semibold hover:border-[#8B1E1E] transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        @empty
+                            <div class="px-3 py-[1.2rem] text-center">
+                                <svg class="mx-auto mb-[0.35rem] h-10 w-10 text-gray-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                Lihat Detail
-                            </a>
-                            <button type="button" disabled class="flex-1 inline-flex items-center justify-center gap-2 bg-[#8B1E1E] text-white px-4 py-2 rounded-md text-sm font-semibold cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                                </svg>
-                                Bayar Sekarang
-                            </button>
-                            @else
-                            <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}" class="flex-1 inline-flex items-center justify-center gap-2 bg-white border border-gray-200 hover:border-[#8B1E1E] text-[#2C1810] px-4 py-2 rounded-md text-sm font-semibold transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                                Lihat Detail
-                            </a>
-                            <button onclick="scrollToKonfirmasi()" class="flex-1 inline-flex items-center justify-center gap-2 bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-4 py-2 rounded-md text-sm font-semibold transition">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                                </svg>
-                                Bayar Sekarang
-                            </button>
-                            @endif
-                        </div>
-                    </div>
-                    @endforeach
-                </section>
-                @else
-                <div class="transactions-empty bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    <p class="text-sm font-semibold text-[#2C1810] mb-1">Tidak ada transaksi berjalan</p>
-                    <p class="text-xs text-[#718078]">Semua pembayaran Anda sudah selesai diproses.</p>
-                </div>
-                @endif
-
-                {{-- KONFIRMASI PEMBAYARAN --}}
-                @if($transaksiKonfirmasi || $showDemoPreview)
-                <section id="section-konfirmasi">
-                    <div class="transactions-confirmation bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24">
-                        <div class="transactions-confirmation-heading flex items-start justify-between mb-4">
-                            <div>
-                                <h2 class="font-display text-2xl font-bold text-[#2C1810]">Konfirmasi Pembayaran</h2>
-                                <p class="text-xs text-[#718078] mt-1">Kirim bukti transfer bank bila sistem belum memperbarui status pesanan Anda secara otomatis.</p>
+                                <p class="mb-1 text-xs font-semibold text-[#2C1810]">Belum ada riwayat pembayaran</p>
+                                <p class="text-[0.68rem] text-[#718078]">Pembayaran yang sudah selesai akan muncul di sini.</p>
                             </div>
                         @endforelse
                     </div>
                 </section>
             </div>
-
-            {{-- Garansi Kesegaran Atsiri --}}
-            <div class="transactions-guarantee bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 bg-[#E8F5E9] rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-display text-lg font-bold text-[#2C1810] mb-2">Garansi Kesegaran Atsiri</h3>
-                        <p class="text-sm text-[#718078] leading-relaxed">Lilin dikemas dengan lapisan kedap udara dan lilin kedelai organik murni langsung dari perkebunan apel Batu, Malang.</p>
-                    </div>
-                </div>
-            </div>
-
-            {{-- RIWAYAT TRANSAKSI --}}
-            <section class="transactions-history bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div class="transactions-history-heading px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-display text-2xl font-bold text-[#2C1810]">Riwayat Transaksi</h2>
-                        <p class="text-xs text-[#718078] mt-1">Semua catatan pembayaran pemesanan aroma apel NusaCandle.</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">• {{ $displayTotalBerhasil }} Berhasil</span>
-                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">• {{ $displayTotalMenunggu }} Menunggu Verifikasi</span>
-                        <span class="bg-gray-100 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full">• {{ $displayTotalDibatalkan }} Dibatalkan</span>
-                    </div>
-                </div>
-
-                <div class="divide-y divide-gray-100">
-                    @forelse($displayRiwayatTransaksi as $transaksi)
-                    <div class="transactions-history-row px-6 py-4 flex items-center gap-4 hover:bg-[#FAF9F6] transition">
-                        {{-- Icon Status --}}
-                        <div class="transactions-history-icon w-10 h-10 rounded-full {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100' : 'bg-gray-100') }} flex items-center justify-center flex-shrink-0">
-                            @if($transaksi->status_pembayaran === 'berhasil')
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            @elseif($transaksi->status_pembayaran === 'menunggu')
-                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            @else
-                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            @endif
-                        </div>
-
-                        {{-- Info Transaksi --}}
-                        <div class="transactions-history-info flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <p class="font-mono font-bold text-[#2C1810]">TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}</p>
-                                <span class="text-xs text-[#718078]">•</span>
-                                <p class="text-xs text-[#718078]">#NC-{{ $transaksi->pesanan->created_at->format('Y') }}-{{ str_pad($transaksi->pesanan->id_pesanan, 4, '0', STR_PAD_LEFT) }}</p>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold {{ $transaksi->status_pembayaran === 'berhasil' ? 'bg-green-100 text-green-700' : ($transaksi->status_pembayaran === 'menunggu' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600') }}">
-                                    {{ $transaksi->status_label }}
-                                </span>
-                            </div>
-                            <p class="text-sm text-[#2C1810] font-semibold truncate">
-                                {{ $transaksi->pesanan->detailPesanan->first()?->produk->nama_produk ?? 'Produk' }} ({{ $transaksi->pesanan->detailPesanan->sum('jumlah') }} Pcs)
-                            </p>
-                            <p class="text-xs text-[#718078] mt-1">
-                                Metode: {{ $transaksi->metode_label }} • {{ $transaksi->created_at->format('d M Y') }}
-                            </p>
-                        </div>
-
-                        {{-- Total --}}
-                        <div class="transactions-history-total text-right flex-shrink-0">
-                            <p class="text-xs text-[#718078] mb-1">{{ $transaksi->status_pembayaran === 'gagal' ? 'Nilai Tagihan' : 'Total Dibayar' }}</p>
-                            <p class="font-display text-lg font-bold {{ $transaksi->status_pembayaran === 'gagal' ? 'text-gray-500' : 'text-[#8B1E1E]' }}">
-                                Rp{{ number_format($transaksi->pesanan->total_harga, 0, ',', '.') }}
-                            </p>
-                        </div>
-
-                        {{-- Tombol --}}
-                        @if ($showDemoPreview)
-                        <a href="{{ route('pembeli.transaksi.index', ['demo_transaction' => $transaksi->id_transaksi]) }}" class="inline-flex items-center gap-1 bg-white border border-gray-200 text-[#2C1810] px-4 py-2 rounded-md text-xs font-semibold flex-shrink-0 hover:border-[#8B1E1E] transition">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            Lihat Detail
-                        </a>
-                        @else
-                        <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}" class="inline-flex items-center gap-1 bg-white border border-gray-200 hover:border-[#8B1E1E] text-[#2C1810] px-4 py-2 rounded-md text-xs font-semibold transition flex-shrink-0">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
-                            Lihat Detail
-                        </a>
-                        @endif
-                    </div>
-                    @empty
-                    <div class="transactions-empty px-6 py-12 text-center">
-                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <p class="text-sm font-semibold text-[#2C1810] mb-1">Belum ada riwayat transaksi</p>
-                        <p class="text-xs text-[#718078]">Transaksi yang sudah selesai akan muncul di sini.</p>
-                    </div>
-                    @endforelse
-                </div>
-            </section>
         </div>
 
         <script>
@@ -866,4 +520,5 @@
                 }
             }
         </script>
+    @endif
 @endsection

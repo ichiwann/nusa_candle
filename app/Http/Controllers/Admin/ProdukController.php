@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Models\Produk;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProdukController extends Controller
 {
@@ -15,11 +15,30 @@ class ProdukController extends Controller
     {
         $query = Produk::query();
 
-        // 1. Logic Search (Cari berdasarkan Nama Produk)
+        // Search by product name or exact numeric product ID.
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('nama_produk', 'like', "%{$search}%");
+            $query->where(function ($searchQuery) use ($search) {
+                $searchQuery->where('nama_produk', 'like', "%{$search}%");
+
+                if (ctype_digit((string) $search)) {
+                    $searchQuery->orWhere('id_produk', (int) $search);
+                }
+            });
         }
+
+        if ($request->input('theme') === 'apel_malang') {
+            $query->where(function ($themeQuery) {
+                $themeQuery->where('nama_produk', 'like', '%Apel%')
+                    ->orWhere('nama_produk', 'like', '%Malang%');
+            });
+        }
+
+        match ($request->input('stock_status')) {
+            'tersedia' => $query->where('stok', '>', 0),
+            'habis' => $query->where('stok', 0),
+            default => null,
+        };
 
         // 2. Logic Sort (Urutkan)
         $sortBy = $request->get('sort', 'terbaru');
@@ -38,16 +57,13 @@ class ProdukController extends Controller
         $totalProduk = Produk::count();
         $totalStok = Produk::sum('stok');
 
-        // Hardcode dulu untuk produk terjual & status stok sesuai desain Figma
-        $produkTerjual = 1840;
-        $statusStokText = 'Aman';
+        $produkTerjual = 50;
 
         return view('pages.admin.produk', compact(
             'produks',
             'totalProduk',
             'totalStok',
-            'produkTerjual',
-            'statusStokText'
+            'produkTerjual'
         ));
     }
 

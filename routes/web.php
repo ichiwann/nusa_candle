@@ -1,24 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminSettingsController;
 // --- Controllers ---
-use App\Http\Controllers\Pembeli\HomeController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HadiahController;
+use App\Http\Controllers\Admin\KodeRedeemController;
+use App\Http\Controllers\Admin\PesananController;
+use App\Http\Controllers\Admin\ProdukController;       // Nanti bisa diganti HadiahController
+use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\HadiahController;       // Nanti bisa diganti HadiahController
-use App\Http\Controllers\Admin\AdminSettingsController;
-use App\Http\Controllers\Admin\KodeRedeemController;
-use App\Http\Controllers\Admin\ProdukController;
-use App\Http\Controllers\Admin\PesananController;
-use App\Http\Controllers\Admin\TransaksiController;
-use App\Http\Controllers\Pembeli\ProfilController;
-use App\Http\Controllers\Pembeli\PoinController;
-use App\Http\Controllers\Pembeli\PembeliProdukController;
+use App\Http\Controllers\Pembeli\HomeController;
 use App\Http\Controllers\Pembeli\KeranjangController;
 use App\Http\Controllers\Pembeli\PembeliPesananController;
+use App\Http\Controllers\Pembeli\PembeliProdukController;
 use App\Http\Controllers\Pembeli\PembeliTransaksiController;
+use App\Http\Controllers\Pembeli\PoinController;
+use App\Http\Controllers\Pembeli\ProfilController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,8 +84,10 @@ Route::middleware(['auth', 'admin']) // Pastikan middleware 'admin' sudah didaft
         Route::get('/pesanan', [PesananController::class, 'index'])->name('orders.index');
         Route::patch('/pesanan/{id}/status', [PesananController::class, 'updateStatus'])->name('orders.updateStatus');
 
-        // Manajemen Transaksi
-        Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transactions.index');
+        // Manajemen Pembayaran
+        Route::get('/pembayaran', [TransaksiController::class, 'index'])->name('payments.index');
+        Route::patch('/pembayaran/{id}/status', [TransaksiController::class, 'updateStatus'])->name('payments.updateStatus');
+        Route::redirect('/transaksi', '/admin/pembayaran')->name('transactions.index');
         Route::patch('/transaksi/{id}/status', [TransaksiController::class, 'updateStatus'])->name('transactions.updateStatus');
 
         // Redeem Code
@@ -133,12 +134,10 @@ Route::middleware(['auth'])->group(function () {
     // Proses checkout setelah pilih metode
     Route::post('/checkout', [PembeliPesananController::class, 'checkout'])->name('pembeli.checkout.store');
 
-
     // Di dalam Route::middleware(['auth'])->group(...)
     Route::get('/transaksi', [PembeliTransaksiController::class, 'index'])->name('pembeli.transaksi.index');
     Route::post('/transaksi/konfirmasi', [PembeliTransaksiController::class, 'store'])->name('pembeli.transaksi.store');
     Route::get('/transaksi/{id}', [PembeliTransaksiController::class, 'show'])->name('pembeli.transaksi.show');
 });
 
-
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

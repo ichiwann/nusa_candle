@@ -189,6 +189,15 @@
                     </div>
 
                     {{-- Produk Hadiah --}}
+                    @forelse ($hadiahList as $hadiah)
+                        @php
+                            $biayaPoin = (int) $hadiah->poin_dibutuhkan;
+                            $namaHadiah = $hadiah->produk?->nama_produk ?? 'Hadiah Refill';
+                            $stokHadiah = (int) ($hadiah->produk?->stok ?? 0);
+                            $poinCukup = $currentPoin >= $biayaPoin;
+                            $bisaKlaim = $poinCukup && $stokHadiah > 0;
+                            $kurangUntukHadiah = max(0, $biayaPoin - $currentPoin);
+                        @endphp
                     <div class="points-reward-product bg-[#FAF9F6] rounded-lg p-5 mb-6">
                         <div class="flex items-start gap-4">
                             <div class="relative flex-shrink-0">

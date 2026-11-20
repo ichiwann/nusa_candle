@@ -16,24 +16,24 @@
     $updatedAtLabel = $updatedAt?->locale('id')->translatedFormat('d M Y, H:i');
     $updatedAtLabel = $updatedAtLabel ? $updatedAtLabel . ' WIB' : null;
     $progressSteps = [
-        ['label' => 'Transaksi Dibuat', 'description' => $createdAt],
+        ['label' => 'Pembayaran Dibuat', 'description' => $createdAt],
         ['label' => 'Menunggu Pembayaran', 'description' => $createdAt],
         ['label' => 'Pembayaran Diverifikasi', 'description' => $statusPembayaran === 'berhasil'
             ? ($updatedAtLabel ?? 'Pembayaran berhasil diverifikasi')
             : ($statusPembayaran === 'gagal' ? 'Pembayaran tidak berhasil' : 'Menunggu verifikasi')],
         ['label' => 'Pembayaran Berhasil', 'description' => $statusPembayaran === 'berhasil'
-            ? ($updatedAtLabel ?? 'Transaksi lunas')
-            : ($statusPembayaran === 'gagal' ? 'Transaksi tidak lunas' : 'Belum lunas')],
+            ? ($updatedAtLabel ?? 'Pembayaran lunas')
+            : ($statusPembayaran === 'gagal' ? 'Pembayaran tidak lunas' : 'Belum lunas')],
     ];
     $statusPresentation = match ($statusPembayaran) {
         'berhasil' => [
             'title' => 'Pembayaran Berhasil Diverifikasi',
-            'description' => 'Transaksi telah selesai dan dana terkonfirmasi otomatis oleh sistem perbankan. Pesanan lilin aromaterapi Anda sedang diproses oleh artisan di Batu, Jawa Timur.',
+            'description' => 'Pembayaran telah selesai dan dana terkonfirmasi otomatis oleh sistem perbankan. Pesanan lilin aromaterapi Anda sedang diproses oleh artisan di Batu, Jawa Timur.',
             'badge' => 'Lunas',
         ],
         'gagal' => [
-            'title' => 'Transaksi Dibatalkan',
-            'description' => 'Transaksi ini tidak berhasil diselesaikan.',
+            'title' => 'Pembayaran Dibatalkan',
+            'description' => 'Pembayaran ini tidak berhasil diselesaikan.',
             'badge' => 'Gagal',
         ],
         default => [
@@ -63,22 +63,22 @@
         <nav aria-label="Jejak halaman" class="mb-3 flex flex-wrap items-center gap-2 text-[9px] text-[#796d5d]">
             <a href="{{ route('home') }}" class="transition hover:text-[#8B1E1E]">Beranda</a>
             <span aria-hidden="true">/</span>
-            <a href="{{ route('pembeli.transaksi.index') }}" class="transition hover:text-[#8B1E1E]">Transaksi Saya</a>
+            <a href="{{ route('pembeli.transaksi.index') }}" class="transition hover:text-[#8B1E1E]">Pembayaran Saya</a>
             <span aria-hidden="true">/</span>
-            <span class="font-semibold text-[#8B1E1E]">Detail Transaksi</span>
+            <span class="font-semibold text-[#8B1E1E]">Detail Pembayaran</span>
         </nav>
 
         <header class="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="mb-1 text-[8px] font-semibold uppercase tracking-[0.16em] text-[#2E7D32]">NusaCandle · Rincian Pembayaran</p>
-                <h1 class="font-display text-xl font-bold leading-tight text-[#8B1E1E] sm:text-2xl">Detail Transaksi</h1>
+                <h1 class="font-display text-xl font-bold leading-tight text-[#8B1E1E] sm:text-2xl">Detail Pembayaran</h1>
                 <p class="mt-1 text-[9px] text-[#796d5d]">
                     TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}
                     <span class="px-1" aria-hidden="true">·</span>
                     Dibuat {{ $transaksi->created_at->locale('id')->translatedFormat('d F Y, H:i') }} WIB
                 </p>
             </div>
-            <div class="transaction-detail-no-print flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2 print:hidden">
                 <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 rounded-md border border-[#e8dfcf] bg-white px-3 py-2 text-[9px] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E]">
                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"/>
@@ -96,7 +96,7 @@
 
         @if ($isDemoPreview)
             <div class="mb-3 rounded-lg border border-[#eddfb8] bg-[#fff9e8] px-3 py-2 text-[9px] text-[#796d5d]" role="note">
-                Ini pratinjau transaksi contoh. Informasi ini tidak tersimpan dan bukan transaksi untuk pembayaran.
+                Ini pratinjau pembayaran contoh. Informasi ini tidak tersimpan dan bukan pembayaran nyata.
             </div>
         @endif
 
@@ -178,12 +178,12 @@
             <div class="min-w-0 space-y-4">
                 <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                     <div class="mb-3 flex items-center justify-between gap-2 border-b border-[#f1ece2] pb-2">
-                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Informasi Transaksi</h2>
+                        <h2 class="font-display text-[11px] font-bold sm:text-xs">Informasi Pembayaran</h2>
                         <span class="rounded-full px-2 py-0.5 text-[7px] font-semibold {{ $transaksi->status_color }}">{{ $transaksi->status_label }}</span>
                     </div>
                     <dl class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <div class="rounded-md bg-[#faf7ed] p-2.5">
-                            <dt class="text-[7px] font-semibold uppercase tracking-wide text-[#796d5d]">ID Transaksi</dt>
+                            <dt class="text-[7px] font-semibold uppercase tracking-wide text-[#796d5d]">ID Pembayaran</dt>
                             <dd class="mt-1 text-[9px] font-semibold text-[#8B1E1E]">TRX-{{ str_pad($transaksi->id_transaksi, 5, '0', STR_PAD_LEFT) }}</dd>
                         </div>
                         <div class="rounded-md bg-[#faf7ed] p-2.5">
@@ -193,7 +193,7 @@
                             </dd>
                         </div>
                         <div class="rounded-md bg-[#faf7ed] p-2.5">
-                            <dt class="text-[7px] font-semibold uppercase tracking-wide text-[#796d5d]">Tanggal Transaksi</dt>
+                            <dt class="text-[7px] font-semibold uppercase tracking-wide text-[#796d5d]">Tanggal Pembayaran</dt>
                             <dd class="mt-1 text-[8px] text-[#2C1810]">{{ $transaksi->created_at->locale('id')->translatedFormat('d F Y, H:i') }} WIB</dd>
                         </div>
                         <div class="rounded-md bg-[#faf7ed] p-2.5">
@@ -280,7 +280,7 @@
                             </a>
                         @else
                             <a href="{{ asset('storage/' . $transaksi->bukti_pembayaran) }}" target="_blank" rel="noopener noreferrer" class="inline-block">
-                                <img src="{{ asset('storage/' . $transaksi->bukti_pembayaran) }}" alt="Bukti pembayaran transaksi" class="max-h-48 rounded-md border border-[#eee5d7] object-contain">
+                                <img src="{{ asset('storage/' . $transaksi->bukti_pembayaran) }}" alt="Bukti pembayaran" class="max-h-48 rounded-md border border-[#eee5d7] object-contain">
                             </a>
                         @endif
                     @else

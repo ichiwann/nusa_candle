@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hadiah;
+use App\Models\PenukaranHadiah;
+use App\Models\Produk;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Models\Hadiah;
-use App\Models\Produk;
-use App\Models\PenukaranHadiah;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class HadiahController extends Controller
 {
@@ -27,6 +27,10 @@ class HadiahController extends Controller
 
         // Daftar hadiah dengan info produk
         $daftarHadiah = Hadiah::with('produk')->orderBy('created_at', 'desc')->get();
+        $produkTersedia = Produk::query()
+            ->whereNotIn('id_produk', Hadiah::query()->select('id_produk'))
+            ->orderBy('nama_produk')
+            ->get(['id_produk', 'nama_produk', 'stok']);
 
         // ✅ DATA PENUKARAN HADIAH (untuk section konfirmasi)
         $daftarPenukaran = PenukaranHadiah::with(['user', 'hadiah.produk'])
@@ -43,6 +47,7 @@ class HadiahController extends Controller
                     'username' => $user->username ?? '-',
                     'poin_sekarang' => $poinSekarang,
                     'poin_saat_klaim' => (int) $penukaran->poin_saat_klaim, // ✅ LANGSUNG DARI DB
+                    'poin_dibutuhkan' => (int) ($penukaran->hadiah?->poin_dibutuhkan ?? 0),
                     'nama_produk' => $penukaran->hadiah->produk->nama_produk ?? 'Hadiah',
                     'poin_ditukar' => $poinDitukar,
                     'status_klaim' => $penukaran->status_klaim,
@@ -59,7 +64,8 @@ class HadiahController extends Controller
             'penukaranDitolak',
             'totalPenukaran',
             'daftarHadiah',
-            'daftarPenukaran'
+            'daftarPenukaran',
+            'produkTersedia'
         ));
     }
 
@@ -140,13 +146,14 @@ class HadiahController extends Controller
             // Update status + simpan alasan di kolom catatan
             $penukaran->update([
                 'status_klaim' => 'ditolak',
-                'catatan' => ($penukaran->catatan ? $penukaran->catatan . ' | ' : '') . 'Ditolak: ' . ($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
+                'catatan' => ($penukaran->catatan ? $penukaran->catatan.' | ' : '').'Ditolak: '.($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
             ]);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+
+            return back()->withErrors(['status' => 'Terjadi kesalahan: '.$e->getMessage()]);
         }
 
         return back()->with('success', 'Klaim hadiah ditolak. Poin dan stok telah dikembalikan.');
