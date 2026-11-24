@@ -7,24 +7,24 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="flex min-h-screen items-center justify-center bg-[#f4f4f4] px-2 pt-9 pb-2 font-sans">
-    <main class="mx-auto flex min-h-[90vh] w-[93vw] max-w-[1152px] items-center justify-center rounded-md bg-[#f7f4e9] p-3 min-[600px]:h-[90vh] min-[600px]:min-h-0 min-[600px]:max-h-[828px] min-[600px]:p-6">
-        <div class="grid w-full grid-cols-1 gap-3 min-[600px]:h-[60vh] min-[600px]:max-h-[554px] min-[600px]:translate-y-6 min-[600px]:grid-cols-[0.75fr_1fr] min-[600px]:gap-8">
-            <section class="flex min-h-0 flex-col justify-center rounded-lg border border-[#eee8d8] bg-[#fffdf8] p-4 min-[600px]:h-full" aria-label="Tentang NusaCandle">
+<body class="flex min-h-screen items-center justify-center bg-[#f4f4f4] p-2 font-buyer">
+    <main class="mx-auto flex min-h-[96vh] w-[97vw] max-w-[1152px] items-center justify-center rounded-md bg-[#f7f4e9] p-4 min-[600px]:h-[96vh] min-[600px]:min-h-0 min-[600px]:max-h-[828px] min-[600px]:p-6">
+        <div class="grid w-full grid-cols-1 gap-4 min-[600px]:h-[68vh] min-[600px]:max-h-[554px] min-[600px]:grid-cols-[0.75fr_1fr] min-[600px]:gap-10">
+            <section class="flex min-h-0 flex-col justify-center rounded-[10px] border border-[#eee8d8] bg-[#fffdf8] p-5 min-[600px]:h-full min-[600px]:px-6" aria-label="Tentang NusaCandle">
                 <div class="mb-1 text-center">
                     <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle"
-                        class="mx-auto mb-8 h-16 w-16 object-contain sm:h-24 sm:w-24" onerror="this.style.display='none'">
+                        class="mx-auto mb-3 h-16 w-16 object-contain sm:h-20 sm:w-20" onerror="this.style.display='none'">
                     <h1 class="font-display text-sm font-semibold text-[#a51f27] sm:text-lg">NusaCandle</h1>
                     <p class="mt-0 text-[7px] uppercase tracking-[0.16em] text-[#52645a] sm:text-[8px]">Lilin Aroma Terapi</p>
                     <p class="mt-0.5 text-[7px] italic text-[#77736b] sm:text-[8px]">"Aroma Apel • Relaksasi Setiap Saat"</p>
                 </div>
 
-                <div class="border-t border-[#eee8d8] pt-5">
+                <div class="mt-4 border-t border-[#eee8d8] pt-4">
                     <h2 class="mb-1 text-center text-[7px] font-bold uppercase tracking-wide text-[#183b2c] sm:text-[8px]">
                         Keistimewaan Anggota NusaCandle
                     </h2>
                     <div class="space-y-4">
-                        <div class="flex items-center gap-2 rounded-md bg-[#f7f4e9] px-2 py-0">
+                        <div class="flex min-h-10 items-center gap-2 rounded-md border border-[#eee8d8] bg-[#f7f4e9] px-2 py-2">
                             <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-[#183b2c] text-white" aria-hidden="true">
                                 <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -34,20 +34,20 @@
                                 Kumpulkan <span class="font-semibold text-[#a51f27]">75 poin NusaCandle</span> dan dapatkan hadiah eksklusif.
                             </p>
                         </div>
-                        <div class="flex items-center gap-2 rounded-md bg-[#f7f4e9] px-2 py-0.5">
+                        <div class="flex min-h-10 items-center gap-2 rounded-md border border-[#eee8d8] bg-[#f7f4e9] px-2 py-2">
                             <svg class="h-3 w-3 shrink-0 text-[#537056]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21s-8-4.5-8-11a4 4 0 017.5-2 4 4 0 017.5 2c0 6.5-7 11-7 11z" />
                             </svg>
                             <p class="text-[7px] leading-relaxed text-stone-700 sm:text-[8px]">
-                                Diskon member, soy wax alami, dan minyak atsiri tanpa parafin.
+                                100% Minyak Atsiri Organik &amp; Soy Wax Ramah Lingkungan.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="min-h-0 rounded-lg border border-[#eee8d8] bg-[#fffdf8] px-4 pt-5 pb-4 min-[600px]:h-full" aria-labelledby="register-title">
-                <header class="mb-1.5">
+            <section class="min-h-0 rounded-[10px] border border-[#eee8d8] bg-[#fffdf8] px-5 py-6 min-[600px]:h-full min-[600px]:px-6 min-[600px]:py-5" aria-labelledby="register-title">
+                <header class="mb-3">
                     <p class="text-[7px] font-semibold uppercase tracking-[0.16em] text-[#537056] sm:text-[8px]">Registrasi</p>
                     <h2 id="register-title" class="font-display text-sm font-semibold leading-tight text-[#a51f27] sm:text-xl">
                         Buat Akun NusaCandle
@@ -65,7 +65,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('register') }}" method="POST" class="space-y-0 sm:space-y-1">
+                <form action="{{ route('register') }}" method="POST" class="space-y-2 sm:space-y-2.5">
                     @csrf
 
                     <div>
