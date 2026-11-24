@@ -72,7 +72,6 @@ class TransaksiController extends Controller
     {
         $validated = $request->validate([
             'status_pembayaran' => ['required', 'in:menunggu,berhasil,gagal'],
-            'catatan_admin' => ['nullable', 'string', 'max:5000'],
             // ✅ Opsional: admin boleh set status pesanan sampai "selesai" dari detail transaksi
             'status_pesanan' => ['nullable', 'in:menunggu_pembayaran,diproses,dikirim,selesai'],
         ]);
@@ -84,7 +83,6 @@ class TransaksiController extends Controller
         try {
             $transaksi->update([
                 'status_pembayaran' => $validated['status_pembayaran'],
-                'catatan_admin' => $validated['catatan_admin'] ?? null,
             ]);
 
             // Verifikasi berhasil → otomatis diproses (hanya jika masih menunggu pembayaran)

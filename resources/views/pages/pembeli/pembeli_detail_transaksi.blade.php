@@ -105,15 +105,6 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 print:hidden">
-                    <button type="button" onclick="window.print()"
-                        class="inline-flex items-center gap-1.5 rounded-md border border-[#e8dfcf] bg-white px-3 py-2 text-[9px] font-semibold text-[#2C1810] transition hover:border-[#8B1E1E]">
-                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" />
-                        </svg>
-                        Cetak / Simpan PDF
-                    </button>
                     <a href="{{ route('pembeli.transaksi.index') }}"
                         class="inline-flex items-center gap-1.5 rounded-md bg-[#8B1E1E] px-3 py-2 text-[9px] font-semibold text-white transition hover:bg-[#6B1515]">
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
