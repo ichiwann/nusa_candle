@@ -238,67 +238,6 @@
                             @endforeach
                         </div>
                     </section>
-
-                    <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
-                        <div class="mb-3 flex items-center gap-2 border-b border-[#f1ece2] pb-2">
-                            <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#f8e6e5] text-[#8B1E1E]"
-                                aria-hidden="true">
-                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </span>
-                            <h2 class="font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Informasi Pengiriman &
-                                Pelacakan</h2>
-                        </div>
-
-                        @if ($isPreview)
-                            <div class="rounded-md bg-[#faf7ed] p-2.5">
-                                <p class="mb-1 text-[7px] font-semibold uppercase tracking-wide text-[#718078]">Data
-                                    Pengiriman</p>
-                                <p class="text-[8px] leading-relaxed text-[#2C1810] sm:text-[9px]">Alamat penerima, kurir,
-                                    dan nomor resi tidak tersedia pada pesanan contoh.</p>
-                            </div>
-                        @else
-                            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                                <div class="rounded-md bg-[#faf7ed] p-2.5">
-                                    <p class="mb-1 text-[7px] font-semibold uppercase tracking-wide text-[#718078]">
-                                        Penerima</p>
-                                    <p class="text-[8px] font-semibold text-[#2C1810] sm:text-[9px]">
-                                        {{ auth()->user()->nama_lengkap }}</p>
-                                    @if (auth()->user()->no_telepon)
-                                        <p class="mt-0.5 text-[7px] text-[#796d5d]">{{ auth()->user()->no_telepon }}</p>
-                                    @endif
-                                </div>
-                                <div class="rounded-md bg-[#faf7ed] p-2.5">
-                                    <p class="mb-1 text-[7px] font-semibold uppercase tracking-wide text-[#718078]">Alamat
-                                        pada Profil</p>
-                                    <p class="text-[8px] leading-relaxed text-[#2C1810] sm:text-[9px]">
-                                        {{ auth()->user()->alamat ?: 'Alamat belum dilengkapi di profil.' }}</p>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="mt-2 flex items-start gap-2 rounded-md border border-[#eee8dc] px-2.5 py-2">
-                            <svg class="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#47784a]" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0zM5 17H3V5h12v12H9m10 0h2v-5h-3V9h-3" />
-                            </svg>
-                            <div class="min-w-0">
-                                <p class="text-[7px] font-semibold text-[#2C1810] sm:text-[8px]">Nomor resi / kurir</p>
-                                <p class="mt-0.5 text-[7px] text-[#796d5d] sm:text-[8px]">
-                                    @if (in_array($pesanan->status_pesanan, ['dikirim', 'selesai']))
-                                        Informasi resi belum tersedia pada data pesanan.
-                                    @else
-                                        Informasi pengiriman akan tersedia setelah pesanan dikirim.
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                    </section>
                 </div>
 
                 <aside class="min-w-0 space-y-3">
@@ -396,7 +335,7 @@
                         </div>
                     </section>
 
-                    <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
+                                        <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
                         <h2 class="mb-2 font-display text-[11px] font-bold text-[#2C1810] sm:text-xs">Tindakan Pesanan</h2>
                         <div class="space-y-1.5">
                             @if ($isPreview)
@@ -415,6 +354,7 @@
                                         </svg>
                                         Upload Bukti Pembayaran
                                     </a>
+
                                 @elseif ($pesanan->status_pesanan === 'dikirim')
                                     <div class="rounded-md border border-[#cfe3c7] bg-[#edf6e9] p-2.5">
                                         <p class="text-[8px] font-semibold text-[#276236]">Pesanan sedang dalam perjalanan
@@ -435,9 +375,50 @@
                                         <p class="text-[7px] leading-relaxed text-[#796d5d]">COD: pastikan Anda sudah
                                             membayar tunai ke kurir sebelum menyelesaikan pesanan.</p>
                                     @endif
+
+                                @elseif ($pesanan->status_pesanan === 'diproses')
+                                    {{-- ✅ Layout sesuai desain untuk status DIPROSES --}}
+                                    <form action="{{ route('pembeli.pesanan.selesai', $pesanan->id_pesanan) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Pastikan pesanan sudah benar-benar diterima. Selesaikan pesanan ini?')">
+                                        @csrf
+                                        <button type="submit"
+                                            class="flex w-full items-center justify-center gap-1.5 rounded-md bg-[#8B1E1E] px-2.5 py-2.5 text-[8px] font-semibold text-white transition hover:bg-[#6B1515] sm:text-[9px]">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                            </svg>
+                                            Konfirmasi Pesanan Diterima
+                                        </button>
+                                    </form>
+
+                                    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer"
+                                        class="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#e5dccb] bg-[#f5f0e5] px-2.5 py-2 text-[8px] font-semibold text-[#276236] transition hover:bg-[#ece5d6] sm:text-[9px]">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                        </svg>
+                                        Hubungi Penjual via WhatsApp
+                                    </a>
+
+                                    <button type="button" disabled
+                                        class="flex w-full cursor-not-allowed items-center justify-center gap-1.5 rounded-md px-2.5 py-2 text-[8px] font-semibold text-[#a99c8b] sm:text-[9px]">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Batalkan Pesanan
+                                    </button>
+                                    <p class="text-center text-[7px] leading-relaxed text-[#796d5d] sm:text-[8px]">
+                                        *Pesanan tidak dapat dibatalkan karena paket sudah diproses dan diserahkan ke
+                                        pihak ekspedisi J&amp;T.
+                                    </p>
                                 @endif
 
-                                {{-- ✅ Tombol Batalkan Pesanan: hanya saat belum dikonfirmasi/diproses --}}
+                                {{-- ✅ Batalkan aktif HANYA saat menunggu pembayaran --}}
                                 @if ($pesanan->status_pesanan === 'menunggu_pembayaran')
                                     <form action="{{ route('pembeli.pesanan.batalkan', $pesanan->id_pesanan) }}"
                                         method="POST"
@@ -458,14 +439,18 @@
                                     </p>
                                 @endif
 
-                                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer"
-                                    class="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#cfe3c7] bg-[#edf6e9] px-2.5 py-2 text-[8px] font-semibold text-[#276236] transition hover:bg-[#e2f0dc] sm:text-[9px]">
-                                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path
-                                            d="M20.52 3.48A11.8 11.8 0 0012.08 0C5.55 0 .24 5.3.24 11.83c0 2.08.55 4.12 1.6 5.92L.14 24l6.42-1.68a11.85 11.85 0 005.51 1.36h.01c6.52 0 11.83-5.31 11.83-11.84 0-3.16-1.23-6.13-3.39-8.36zM12.08 21.67a9.84 9.84 0 01-5.02-1.38l-.36-.21-3.81 1 1.02-3.72-.24-.38a9.8 9.8 0 01-1.51-5.15c0-5.46 4.45-9.9 9.92-9.9 2.65 0 5.14 1.03 7.01 2.9a9.85 9.85 0 012.9 7.02c0 5.47-4.45 9.92-9.91 9.92zm5.44-7.42c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z" />
-                                    </svg>
-                                    Hubungi Penjual via WhatsApp
-                                </a>
+                                {{-- ✅ WhatsApp umum (diproses sudah punya sendiri di atas, jadi skip) --}}
+                                @if ($pesanan->status_pesanan !== 'diproses')
+                                    <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer"
+                                        class="flex w-full items-center justify-center gap-1.5 rounded-md border border-[#cfe3c7] bg-[#edf6e9] px-2.5 py-2 text-[8px] font-semibold text-[#276236] transition hover:bg-[#e2f0dc] sm:text-[9px]">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                        </svg>
+                                        Hubungi Penjual via WhatsApp
+                                    </a>
+                                @endif
                             @endif
 
                             <a href="{{ route('pembeli.pesanan.index') }}"

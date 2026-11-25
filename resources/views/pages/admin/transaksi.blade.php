@@ -513,13 +513,13 @@
                             class="mb-2 block text-[9px] font-bold uppercase tracking-[0.08em] text-[#37312b]">Pilih Status
                             Pembayaran Baru</label>
                         <select name="status_pembayaran" id="status_pembayaran" required
-                            class="w-full rounded-xl border-2 border-[#c6cbb9] bg-[#fffdf7] px-3 py-3 text-[11px] text-[#37312b] outline-none transition focus:border-[#315d41] focus:ring-2 focus:ring-[#315d41]/10">
-                            <option value="menunggu">Menunggu — pembayaran belum dikonfirmasi</option>
+                            class="w-full rounded-xl border-2 border-[#c6cbb9] bg-[#fffdf7] px-3 py-3 text-[11px] text-[#37312b] outline-none transition focus:border-[#315d41] focus:ring-2 focus:ring-[#315d41]/10 disabled:cursor-not-allowed disabled:bg-[#f0ece1] disabled:text-[#948b80]">
                             <option value="berhasil">Berhasil — pembayaran telah diverifikasi</option>
                             <option value="gagal">Gagal — pembayaran ditolak atau dibatalkan</option>
                         </select>
-                        <p class="mt-1.5 text-[8px] text-[#948b80]">Hanya 3 pilihan status yang diizinkan untuk
-                            sinkronisasi mutasi rekening.</p>
+                        <p id="payment-status-note" class="mt-1.5 text-[8px] text-[#948b80]">Hanya 2 pilihan status yang
+                            diizinkan untuk sinkronisasi mutasi rekening.</p>
+                        <p class="mt-1 text-[8px] text-red-700" data-validation-error="status_pembayaran"></p>
                         <p class="mt-1 text-[8px] text-red-700" data-validation-error="status_pembayaran"></p>
                     </section>
 
@@ -707,14 +707,36 @@
                 proofLink.classList.add('hidden');
             }
 
-            // ✅ Pastikan route-nya sesuai (transaksi, bukan pembayaran)
+            // ✅ Pastikan route-nya sesuai
             document.getElementById('status-form').action = `/admin/transaksi/${data.id}/status`;
 
+            // Ambil elemen yang dibutuhkan
             const paymentStatusSelect = document.getElementById('status_pembayaran');
-            paymentStatusSelect.value = data.statusPembayaran;
+            const submitBtn = document.getElementById('modal-submit');
+            const noteEl = document.getElementById('payment-status-note');
 
-            // ✅ BARIS 'catatan_admin' SUDAH DIHAPUS DI SINI
+            // Cek apakah status sudah final (berhasil/gagal)
+            const isLocked = data.statusPembayaran === 'berhasil' || data.statusPembayaran === 'gagal';
 
+            // Set value: jika locked, tampilkan status aslinya. Jika menunggu, default 'berhasil'
+            paymentStatusSelect.value = isLocked ? data.statusPembayaran : 'berhasil';
+
+            // Disable/Enable elemen form
+            paymentStatusSelect.disabled = isLocked;
+            submitBtn.disabled = isLocked;
+
+            // Tambahkan efek visual disabled ke tombol
+            if (isLocked) {
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                if (noteEl) noteEl.textContent =
+                    'Status pembayaran sudah diverifikasi (berhasil/gagal) dan tidak dapat diubah lagi.';
+            } else {
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (noteEl) noteEl.textContent =
+                'Hanya 2 pilihan status yang diizinkan untuk sinkronisasi mutasi rekening.';
+            }
+
+            // Reset error validation
             document.querySelectorAll('[data-validation-error]').forEach(error => {
                 error.textContent = '';
             });

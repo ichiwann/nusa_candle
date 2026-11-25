@@ -81,8 +81,6 @@
         };
     @endphp
 
-
-
     <div class="min-h-screen bg-[#faf7ed] text-[#2C1810] print:bg-white">
         <div class="mx-auto max-w-7xl px-4 pb-8 pt-3 sm:px-6 lg:px-8">
             <nav aria-label="Jejak halaman" class="mb-3 flex flex-wrap items-center gap-2 text-[9px] text-[#796d5d] print:hidden">
@@ -376,7 +374,7 @@
                 {{-- ✅ AKSI PESANAN PEMBELI --}}
                 @if (!($isDemoPreview ?? false))
                     <section class="rounded-lg border border-[#e8dfcf] bg-white p-3 shadow-sm sm:p-4">
-                        <h2 class="mb-2 font-serif text-[11px] font-bold sm:text-xs">Aksi Pesanan</h2>
+                        <h2 class="mb-2 font-serif text-[11px] font-bold sm:text-xs">Konfirmasi Pembayaran</h2>
 
                         @if ($pesanan->status_pesanan === 'dikirim')
                             {{-- Konfirmasi penerimaan ada di halaman Detail Pesanan --}}
@@ -389,11 +387,13 @@
                                 class="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-[#2E7D32] px-2.5 py-2 text-[9px] font-semibold text-white transition hover:bg-[#256428]">
                                 Buka Detail Pesanan
                             </a>
+
                         @elseif (
                             $transaksi->metode_pembayaran !== 'cod' &&
                                 $transaksi->status_pembayaran === 'menunggu' &&
-                                $pesanan->status_pesanan === 'menunggu_pembayaran')
-                            {{-- ✅ Transfer/e-wallet → WAJIB upload bukti di sini --}}
+                                $pesanan->status_pesanan === 'menunggu_pembayaran' &&
+                                !$transaksi->bukti_pembayaran)
+                            {{-- ✅ Belum ada bukti → tampilkan form upload --}}
                             <p class="mb-2 text-[8px] leading-relaxed text-[#796d5d]">
                                 Selesaikan pembayaran {{ $transaksi->metode_label }}, lalu unggah bukti transfer di sini.
                             </p>
@@ -402,8 +402,7 @@
                                 @csrf
                                 <input type="hidden" name="id_transaksi" value="{{ $transaksi->id_transaksi }}">
                                 <div>
-                                    <label class="mb-1 block text-[8px] font-semibold text-[#796d5d]">Nama Pemilik Rekening
-                                        Pengirim</label>
+                                    <label class="mb-1 block text-[8px] font-semibold text-[#796d5d]">Nama Pemilik Rekening</label>
                                     <input type="text" name="nama_pemilik" required placeholder="Contoh: Rian Anggoro"
                                         class="w-full rounded-md border border-[#e5dccb] px-2.5 py-2 text-[9px] outline-none focus:border-[#8B1E1E]">
                                 </div>
@@ -418,16 +417,29 @@
                                     Kirim Bukti Pembayaran
                                 </button>
                             </form>
-                            @if ($transaksi->bukti_pembayaran)
-                                <p class="mt-1.5 text-[7px] text-[#796d5d]">Bukti sudah terunggah. Mengunggah lagi akan
-                                    mengganti bukti lama selama belum diverifikasi admin.</p>
-                            @endif
+
+                        @elseif ($transaksi->bukti_pembayaran && $transaksi->status_pembayaran === 'menunggu')
+                            {{-- ✅ Sudah upload bukti → form hilang, tampilkan info menunggu verifikasi --}}
+                            <div class="rounded-md border border-[#cfe3c7] bg-[#edf6e9] p-2.5">
+                                <div class="flex items-start gap-2">
+                                    <svg class="mt-0.5 h-4 w-4 shrink-0 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-[8px] font-semibold text-[#276236]">Bukti pembayaran terkirim</p>
+                                        <p class="mt-0.5 text-[7px] leading-relaxed text-[#47784a]">
+                                            Terima kasih! Bukti transfer kamu sudah kami terima dan sedang menunggu verifikasi admin.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         @elseif ($transaksi->metode_pembayaran === 'cod' && $pesanan->status_pesanan !== 'selesai')
                             <div class="rounded-md border border-[#cfe3c7] bg-[#edf6e9] p-2.5">
                                 <p class="text-[8px] font-semibold text-[#276236]">Pembayaran di Tempat (COD)</p>
                                 <p class="mt-0.5 text-[7px] leading-relaxed text-[#47784a]">Tidak perlu upload bukti.
                                     Siapkan pembayaran saat pesanan diterima.</p>
                             </div>
+
                         @else
                             <p class="rounded-md bg-[#faf7ed] px-2.5 py-2 text-[8px] leading-relaxed text-[#796d5d]">
                                 @if ($pesanan->status_pesanan === 'selesai')

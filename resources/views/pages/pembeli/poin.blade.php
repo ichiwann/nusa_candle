@@ -261,21 +261,21 @@
 
                         <form action="{{ route('poin.redeem') }}" method="POST">
                             @csrf
-                            <div class="mb-4">
-                                <label
-                                    class="block text-xs font-semibold uppercase tracking-wider text-[#718078] mb-2">Masukkan
-                                    Redeem Code</label>
+                            <label
+                                class="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#718078]">Masukkan
+                                Redeem Code</label>
+                            <div class="flex items-stretch gap-2">
                                 <input type="text" name="kode_redeem" placeholder="MASUKKAN REDEEM CODE"
-                                    class="w-full px-4 py-2.5 bg-[#FAF9F6] border border-gray-200 rounded-md text-sm uppercase focus:border-[#8B1E1E] focus:ring-1 focus:ring-[#8B1E1E]/20 outline-none">
+                                    class="min-w-0 flex-1 rounded-md border border-gray-200 bg-[#FAF9F6] px-3 py-2.5 text-sm uppercase focus:border-[#8B1E1E] focus:ring-1 focus:ring-[#8B1E1E]/20 outline-none">
+                                <button type="submit"
+                                    class="flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-[#8B1E1E] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B1515]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Tukarkan
+                                </button>
                             </div>
-                            <button type="submit"
-                                class="w-full bg-[#8B1E1E] hover:bg-[#6B1515] text-white px-6 py-3 rounded-md font-semibold transition flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                Tukarkan
-                            </button>
                         </form>
 
                         <p class="text-[10px] text-[#718078] mt-4 flex items-center gap-1">

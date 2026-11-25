@@ -6,7 +6,7 @@
     NusaCandle')
 
 @section('content')
-{{-- Breadcrumb --}}
+    {{-- Breadcrumb --}}
     <div class="bg-[#faf7ed]">
         <div class="mx-auto max-w-6xl px-4 py-3 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center gap-2 text-[10px] text-[#796d5d] sm:text-xs">
@@ -181,28 +181,7 @@
                             @endif
                         </div>
                     @endforeach
-                </div>
-
-                {{-- Profil Aroma --}}
-                <div class="rounded-xl border border-[#e6ddcd] bg-[#f7f3e8] p-3 sm:p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d9efcf]">
-                            <svg class="h-5 w-5 text-[#2E7D32]" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-display text-[12px] font-bold text-[#2C1810] sm:text-sm">Profil Aroma Khas Batu & Malang</h3>
-                            <p class="text-[9px] leading-snug text-[#718078] sm:text-[10px]">Awal: Apel Malang Segar • Tengah: Bunga Melati Putih • Dasar:
-                                Vanili Lembut</p>
-                        </div>
-                        <span
-                            class="ml-auto whitespace-nowrap rounded-full bg-[#dff0d8] px-2.5 py-1.5 text-[8px] font-semibold text-[#2E7D32]">Mutu
-                            Terapi</span>
-                    </div>
-                </div>
+                </div>                
             </div>
 
             {{-- Kolom Kanan - Info Produk --}}
@@ -219,7 +198,7 @@
 
                 {{-- Judul --}}
                 <h1 class="mb-2 font-display text-[21px] font-bold leading-[1.15] text-[#2C1810] sm:text-2xl">
-                    {{ ($isPreview ?? false) ? 'NusaCandle - Lilin Aroma Terapi Aroma Apel' : $produk->nama_produk }}
+                    {{ $isPreview ?? false ? 'NusaCandle - Lilin Aroma Terapi Aroma Apel' : $produk->nama_produk }}
                 </h1>
 
                 {{-- Rating --}}
@@ -388,37 +367,9 @@
                         </div>
                     </form>
                 @endif
-
-                {{-- Garansi --}}
-                <div class="flex flex-wrap items-center gap-3 text-[9px] text-[#718078]">
-                    <div class="flex items-center gap-1.5">
-                        <svg class="h-4 w-4 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        Garansi 100% Tukar Pecah
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <svg class="h-4 w-4 text-[#2E7D32]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                        </svg>
-                        Pengiriman Ekstra Bubble
-                    </div>
-                </div>
             </div>
         </div>
-
-        {{-- Panduan Perawatan --}}
-        <section class="rounded-xl border border-[#eee5d7] bg-[#f7f3e8] p-5 sm:p-7">
-            <p class="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8B1E1E]">Panduan Perawatan</p>
-            <h2 class="mb-2 font-display text-lg font-bold text-[#2C1810] sm:text-xl">Tips Menikmati Lilin Aromaterapi NusaCandle</h2>
-            <p class="max-w-4xl text-[10px] leading-relaxed text-[#625b50] sm:text-[11px]">
-                Agar aroma buah apel Malang menguap optimal, biarkan lilin menyala selama minimal 2 jam pada pembakaran
-                pertama hingga permukaan lilin mencair merata ke tepi wadah. Potong sumbu katun menjadi 5mm sebelum
-                dinyalakan kembali.
-            </p>
-        </section>
+    </div>
     </div>
 
     @unless ($isPreview ?? false)

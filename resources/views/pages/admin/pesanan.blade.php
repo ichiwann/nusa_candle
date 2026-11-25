@@ -133,7 +133,7 @@
             </label>
         </form>
 
-                <section class="overflow-hidden rounded-md border border-[#e8dfd1] bg-[#fffdf7] shadow-sm">
+        <section class="overflow-hidden rounded-md border border-[#e8dfd1] bg-[#fffdf7] shadow-sm">
             <div
                 class="flex flex-wrap items-center justify-between gap-3 border-b border-[#e8dfd1] bg-[#f2ede1] px-4 py-4">
                 <div class="flex items-center gap-2.5">
@@ -521,8 +521,7 @@
                             </label>
                             <select name="status_pesanan" id="status_pesanan" required
                                 class="w-full rounded-md border border-[#d9d4c6] bg-[#fffdf7] px-3 py-3 text-xs text-[#30483a] outline-none focus:border-[#64835d] focus:ring-1 focus:ring-[#64835d]/20">
-                                <option value="menunggu_pembayaran">Menunggu Pembayaran</option>
-                                <option value="diproses">Diproses</option>
+                                <option value="diproses" selected>Diproses</option>
                                 <option value="dikirim">Dikirim (Siap / Dalam Perjalanan)</option>
                             </select>
                         </div>
@@ -545,10 +544,6 @@
                         </svg>
                         <p id="status-note"></p>
                     </div>
-
-                    <p class="text-[9px] leading-relaxed text-[#87948b]">
-                        Kolom nomor resi hanya untuk tampilan dan belum disimpan ke database.
-                    </p>
 
                     <div class="flex justify-end gap-2 border-t border-[#e8dfd1] pt-3">
                         <button type="button" onclick="closeStatusModal()"
@@ -694,20 +689,21 @@
         }
 
         function openDetailModal(data, focusStatus = false) {
+            // 1. Isi data dasar ke modal
             document.getElementById('modal-pesanan-id').textContent = data.kode_pesanan;
             document.getElementById('modal-status-label').textContent = data.status_label;
             document.getElementById('modal-pelanggan').textContent = data.pelanggan;
-            document.getElementById('modal-username').textContent =
-                data.username && data.username !== '-' ? data.username : 'Pelanggan';
-            document.getElementById('modal-alamat').textContent =
-                data.alamat && data.alamat !== '-' ? data.alamat : 'Alamat belum tersedia';
+            document.getElementById('modal-username').textContent = data.username && data.username !== '-' ? data.username :
+                'Pelanggan';
+            document.getElementById('modal-alamat').textContent = data.alamat && data.alamat !== '-' ? data.alamat :
+                'Alamat belum tersedia';
             document.getElementById('modal-total').textContent = data.total;
-            document.getElementById('status-modal-title').textContent =
-                focusStatus ? 'Update Status Pesanan' : 'Detail Pesanan';
-            document.getElementById('status-modal-description').textContent = focusStatus ?
-                'Perbarui status pesanan dan informasi pengiriman.' :
-                'Periksa detail pelanggan, produk, dan pembayaran pesanan.';
 
+            document.getElementById('status-modal-title').textContent = 'Update Status Pesanan';
+            document.getElementById('status-modal-description').textContent =
+                'Perbarui status pesanan dan informasi pengiriman.';
+
+            // 2. Isi daftar item
             const itemsEl = document.getElementById('modal-items');
             itemsEl.replaceChildren();
             let totalQuantity = 0;
@@ -715,6 +711,7 @@
             data.items.forEach(item => {
                 const li = document.createElement('li');
                 li.className = 'flex items-start justify-between gap-2';
+
                 const name = document.createElement('span');
                 name.className = 'min-w-0 break-words font-medium';
                 name.textContent = item.nama;
@@ -737,27 +734,39 @@
             }
 
             document.getElementById('modal-total-quantity').textContent = `${totalQuantity} pcs`;
+
+            // 3. SET ACTION FORM (INI KUNCI PERBAIKANNYA)
+            // Pastikan URL ini persis sama dengan yang ada di routes/web.php
             document.getElementById('status-form').action = `/admin/pesanan/${data.id}/status`;
             document.getElementById('status-tracking').value = '';
 
-            const allowed = ['menunggu_pembayaran', 'diproses', 'dikirim'];
-            const locked = !allowed.includes(data.status);
+            // 4. Logika Disable/Enable Form
             const select = document.getElementById('status_pesanan');
             const submitBtn = document.getElementById('status-submit');
+            const trackingInput = document.getElementById('status-tracking'); // Ambil elemen input resi
 
-            select.value = locked ? 'diproses' : data.status;
+            const lockedStatuses = ['dikirim', 'selesai', 'dibatalkan'];
+            const locked = lockedStatuses.includes(data.status);
+
+            select.value = (data.status === 'dikirim') ? 'dikirim' : 'diproses';
+
+            // Disable SEMUA elemen form jika status terkunci
             select.disabled = locked;
+            trackingInput.disabled = locked; // ✅ Input resi ikut di-disable
             submitBtn.disabled = locked;
+
+            // Tambahkan efek visual disabled ke tombol
             submitBtn.classList.toggle('opacity-50', locked);
             submitBtn.classList.toggle('cursor-not-allowed', locked);
 
             document.getElementById('status-note').textContent = locked ?
-                'Pesanan sudah selesai/dibatalkan — status tidak dapat diubah.' :
-                'Admin hanya dapat mengubah status sampai "Dikirim". Status "Selesai" dikonfirmasi pembeli saat barang tiba atau melalui halaman Transaksi.';
+                'Pesanan sudah dikirim/selesai/dibatalkan — status tidak dapat diubah lagi.' :
+                'Admin hanya dapat mengubah status sampai "Dikirim". Status "Selesai" dikonfirmasi pembeli saat barang tiba.';
 
+            // 5. Tampilkan Modal
             document.getElementById('status-modal').classList.remove('hidden');
             if (focusStatus) {
-                document.getElementById('status_pesanan').focus();
+                select.focus();
             }
         }
 

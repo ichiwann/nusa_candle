@@ -64,19 +64,27 @@ class TransaksiController extends Controller
         })->sum('total_harga');
 
         return view('pages.admin.transaksi', compact(
-            'transaksis', 'totalPendapatan'
+            'transaksis',
+            'totalPendapatan'
         ));
     }
 
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
+        $transaksi = Transaksi::with('pesanan')->findOrFail($id);
+
+        // ✅ Tolak jika status pembayaran sudah final (berhasil/gagal)
+        if (in_array($transaksi->status_pembayaran, ['berhasil', 'gagal'])) {
+            return back()->withErrors([
+                'status_pembayaran' => 'Status pembayaran sudah diverifikasi (berhasil/gagal) dan tidak dapat diubah lagi.',
+            ]);
+        }
+
         $validated = $request->validate([
-            'status_pembayaran' => ['required', 'in:menunggu,berhasil,gagal'],
-            // ✅ Opsional: admin boleh set status pesanan sampai "selesai" dari detail transaksi
-            'status_pesanan' => ['nullable', 'in:menunggu_pembayaran,diproses,dikirim,selesai'],
+            'status_pembayaran' => ['required', 'in:berhasil,gagal'],
+            'status_pesanan'    => ['nullable', 'in:menunggu_pembayaran,diproses,dikirim,selesai'],
         ]);
 
-        $transaksi = Transaksi::with('pesanan')->findOrFail($id);
         $pesanan = $transaksi->pesanan;
 
         DB::beginTransaction();
@@ -90,11 +98,10 @@ class TransaksiController extends Controller
                 $pesanan->update(['status_pesanan' => 'diproses']);
             }
 
-            // ✅ Update status pesanan manual (sampai selesai) jika dipilih
-            if (! empty($validated['status_pesanan'])) {
+            // Update status pesanan manual (sampai selesai) jika dipilih
+            if (!empty($validated['status_pesanan'])) {
                 $pesanan->update(['status_pesanan' => $validated['status_pesanan']]);
 
-                // COD diselesaikan admin → pembayaran otomatis lunas
                 if ($validated['status_pesanan'] === 'selesai' && $transaksi->metode_pembayaran === 'cod') {
                     $transaksi->update(['status_pembayaran' => 'berhasil']);
                 }
@@ -103,8 +110,7 @@ class TransaksiController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return back()->withErrors(['status' => 'Terjadi kesalahan: '.$e->getMessage()]);
+            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
 
         return back()->with('success', 'Status pembayaran berhasil diperbarui.');

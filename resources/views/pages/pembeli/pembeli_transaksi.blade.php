@@ -328,15 +328,6 @@
                                                 </svg>
                                                 Lihat Detail
                                             </a>
-                                            <a href="{{ route('pembeli.transaksi.show', $transaksi->id_transaksi) }}"
-                                                class="flex-1 inline-flex items-center justify-center gap-[0.25rem] rounded-md bg-[#bf3833] px-[0.45rem] py-[0.35rem] text-[0.66rem] font-semibold text-white transition hover:bg-[#a92f2d] max-[480px]:w-full">
-                                                <svg class="h-[0.65rem] w-[0.65rem]" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                                </svg>
-                                                {{ $transaksi->metode_pembayaran === 'cod' ? 'Lihat Instruksi COD' : 'Bayar & Upload Bukti' }}
-                                            </a>
                                         @endif
                                     </div>
                                 </div>

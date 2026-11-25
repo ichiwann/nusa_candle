@@ -18,10 +18,10 @@ class PesananController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('id_pesanan', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($q) use ($search) {
-                      $q->where('nama_lengkap', 'like', "%{$search}%")
-                        ->orWhere('username', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->where('nama_lengkap', 'like', "%{$search}%")
+                            ->orWhere('username', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -47,23 +47,30 @@ class PesananController extends Controller
         $dibatalkan = Pesanan::where('status_pesanan', 'dibatalkan')->count();
 
         return view('pages.admin.pesanan', compact(
-            'pesanans', 'totalPesanan', 'menunggu', 'diproses', 'dikirim', 'selesai', 'dibatalkan'
+            'pesanans',
+            'totalPesanan',
+            'menunggu',
+            'diproses',
+            'dikirim',
+            'selesai',
+            'dibatalkan'
         ));
     }
 
     public function updateStatus(Request $request, int $id): RedirectResponse
     {
-        $validated = $request->validate([
-            // ✅ Admin hanya boleh sampai "dikirim".
-            // "selesai" hanya via konfirmasi pembeli atau halaman Transaksi.
-            'status_pesanan' => ['required', 'in:menunggu_pembayaran,diproses,dikirim'],
-        ]);
-
         $pesanan = Pesanan::findOrFail($id);
 
-        if (in_array($pesanan->status_pesanan, ['selesai', 'dibatalkan'])) {
-            return back()->withErrors(['status_pesanan' => 'Pesanan yang sudah selesai/dibatalkan tidak dapat diubah.']);
+        // ✅ Tolak jika status sudah terkunci (dikirim/selesai/dibatalkan)
+        if (in_array($pesanan->status_pesanan, ['dikirim', 'selesai', 'dibatalkan'])) {
+            return back()->withErrors([
+                'status_pesanan' => 'Status pesanan sudah dikirim/selesai/dibatalkan dan tidak dapat diubah lagi.',
+            ]);
         }
+
+        $validated = $request->validate([
+            'status_pesanan' => ['required', 'in:diproses,dikirim'],
+        ]);
 
         $pesanan->update($validated);
 
