@@ -38,7 +38,7 @@ class PembeliPesananController extends Controller
         });
 
         $riwayatPesanan = $semuaPesanan->filter(function ($p) {
-            return $p->status_pesanan === 'selesai';
+            return in_array($p->status_pesanan, ['selesai', 'dibatalkan']);
         });
 
         return view('pages.pembeli.pembeli_pesanan', compact(
@@ -291,5 +291,51 @@ class PembeliPesananController extends Controller
 
         return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
             ->with('success', 'Terima kasih! Pesanan telah diselesaikan.');
+    }
+
+    /**
+     * ✅ Pembeli membatalkan pesanan — hanya saat masih menunggu_pembayaran
+     *    (belum dikonfirmasi / belum diproses penjual).
+     */
+    public function batalkan(int $id): RedirectResponse
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $pesanan = Pesanan::with(['detailPesanan.produk', 'transaksi'])
+            ->where('id_pesanan', $id)
+            ->where('id_user', $user->id_user)
+            ->firstOrFail();
+
+        if ($pesanan->status_pesanan !== 'menunggu_pembayaran') {
+            return back()->withErrors(['batalkan' => 'Pesanan hanya dapat dibatalkan sebelum dikonfirmasi/diproses penjual.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            $pesanan->update(['status_pesanan' => 'dibatalkan']);
+
+            // ✅ Kembalikan stok produk yang tadi dipotong saat checkout
+            foreach ($pesanan->detailPesanan as $detail) {
+                if ($detail->produk) {
+                    $detail->produk->increment('stok', $detail->jumlah);
+                }
+            }
+
+            // ✅ Tandai transaksi yang masih menunggu sebagai gagal (batal)
+            foreach ($pesanan->transaksi as $trx) {
+                if ($trx->status_pembayaran === 'menunggu') {
+                    $trx->update(['status_pembayaran' => 'gagal']);
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['batalkan' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+
+        return redirect()->route('pembeli.pesanan.show', $pesanan->id_pesanan)
+            ->with('success', 'Pesanan berhasil dibatalkan. Stok produk telah dikembalikan.');
     }
 }

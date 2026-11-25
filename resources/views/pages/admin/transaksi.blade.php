@@ -22,11 +22,6 @@
                         Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
                     </p>
                 </div>
-                <svg class="mt-1 h-5 w-5 shrink-0 text-[#64835d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
             </div>
         </section>
 
@@ -393,10 +388,6 @@
                     Tutup
                 </button>
                 <div class="flex flex-wrap justify-end gap-2">
-                    <button type="button" onclick="printPaymentDetail()"
-                        class="inline-flex items-center gap-1.5 rounded-md border border-[#e8dfd1] bg-white px-3 py-2 text-[9px] font-semibold uppercase text-[#52645a] transition hover:bg-[#f7f4e9]">
-                        Cetak Bukti Pembayaran
-                    </button>
                     <button type="button" onclick="openPaymentUpdateModal()"
                         class="inline-flex items-center gap-1.5 rounded-md bg-[#103a2a] px-4 py-2 text-[9px] font-semibold uppercase text-white transition hover:bg-[#315d41]">
                         Update Status

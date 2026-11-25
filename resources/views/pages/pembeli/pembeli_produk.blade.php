@@ -6,14 +6,7 @@
     <div class="catalog-page min-h-screen bg-[#FAF8F2] text-[#2C1810]">
 <section class="bg-[#FAF8F2] px-4 pb-6 pt-5 text-center sm:px-6 lg:pb-6 lg:pt-5">
             <div class="mx-auto max-w-4xl">
-                <div class="mb-2 inline-flex items-center gap-1 rounded-full bg-[#c4e7b5] px-2.5 py-0.5 text-[8px] font-medium text-[#42643a]">
-                    <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    100% SOY WAX + MINYAK ATSIRI APEL MALANG ASLI
-                </div>
+
                 <h1 class="font-display text-[1.8rem] font-bold leading-tight text-[#2C1810] sm:text-[1.8rem] lg:text-[1.8rem]">
                     Koleksi Produk Eksklusif <span class="italic text-[#8B1E1E]">NusaCandle</span>
                 </h1>
@@ -115,9 +108,6 @@
                                 <div class="mt-auto flex items-baseline gap-1.5 border-t border-[#f1ece2] pt-1.5">
                                     <p class="font-display text-[7px] font-bold text-[#8B1E1E] sm:text-[9px]">
                                         Rp {{ number_format($item->harga, 0, ',', '.') }}
-                                    </p>
-                                    <p class="text-[5px] text-[#9a8f84] line-through">
-                                        Rp {{ number_format($item->harga + 25000, 0, ',', '.') }}
                                     </p>
                                 </div>
                             </div>

@@ -131,37 +131,6 @@
                         Dibatalkan ({{ number_format($dibatalkan) }})</option>
                 </select>
             </label>
-
-            <details class="relative">
-                <summary
-                    class="flex cursor-pointer list-none items-center gap-1.5 rounded-md border border-[#e8dfd1] bg-[#fbf9f2] px-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[#30483a] transition hover:border-[#64835d]">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                            d="M4 6h16M7 12h10m-7 6h4" />
-                    </svg>
-                    Filter Lanjutan
-                </summary>
-                <div class="absolute right-0 z-20 mt-2 w-56 rounded-md border border-[#e8dfd1] bg-[#fffdf7] p-3 shadow-lg">
-                    <label for="order-sort"
-                        class="mb-1.5 block text-[9px] font-semibold uppercase tracking-[0.08em] text-[#718078]">
-                        Urutkan Pesanan
-                    </label>
-                    <select id="order-sort" name="sort" onchange="this.form.submit()"
-                        class="w-full rounded-md border border-[#e8dfd1] bg-[#fbf9f2] px-2.5 py-2 text-[10px] text-[#30483a] outline-none focus:border-[#64835d]">
-                        <option value="terbaru" {{ request('sort', 'terbaru') == 'terbaru' ? 'selected' : '' }}>Terbaru
-                        </option>
-                        <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
-                        <option value="total_terendah" {{ request('sort') == 'total_terendah' ? 'selected' : '' }}>Total
-                            Terendah</option>
-                        <option value="total_tertinggi" {{ request('sort') == 'total_tertinggi' ? 'selected' : '' }}>Total
-                            Tertinggi</option>
-                    </select>
-                    <a href="{{ route('admin.orders.index') }}"
-                        class="mt-2 block border-t border-[#eee8dc] pt-2 text-[10px] font-semibold text-red-700 hover:text-red-800">
-                        Reset semua filter
-                    </a>
-                </div>
-            </details>
         </form>
 
                 <section class="overflow-hidden rounded-md border border-[#e8dfd1] bg-[#fffdf7] shadow-sm">

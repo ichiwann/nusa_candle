@@ -142,13 +142,13 @@
         const chartDetail = document.getElementById('chart-detail');
         const chartData = @json($chartData);
         const stageLabels = [
-            ['Minggu 1', '(Panen Awal)'],
+            'Minggu 1',
             'Minggu 2',
-            ['Minggu 3', '(Distribusi)'],
+            'Minggu 3',
             'Minggu 4',
-            ['Minggu 5', '(Puncak Bumijaji)'],
+            'Minggu 5',
             'Minggu 6',
-            ['Minggu 7', '(Kini)'],
+            'Minggu 7',
         ];
 
         if (chartElement && typeof Chart !== 'undefined') {

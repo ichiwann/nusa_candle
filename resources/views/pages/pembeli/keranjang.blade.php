@@ -11,8 +11,6 @@
         input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 
-        /* Layout dua kolom. Ringkasan di kanan bersifat statis (tidak sticky),
-           sehingga saat halaman di-scroll ia tidak ikut turun / menempel. */
         .cart-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; align-items: start; }
         @media (min-width: 1024px) {
             .cart-grid { grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr); gap: 1.5rem; }
@@ -22,7 +20,6 @@
     <div class="bg-[#faf7ed]">
         <div class="mx-auto max-w-7xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
 
-            {{-- Header --}}
             <header class="mb-6">
                 <h1 class="font-serif text-3xl font-bold leading-tight text-[#8B1E1E] sm:text-4xl">Keranjang Belanja Anda</h1>
                 <p class="mt-1 text-xs text-[#796d5d] sm:text-sm">
@@ -35,7 +32,6 @@
                 {{-- ================= KOLOM KIRI ================= --}}
                 <div class="min-w-0 space-y-5">
 
-                    {{-- Daftar Item --}}
                     <section class="rounded-xl border border-[#e8dfcf] bg-[#fffdf7] p-3 shadow-sm sm:p-5">
                         <div class="mb-3 flex items-center gap-2 border-b border-[#eee8dc] pb-3">
                             <input type="checkbox" id="select-all" onchange="toggleSelectAll(this)"
@@ -129,7 +125,6 @@
                         @endforelse
                     </section>
 
-                    {{-- Metode Pembayaran --}}
                     @if ($keranjang->count() > 0)
                         <form id="checkout-form" action="{{ route('pembeli.checkout.store') }}" method="POST">
                             @csrf
@@ -148,7 +143,7 @@
                             </div>
                         </div>
 
-                        {{-- Transfer Bank --}}
+                        {{-- Transfer Bank (sesuai database: BCA & Mandiri) --}}
                         <div class="mb-2 flex flex-wrap items-center gap-2">
                             <h3 class="text-[9px] font-bold uppercase tracking-wide text-[#2E7D32]">Transfer Bank / Virtual Account</h3>
                             <span class="rounded bg-[#f5f0e5] px-2 py-0.5 text-[7px] text-[#796d5d]">Verifikasi Otomatis</span>
@@ -163,16 +158,6 @@
                                 <input type="radio" name="metode_pembayaran" value="mandiri" class="h-3.5 w-3.5 accent-[#8B1E1E]" onchange="updateMetodeTerpilih(this.value)">
                                 <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#fff3df] text-[8px] font-bold text-[#8a5a16]">MDR</span>
                                 <span class="min-w-0 text-[10px] font-semibold text-[#2C1810]">Mandiri Virtual Account</span>
-                            </label>
-                            <label class="flex cursor-not-allowed items-center gap-2.5 rounded-lg border border-[#e5dccb] bg-white p-2.5 opacity-60" title="Belum tersedia">
-                                <input type="radio" name="metode_pembayaran" value="bri" disabled class="h-3.5 w-3.5 accent-[#8B1E1E]">
-                                <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#fff0e8] text-[8px] font-bold text-[#c33b35]">BRI</span>
-                                <span class="min-w-0 text-[10px] font-semibold text-[#2C1810]">BRI Virtual Account</span>
-                            </label>
-                            <label class="flex cursor-not-allowed items-center gap-2.5 rounded-lg border border-[#e5dccb] bg-white p-2.5 opacity-60" title="Belum tersedia">
-                                <input type="radio" name="metode_pembayaran" value="bni" disabled class="h-3.5 w-3.5 accent-[#8B1E1E]">
-                                <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#fff5e5] text-[8px] font-bold text-[#e37d22]">BNI</span>
-                                <span class="min-w-0 text-[10px] font-semibold text-[#2C1810]">BNI Virtual Account</span>
                             </label>
                         </div>
 
@@ -191,7 +176,7 @@
                             <span class="text-[10px] font-semibold text-[#2C1810]">COD (Bayar Tunai saat Kurir Tiba)</span>
                         </label>
 
-                        {{-- E-Wallet --}}
+                        {{-- E-Wallet (sesuai database: GoPay, DANA, ShopeePay) --}}
                         <div class="mb-2 flex flex-wrap items-center gap-2">
                             <h3 class="text-[9px] font-bold uppercase tracking-wide text-[#2E7D32]">E-Wallet Digital</h3>
                             <span class="rounded bg-[#f5f0e5] px-1.5 py-0.5 text-[7px] text-[#796d5d]">Scan QRIS / Direct</span>
@@ -207,11 +192,22 @@
                                 <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#e8f3ff] text-[7px] font-bold text-[#1681d5]">DN</span>
                                 <span class="text-[10px] font-semibold text-[#2C1810]">DANA</span>
                             </label>
-                            <label class="flex cursor-not-allowed items-center gap-2.5 rounded-lg border border-[#e5dccb] bg-white p-2.5 opacity-60" title="Belum tersedia">
-                                <input type="radio" name="metode_pembayaran" value="ovo" disabled class="h-3.5 w-3.5 accent-[#8B1E1E]">
-                                <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#f1effb] text-[7px] font-bold text-[#5745a7]">OVO</span>
-                                <span class="text-[10px] font-semibold text-[#2C1810]">OVO</span>
+                            <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border border-[#e5dccb] bg-white p-2.5 transition has-[:checked]:border-[#8B1E1E] has-[:checked]:bg-[#fff8f6]">
+                                <input type="radio" name="metode_pembayaran" value="shopeepay" class="h-3.5 w-3.5 accent-[#8B1E1E]" onchange="updateMetodeTerpilih(this.value)">
+                                <span class="flex h-6 w-8 shrink-0 items-center justify-center rounded bg-[#fff0f0] text-[7px] font-bold text-[#ee4d2d]">SP</span>
+                                <span class="text-[10px] font-semibold text-[#2C1810]">ShopeePay</span>
                             </label>
+                        </div>
+
+                        {{-- ✅ BOX NOMOR REKENING: di dalam card metode, setelah grid E-Wallet --}}
+                        <div id="rekening-info" class="mt-4 hidden rounded-lg border border-[#e5dccb] bg-[#faf7ed] p-3">
+                            <p id="label-rekening" class="mb-1 text-[8px] text-[#796d5d]">Nomor pembayaran</p>
+                            <div class="flex items-center justify-between gap-2">
+                                <p id="nomor-rekening" class="font-mono text-sm font-bold tracking-wide text-[#8B1E1E]"></p>
+                                <button type="button" onclick="copyRekening()"
+                                    class="rounded bg-[#8B1E1E] px-3 py-1.5 text-[9px] font-semibold text-white transition hover:bg-[#6B1515]">Salin</button>
+                            </div>
+                            <p class="mt-1 text-[8px] text-[#796d5d]">Ikuti petunjuk pembayaran untuk melanjutkan pesanan.</p>
                         </div>
                     </section>
 
@@ -220,7 +216,7 @@
                     @endif
                 </div>
 
-                {{-- ================= KOLOM KANAN: RINGKASAN (statis, tidak ikut scroll) ================= --}}
+                {{-- ================= KOLOM KANAN: RINGKASAN ================= --}}
                 <aside class="min-w-0">
                     <section class="rounded-xl border border-[#e8dfcf] bg-[#fffdf7] p-4 shadow-sm sm:p-5">
                         <div class="mb-4 flex items-center justify-between">
@@ -245,7 +241,6 @@
                             </div>
                         </div>
 
-                        {{-- Metode terpilih --}}
                         <div class="mt-3 flex items-center justify-between gap-2 rounded-lg border border-[#e5dccb] bg-[#faf7ed] px-3 py-2.5">
                             <div class="min-w-0">
                                 <p class="text-[8px] font-semibold uppercase tracking-wide text-[#796d5d]">Metode Pembayaran</p>
@@ -254,7 +249,6 @@
                             <span id="badge-verifikasi" class="shrink-0 rounded-full bg-[#e8f2e2] px-2 py-0.5 text-[8px] font-semibold text-[#2E7D32]">Terverifikasi</span>
                         </div>
 
-                        {{-- Potensi poin --}}
                         <div class="mt-3 flex items-center gap-2.5 rounded-lg border border-[#d6e8d0] bg-[#edf6e9] px-3 py-2.5">
                             <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#d7ebcf] text-[#2E7D32]">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,7 +262,6 @@
                             <a href="{{ route('poin.index') }}" class="shrink-0 text-[9px] font-semibold text-[#2E7D32] underline underline-offset-2">Detail</a>
                         </div>
 
-                        {{-- Total --}}
                         <div class="mt-4 border-t border-[#eee8dc] pt-3">
                             <div class="flex items-start justify-between gap-2">
                                 <div>
@@ -301,15 +294,52 @@
         </div>
     </div>
 
+    {{-- ✅ SATU blok script: semua fungsi (showRekening didefinisikan SEKALI di sini) --}}
     <script>
         const ONGKIR = {{ $ongkir }};
         const PACKAGING = {{ $packaging }};
+
         const namaMetode = {
-            bca: 'BCA Virtual Account', mandiri: 'Mandiri Virtual Account',
-            bri: 'BRI Virtual Account', bni: 'BNI Virtual Account',
-            gopay: 'GoPay', dana: 'DANA', ovo: 'OVO',
-            shopeepay: 'ShopeePay', cod: 'COD (Bayar di Tempat)'
+            bca: 'BCA Virtual Account',
+            mandiri: 'Mandiri Virtual Account',
+            gopay: 'GoPay',
+            dana: 'DANA',
+            shopeepay: 'ShopeePay',
+            cod: 'COD (Bayar di Tempat)'
         };
+
+        const rekeningData = {
+            bca: '8271 0812 3456 7890',
+            mandiri: '130 00 1234567 8',
+            gopay: '0812 8899 1201',
+            dana: '0857 3344 9022',
+            shopeepay: '0821 7766 4503',
+            cod: 'Bayar tunai di tempat saat barang diterima'
+        };
+
+        function showRekening(metode) {
+            const box = document.getElementById('rekening-info');
+            const nomor = document.getElementById('nomor-rekening');
+            const label = document.getElementById('label-rekening');
+            if (!box || !nomor || !label) return;
+            nomor.textContent = rekeningData[metode] || '-';
+            label.textContent = ['bca', 'mandiri'].includes(metode)
+                ? 'Nomor Virtual Account / Rekening Tujuan'
+                : (metode === 'cod' ? 'Instruksi Pembayaran' : 'Nomor Akun E-Wallet / QRIS');
+            box.classList.remove('hidden');
+        }
+
+        function copyRekening() {
+            const nomor = document.getElementById('nomor-rekening').textContent;
+            navigator.clipboard.writeText(nomor.replace(/\s/g, ''))
+                .then(() => alert('Nomor pembayaran berhasil disalin.'));
+        }
+
+        function updateMetodeTerpilih(value) {
+            document.getElementById('metode-terpilih').textContent = namaMetode[value] || value;
+            document.getElementById('badge-verifikasi').classList.remove('hidden');
+            showRekening(value);
+        }
 
         function toggleSelectAll(source) {
             document.querySelectorAll('input[name="selected[]"]').forEach(cb => cb.checked = source.checked);
@@ -323,11 +353,6 @@
                 all.checked = Array.from(boxes).every(cb => cb.checked);
             }
             updateRingkasanBelanja();
-        }
-
-        function updateMetodeTerpilih(value) {
-            document.getElementById('metode-terpilih').textContent = namaMetode[value] || value;
-            document.getElementById('badge-verifikasi').classList.remove('hidden');
         }
 
         function updateRingkasanBelanja() {
@@ -374,6 +399,7 @@
             if (all) all.checked = true;
             document.querySelectorAll('input[name="selected[]"]').forEach(cb => cb.checked = true);
             updateRingkasanBelanja();
+            showRekening('bca');
 
             document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
                 cb.addEventListener('change', updateRingkasanBelanja);

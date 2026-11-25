@@ -8,16 +8,18 @@
             <div>
                 <div class="flex items-center gap-2 mb-4">
                     <h3 class="font-display text-xl font-bold text-[#8B1E1E]">NusaCandle</h3>
-                    <span class="bg-[#E8F5E9] text-[#2E7D32] text-[10px] font-semibold px-2 py-0.5 rounded">Authentic
-                        Malang</span>
                 </div>
                 <p class="text-sm text-[#718078] leading-relaxed mb-4">
                     Kerajinan lilin aromaterapi berbahan dasar 100% kedelai alami dipadukan dengan ekstrak minyak atsiri
                     apel Malang dan dedaunan nusantara untuk ketenangan jiwa.
                 </p>
                 <p class="text-xs text-[#2E7D32] flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    <svg class="h-5 w-5 shrink-0 text-[#315b42]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M20.5 3.5C11 3.5 5 7.7 5 14a6 6 0 006 6c6.3 0 10.5-6 9.5-16.5Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M4 21c3-4 6.5-7.5 12-11" />
                     </svg>
                     Ramah Lingkungan & Non-Toxic
                 </p>
@@ -27,10 +29,13 @@
             <div>
                 <h4 class="font-semibold text-[#2C1810] mb-4">Navigasi Cepat</h4>
                 <ul class="space-y-2 text-sm text-[#718078]">
-                    <li><a href="#" class="hover:text-[#8B1E1E] transition">Katalog Utama</a></li>
-                    <li><a href="#" class="hover:text-[#8B1E1E] transition">Koleksi Musim Apel</a></li>
-                    <li><a href="#" class="hover:text-[#8B1E1E] transition">Program Loyalitas Poin</a></li>
-                    <li><a href="#" class="hover:text-[#8B1E1E] transition">Lacak Pengiriman</a></li>
+                    <li><a href="{{ route('home') }}" class="hover:text-[#8B1E1E] transition">Beranda</a></li>
+                    <li><a href="{{ route('produk.index') }}" class="hover:text-[#8B1E1E] transition">Produk</a></li>
+                    <li><a href="{{ route('pembeli.pesanan.index') }}"
+                            class="hover:text-[#8B1E1E] transition">Pesanan</a></li>
+                    <li><a href="{{ route('pembeli.transaksi.index') }}"
+                            class="hover:text-[#8B1E1E] transition">Pembayaran</a></li>
+                    <li><a href="{{ route('poin.index') }}" class="hover:text-[#8B1E1E] transition">Poin saya</a></li>
                 </ul>
             </div>
 
@@ -81,11 +86,15 @@
                         +62 812-3456-7890
                     </li>
                     <li class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-4 w-4 shrink-0 text-[#8B1E1E]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="2" y="2" width="20" height="20" rx="5" stroke-width="2" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                            <path stroke-linecap="round" stroke-width="2" d="M17.5 6.5h.01" />
                         </svg>
-                        halo@nusacandle.id
+                        <a href="https://www.instagram.com/nusacandlekhas_malang?fqnt=MWo3c3JtdTRreXN5bA==" target="_blank" rel="noopener noreferrer"
+                            class="transition hover:text-[#8B1E1E]">@nusacandlekhas_malang</a>
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

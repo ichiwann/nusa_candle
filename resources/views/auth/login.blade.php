@@ -37,10 +37,10 @@
                     </div>
                     <div class="flex items-center gap-3 rounded-xl border border-[#e8dec8] bg-[#fffdf8] px-3 py-3 sm:px-4 sm:py-4">
                         <svg class="h-5 w-5 shrink-0 text-[#183d2b]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4c-3.3 0-5.8 2.3-5.8 5.5 0 2.3-1.4 4-2.7 5.6-1.1 1.3-.2 3.2 1.5 3.2h14c1.7 0 2.6-1.9 1.5-3.2-1.3-1.6-2.7-3.3-2.7-5.6C17.8 6.3 15.3 4 12 4Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4c-3.3 0-5.8 2.3-5.x`8 5.5 0 2.3-1.4 4-2.7 5.6-1.1 1.3-.2 3.2 1.5 3.2h14c1.7 0 2.6-1.9 1.5-3.2-1.3-1.6-2.7-3.3-2.7-5.6C17.8 6.3 15.3 4 12 4Z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 18.3v3.2m-5.5.5h11" />
                         </svg>
-                        <p class="text-[9px] leading-relaxed text-[#4b463f] sm:text-sm">Ekstrak Buah Apel Khas Kota Batu &amp; Minyak Atsiri Alami</p>
+                        <p class="text-[9px] leading-relaxed text-[#4b463f] sm:text-sm">Ekstrak Buah Apel Khas Kota Malang &amp; Minyak Atsiri Alami</p>
                     </div>
                 </div>
             </section>

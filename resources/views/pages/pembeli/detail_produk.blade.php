@@ -243,14 +243,10 @@
                 <div class="mb-3 rounded-xl border border-[#eee5d7] bg-[#f7f3e8] p-3 sm:p-4">
                     <div class="mb-1.5 flex items-center justify-between">
                         <p class="text-[9px] font-semibold uppercase tracking-wider text-[#796d5d]">Harga Resmi Perajin</p>
-                        <span class="rounded bg-[#FCE4EC] px-2 py-1 text-[9px] font-semibold text-[#8B1E1E]">Hemat
-                            22%</span>
                     </div>
                     <div class="flex flex-wrap items-baseline gap-2">
                         <span class="font-display text-2xl font-bold text-[#8B1E1E] sm:text-3xl">Rp
                             {{ number_format($produk->harga, 0, ',', '.') }}</span>
-                        <span class="text-[11px] text-[#8f8374] line-through">Rp
-                            {{ number_format($produk->harga + ($isPreview ?? false ? 26000 : 25000), 0, ',', '.') }}</span>
                     </div>
                 </div>
 

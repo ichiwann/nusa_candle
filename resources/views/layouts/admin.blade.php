@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - NusaCandle Admin</title>
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .display-font { font-family: 'Playfair Display', serif; }
@@ -24,7 +24,7 @@
         'grid-cols-1 md:grid-cols-[250px_minmax(0,1fr)]' => request()->routeIs('admin.*'),
         'grid-cols-[244px_1fr]' => !request()->routeIs('admin.*'),
     ])>
-        
+
         {{-- Sidebar --}}
         <x-admin.sidebar />
 
@@ -36,29 +36,33 @@
                 <x-admin.navbar />
             @endif
 
+            {{-- ✅ Notifikasi global: DI LUAR container ber-padding,
+                 agar tidak tertimpa negative-margin (-my-6 / sm:-my-9) wrapper halaman admin --}}
+            @if (session('success') || $errors->any())
+                <div class="w-full px-4 pt-4 sm:px-6 lg:px-8 xl:px-12">
+                    @if (session('success'))
+                        <div role="status"
+                            class="mb-3 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div role="alert"
+                            class="mb-3 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                            <ul class="list-inside list-disc space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
             <!-- Konten Utama (Fluid/Responsive) -->
             <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-9">
-                
-                {{-- Notifikasi --}}
-                @if (session('success'))
-                    <div role="status" class="border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 rounded-md">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div role="alert" class="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 rounded-md">
-                        <ul class="list-inside list-disc space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                {{-- Konten Halaman --}}
                 @yield('content')
-                
             </div>
         </main>
     </div>

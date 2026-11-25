@@ -128,6 +128,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pesanan/{id}/reorder', [PembeliPesananController::class, 'reorder'])->name('pembeli.pesanan.reorder');
     // ✅ Pembeli menyelesaikan pesanan yang sudah dikirim
     Route::post('/pesanan/{id}/selesai', [PembeliPesananController::class, 'selesai'])->name('pembeli.pesanan.selesai');
+    // ✅ Pembeli membatalkan pesanan yang belum dikonfirmasi/diproses
+    Route::post('/pesanan/{id}/batalkan', [PembeliPesananController::class, 'batalkan'])->name('pembeli.pesanan.batalkan');
 
     // Halaman checkout (pilih metode pembayaran)
     Route::get('/checkout', [PembeliPesananController::class, 'showCheckout'])->name('pembeli.checkout.show');
@@ -140,4 +142,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaksi/{id}', [PembeliTransaksiController::class, 'show'])->name('pembeli.transaksi.show');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
