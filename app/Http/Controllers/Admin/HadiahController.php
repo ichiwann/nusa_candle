@@ -25,18 +25,22 @@ class HadiahController extends Controller
         $penukaranDitolak = PenukaranHadiah::where('status_klaim', 'ditolak')->count();
         $totalPenukaran = PenukaranHadiah::count();
 
-        // Daftar hadiah dengan info produk
-        $daftarHadiah = Hadiah::with('produk')->orderBy('created_at', 'desc')->get();
+        // ✅ Daftar hadiah dengan info produk (Pagination 10 per halaman)
+        $daftarHadiah = Hadiah::with('produk')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10, ['*'], 'hadiah_page');
+
         $produkTersedia = Produk::query()
             ->whereNotIn('id_produk', Hadiah::query()->select('id_produk'))
             ->orderBy('nama_produk')
             ->get(['id_produk', 'nama_produk', 'stok']);
 
-        // ✅ DATA PENUKARAN HADIAH (untuk section konfirmasi)
+        // ✅ DATA PENUKARAN HADIAH (Pagination 10 per halaman + withQueryString agar search tetap terbawa)
         $daftarPenukaran = PenukaranHadiah::with(['user', 'hadiah.produk'])
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($penukaran) {
+            ->paginate(10, ['*'], 'penukaran_page')
+            ->withQueryString()
+            ->through(function ($penukaran) {
                 $user = $penukaran->user;
                 $poinSekarang = (int) $user->total_poin;
                 $poinDitukar = $penukaran->poin_ditukar;
@@ -46,7 +50,7 @@ class HadiahController extends Controller
                     'nama_user' => $user->nama_lengkap ?? 'Unknown',
                     'username' => $user->username ?? '-',
                     'poin_sekarang' => $poinSekarang,
-                    'poin_saat_klaim' => (int) $penukaran->poin_saat_klaim, // ✅ LANGSUNG DARI DB
+                    'poin_saat_klaim' => (int) $penukaran->poin_saat_klaim,
                     'poin_dibutuhkan' => (int) ($penukaran->hadiah?->poin_dibutuhkan ?? 0),
                     'nama_produk' => $penukaran->hadiah->produk->nama_produk ?? 'Hadiah',
                     'poin_ditukar' => $poinDitukar,
@@ -100,9 +104,6 @@ class HadiahController extends Controller
         return back()->with('success', 'Hadiah berhasil dihapus.');
     }
 
-    /**
-     * Approve klaim hadiah
-     */
     public function approve(int $id): RedirectResponse
     {
         $penukaran = PenukaranHadiah::findOrFail($id);
@@ -116,9 +117,6 @@ class HadiahController extends Controller
         return back()->with('success', 'Klaim hadiah berhasil disetujui. Silakan proses pengiriman hadiah.');
     }
 
-    /**
-     * Reject klaim hadiah (kembalikan poin + stok)
-     */
     public function reject(Request $request, int $id): RedirectResponse
     {
         $penukaran = PenukaranHadiah::with(['user', 'hadiah.produk'])->findOrFail($id);
@@ -133,27 +131,23 @@ class HadiahController extends Controller
 
         DB::beginTransaction();
         try {
-            // Kembalikan poin ke user
             if ($penukaran->user) {
                 $penukaran->user->increment('total_poin', $penukaran->poin_ditukar);
             }
 
-            // ✅ KEMBALIKAN STOK PRODUK (stok sudah dipotong saat klaim)
             if ($penukaran->hadiah?->produk) {
                 $penukaran->hadiah->produk->increment('stok');
             }
 
-            // Update status + simpan alasan di kolom catatan
             $penukaran->update([
                 'status_klaim' => 'ditolak',
-                'catatan' => ($penukaran->catatan ? $penukaran->catatan.' | ' : '').'Ditolak: '.($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
+                'catatan' => ($penukaran->catatan ? $penukaran->catatan . ' | ' : '') . 'Ditolak: ' . ($validated['alasan_tolak'] ?? 'Tidak ada alasan'),
             ]);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return back()->withErrors(['status' => 'Terjadi kesalahan: '.$e->getMessage()]);
+            return back()->withErrors(['status' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
 
         return back()->with('success', 'Klaim hadiah ditolak. Poin dan stok telah dikembalikan.');

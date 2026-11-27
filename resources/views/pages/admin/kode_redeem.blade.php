@@ -222,16 +222,54 @@
                 </table>
             </div>
 
+            {{-- pagination --}}
             @if ($redeemCodes->hasPages())
-                <div class="flex items-center justify-between border-t border-[#e8dfd1] px-3 py-3">
+                <nav role="navigation" aria-label="Navigasi halaman" class="flex items-center justify-end gap-1.5 p-3">
                     <p class="text-[9px] text-[#718078]">
                         Menampilkan {{ $redeemCodes->firstItem() }}-{{ $redeemCodes->lastItem() }} dari
                         {{ $redeemCodes->total() }} kode
                     </p>
-                    <div class="flex items-center gap-1">
-                        {{ $redeemCodes->links() }}
-                    </div>
-                </div>
+                    {{-- Previous --}}
+                    @if ($redeemCodes->onFirstPage())
+                        <span aria-disabled="true" aria-label="Previous"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Previous
+                        </span>
+                    @else
+                        <a href="{{ $redeemCodes->previousPageUrl() }}" rel="prev" aria-label="Previous"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Elemen halaman --}}
+                    @foreach ($redeemCodes->getUrlRange(1, $redeemCodes->lastPage()) as $page => $url)
+                        @if ($page == $redeemCodes->currentPage())
+                            <span aria-current="page"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[#103a2a] text-[11px] font-bold text-white">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" aria-label="Halaman {{ $page }}"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($redeemCodes->hasMorePages())
+                        <a href="{{ $redeemCodes->nextPageUrl() }}" rel="next" aria-label="Next"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Next
+                        </a>
+                    @else
+                        <span aria-disabled="true" aria-label="Next"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Next
+                        </span>
+                    @endif
+                </nav>
             @endif
         </section>
     </div>

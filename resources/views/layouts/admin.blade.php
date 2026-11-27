@@ -25,19 +25,18 @@
         'grid-cols-[244px_1fr]' => !request()->routeIs('admin.*'),
     ])>
 
-        {{-- Sidebar --}}
+        {{-- Sidebar (desktop) + Drawer (mobile) --}}
         <x-admin.sidebar />
 
-        <main class="min-w-0 flex-1">
-            {{-- Navbar --}}
+        {{-- Kolom kanan: navbar + konten. flex-col agar navbar menempel penuh ke sidebar --}}
+        <main class="flex min-w-0 flex-col">
             @if (request()->routeIs('admin.dashboard'))
                 <x-admin.navbar :total-orders="array_sum($chartData['orders'])" />
             @else
                 <x-admin.navbar />
             @endif
 
-            {{-- ✅ Notifikasi global: DI LUAR container ber-padding,
-                 agar tidak tertimpa negative-margin (-my-6 / sm:-my-9) wrapper halaman admin --}}
+            {{-- Notifikasi global --}}
             @if (session('success') || $errors->any())
                 <div class="w-full px-4 pt-4 sm:px-6 lg:px-8 xl:px-12">
                     @if (session('success'))
@@ -46,7 +45,6 @@
                             {{ session('success') }}
                         </div>
                     @endif
-
                     @if ($errors->any())
                         <div role="alert"
                             class="mb-3 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -60,8 +58,8 @@
                 </div>
             @endif
 
-            <!-- Konten Utama (Fluid/Responsive) -->
-            <div class="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 sm:py-9">
+            {{-- Konten utama --}}
+            <div class="w-full px-4 py-6 sm:px-6 sm:py-9 lg:px-8 xl:px-12">
                 @yield('content')
             </div>
         </main>

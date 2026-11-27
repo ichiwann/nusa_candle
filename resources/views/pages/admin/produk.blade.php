@@ -230,16 +230,52 @@
 
             <!-- Pagination -->
             @if ($produks->hasPages())
-                <div class="flex items-center justify-between border-t border-[#eee8dc] px-5 py-4">
+                <nav role="navigation" aria-label="Navigasi halaman" class="flex items-center justify-end gap-1.5 p-3">
                     <p class="text-xs text-[#718078]">
                         Menampilkan {{ $produks->firstItem() }}-{{ $produks->lastItem() }} dari {{ $produks->total() }}
                         produk
                     </p>
-                    <!-- Link Pagination Laravel -->
-                    <div class="flex items-center gap-1">
-                        {{ $produks->links() }}
-                    </div>
-                </div>
+                    {{-- Previous --}}
+                    @if ($produks->onFirstPage())
+                        <span aria-disabled="true" aria-label="Previous"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Previous
+                        </span>
+                    @else
+                        <a href="{{ $produks->previousPageUrl() }}" rel="prev" aria-label="Previous"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Elemen halaman --}}
+                    @foreach ($produks->getUrlRange(1, $produks->lastPage()) as $page => $url)
+                        @if ($page == $produks->currentPage())
+                            <span aria-current="page"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[#103a2a] text-[11px] font-bold text-white">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" aria-label="Halaman {{ $page }}"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($produks->hasMorePages())
+                        <a href="{{ $produks->nextPageUrl() }}" rel="next" aria-label="Next"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Next
+                        </a>
+                    @else
+                        <span aria-disabled="true" aria-label="Next"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Next
+                        </span>
+                    @endif
+                </nav>
             @endif
         </section>
 

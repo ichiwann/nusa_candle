@@ -95,10 +95,6 @@
                         <h2 id="order-progress-title" class="font-display text-sm font-bold text-[#2C1810] sm:text-base">
                             Status Pengiriman Terkini</h2>
                     </div>
-                    <div class="rounded-md bg-[#f7f4ec] px-2.5 py-1.5 text-right text-[7px] text-[#796d5d] sm:text-[8px]">
-                        Estimasi tiba
-                        <span class="ml-1 font-semibold text-[#2C1810]">Belum tersedia</span>
-                    </div>
                 </div>
                 <div class="overflow-x-auto pb-1">
                     <ol class="relative grid min-w-[700px] grid-cols-5">

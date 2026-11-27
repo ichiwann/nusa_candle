@@ -1,92 +1,78 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Akun - NusaCandle</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0 !important; padding: 0 !important; }
+    </style>
 </head>
+<body class="min-h-screen bg-[#f4f4f4] font-sans">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="grid w-full max-w-5xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10">
 
-<body class="flex min-h-screen items-center justify-center bg-[#f4f4f4] p-2 font-buyer">
-    <main
-        class="mx-auto flex min-h-[96vh] w-[97vw] max-w-[1152px] items-center justify-center rounded-md bg-[#f7f4e9] p-4 min-[600px]:h-[96vh] min-[600px]:min-h-0 min-[600px]:max-h-[828px] min-[600px]:p-6">
-        <div
-            class="grid w-full grid-cols-1 gap-4 min-[600px]:h-[68vh] min-[600px]:max-h-[554px] min-[600px]:grid-cols-[0.75fr_1fr] min-[600px]:gap-10">
+            {{-- ===== KOLOM KIRI: BRANDING ===== --}}
+            <div class="flex flex-col items-center justify-center rounded-xl border border-[#e8dfd1] bg-white p-8 shadow-sm">
+                {{-- Logo --}}
+                <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle"
+                    class="mb-4 h-20 w-20 object-contain" onerror="this.style.display='none'">
+                <h1 class="font-serif text-2xl font-bold text-[#a51f27]">NusaCandle</h1>
+                <p class="mt-1 text-[10px] uppercase tracking-widest text-[#52645a]">Lilin Aroma Terapi</p>
+                <p class="mt-1 text-[10px] italic text-[#77736b]">"Aroma Apel • Relaksasi Setiap Saat"</p>
 
-            {{-- Kolom Kiri: Branding --}}
-            <section
-                class="flex min-h-0 flex-col justify-center rounded-[10px] border border-[#eee8d8] bg-[#fffdf8] p-5 min-[600px]:h-full min-[600px]:px-6"
-                aria-label="Tentang NusaCandle">
-                <div class="mb-1 text-center">
-                    <img src="{{ asset('images/logo-nusacandle.png') }}" alt="NusaCandle"
-                        class="mx-auto mb-3 h-16 w-16 object-contain sm:h-20 sm:w-20"
-                        onerror="this.style.display='none'">
-                    <h1 class="font-display text-sm font-semibold text-[#a51f27] sm:text-lg">NusaCandle</h1>
-                    <p class="mt-0 text-[7px] uppercase tracking-[0.16em] text-[#52645a] sm:text-[8px]">Lilin Aroma
-                        Terapi</p>
-                    <p class="mt-0.5 text-[7px] italic text-[#77736b] sm:text-[8px]">"Aroma Apel • Relaksasi Setiap
-                        Saat"</p>
+                {{-- Divider --}}
+                <div class="my-6 flex w-full items-center gap-2">
+                    <span class="h-px flex-1 bg-[#eee8d8]"></span>
+                    <svg class="h-4 w-4 text-[#8b7658]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m0 0l-4-4m4 4l4-4" />
+                    </svg>
+                    <span class="h-px flex-1 bg-[#eee8d8]"></span>
                 </div>
 
-                <div class="mt-4 border-t border-[#eee8d8] pt-4">
-                    <h2
-                        class="mb-1 text-center text-[7px] font-bold uppercase tracking-wide text-[#183b2c] sm:text-[8px]">
-                        Keistimewaan Anggota NusaCandle
-                    </h2>
-                    <div class="space-y-4">
-                        <div
-                            class="flex min-h-10 items-center gap-2 rounded-md border border-[#eee8d8] bg-[#f7f4e9] px-2 py-2">
-                            <span
-                                class="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-[#183b2c] text-white"
-                                aria-hidden="true">
-                                <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </span>
-                            <p class="text-[7px] leading-relaxed text-stone-700 sm:text-[8px]">
-                                Kumpulkan <span class="font-semibold text-[#a51f27]">75 poin NusaCandle</span> dan
-                                dapatkan hadiah eksklusif.
-                            </p>
-                        </div>
-                        <div
-                            class="flex min-h-10 items-center gap-2 rounded-md border border-[#eee8d8] bg-[#f7f4e9] px-2 py-2">
-                            <svg class="h-3 w-3 shrink-0 text-[#537056]" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 21s-8-4.5-8-11a4 4 0 017.5-2 4 4 0 017.5 2c0 6.5-7 11-7 11z" />
+                {{-- Keistimewaan Anggota NusaCandle --}}
+                <h2 class="mb-3 text-center text-[10px] font-bold uppercase tracking-wide text-[#183b2c]">
+                    Keistimewaan Anggota NusaCandle
+                </h2>
+
+                <div class="w-full space-y-3">
+                    {{-- Card 1: Poin NusaCandle --}}
+                    <div class="flex items-center gap-3 rounded-lg border border-[#e8dfd1] bg-[#f7f4e9] p-3">
+                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#183b2c] text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                             </svg>
-                            <p class="text-[7px] leading-relaxed text-stone-700 sm:text-[8px]">
-                                100% Minyak Atsiri Organik &amp; Soy Wax Ramah Lingkungan.
-                            </p>
-                        </div>
+                        </span>
+                        <p class="text-[11px] leading-relaxed text-stone-700">
+                            Kumpulkan <span class="font-semibold text-[#a51f27]">70 poin NusaCandle</span> dan dapatkan refill lilin NusaCandle gratis!
+                        </p>
+                    </div>
+
+                    {{-- Card 2: Bahan Organik --}}
+                    <div class="flex items-center gap-3 rounded-lg border border-[#e8dfd1] bg-[#f7f4e9] p-3">
+                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#183b2c] text-[#183b2c]">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </span>
+                        <p class="text-[11px] leading-relaxed text-stone-700">
+                            100% Minyak Atsiri Organik & Soy Wax Ramah Lingkungan.
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {{-- Kolom Kanan: Form Register --}}
-            <section
-                class="min-h-0 rounded-[10px] border border-[#eee8d8] bg-[#fffdf8] px-5 py-6 min-[600px]:h-full min-[600px]:px-6 min-[600px]:py-5"
-                aria-labelledby="register-title">
-                <header class="mb-3">
-                    <p class="text-[7px] font-semibold uppercase tracking-[0.16em] text-[#537056] sm:text-[8px]">
-                        Registrasi</p>
-                    <h2 id="register-title"
-                        class="font-display text-sm font-semibold leading-tight text-[#a51f27] sm:text-xl">
-                        Buat Akun NusaCandle
-                    </h2>
-                    <p class="mt-0.5 text-[7px] leading-relaxed text-stone-500 sm:text-[8px]">Daftar dan nikmati
-                        pengalaman berbelanja di NusaCandle.</p>
-                </header>
+            {{-- ===== KOLOM KANAN: FORM REGISTER ===== --}}
+            <div class="rounded-xl border border-[#e8dfd1] bg-white p-8 shadow-sm">
+                <p class="text-[10px] font-semibold uppercase tracking-widest text-[#537056]">Registrasi</p>
+                <h2 class="mt-1 font-serif text-3xl font-bold text-[#a51f27]">Buat Akun NusaCandle</h2>
+                <p class="mt-2 text-sm text-stone-500">Daftar dan nikmati pengalaman berbelanja di NusaCandle.</p>
 
                 @if ($errors->any())
-                    <div
-                        class="mb-2 rounded-md border border-red-100 bg-red-50 px-2 py-1 text-[7px] leading-relaxed text-red-700">
-                        <ul class="list-inside list-disc space-y-0.5">
+                    <div class="mt-4 rounded-md border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+                        <ul class="list-inside list-disc space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -94,155 +80,115 @@
                     </div>
                 @endif
 
-                <form action="{{ route('register') }}" method="POST" class="space-y-2 sm:space-y-2.5">
+                <form action="{{ route('register') }}" method="POST" class="mt-6 space-y-4">
                     @csrf
 
                     <div>
-                        <label for="nama_lengkap"
-                            class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Nama
-                            Lengkap</label>
-                        <input type="text" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}"
-                            required autocomplete="name"
-                            class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white px-2 text-[7px] outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                        <label for="nama_lengkap" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Nama Lengkap</label>
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required autocomplete="name"
+                            class="mt-1 block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                             placeholder="Masukkan nama lengkap">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label for="username"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Username</label>
-                            <input type="text" id="username" name="username" value="{{ old('username') }}" required
-                                autocomplete="username"
-                                class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white px-2 text-[7px] outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="username" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Username</label>
+                            <input type="text" id="username" name="username" value="{{ old('username') }}" required autocomplete="username"
+                                class="mt-1 block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                 placeholder="Masukkan username">
                         </div>
                         <div>
-                            <label for="no_telepon"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Nomor
-                                Telepon</label>
-                            <input type="tel" id="no_telepon" name="no_telepon" value="{{ old('no_telepon') }}"
-                                required autocomplete="tel"
-                                class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white px-2 text-[7px] outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="no_telepon" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Nomor Telepon</label>
+                            <input type="tel" id="no_telepon" name="no_telepon" value="{{ old('no_telepon') }}" required autocomplete="tel"
+                                class="mt-1 block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                 placeholder="Nomor telepon">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label for="email"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Email</label>
-                            <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                                autocomplete="email"
-                                class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white px-2 text-[7px] outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="email" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Email</label>
+                            <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email"
+                                class="mt-1 block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                 placeholder="Alamat email">
                         </div>
                         <div>
-                            <label for="alamat"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Alamat
-                                Lengkap</label>
-                            <input type="text" id="alamat" name="alamat" value="{{ old('alamat') }}" required
-                                autocomplete="street-address"
-                                class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white px-2 text-[7px] outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="alamat" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Alamat Lengkap</label>
+                            <input type="text" id="alamat" name="alamat" value="{{ old('alamat') }}" required autocomplete="street-address"
+                                class="mt-1 block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                 placeholder="Alamat lengkap">
                         </div>
                     </div>
 
-                    {{-- PASSWORD DENGAN ICON MATA (Pastikan absolute right-2) --}}
-                    <div class="grid grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label for="password"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Password</label>
-                            <div class="relative">
-                                <input type="password" id="password" name="password" required
-                                    autocomplete="new-password"
-                                    class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white pl-2 pr-7 text-[7px] text-[#2C1810] outline-none placeholder:text-stone-400 focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="password" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Password</label>
+                            <div class="relative mt-1">
+                                <input type="password" id="password" name="password" required autocomplete="new-password"
+                                    class="block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 pr-10 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                     placeholder="Buat password">
                                 <button type="button" onclick="togglePassword('password', this)"
-                                    class="absolute right-2 top-1/2 -translate-y-1/2 flex h-4 w-4 items-center justify-center border-0 bg-transparent p-0 text-[#8b8680] transition hover:text-[#a51f27] focus:outline-none"
-                                    tabindex="-1" aria-label="Tampilkan password">
-                                    <svg class="eye-open h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8b8680] hover:text-[#a51f27]" tabindex="-1">
+                                    <svg class="eye-open h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
-                                    <svg class="eye-closed hidden h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    <svg class="eye-closed hidden h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
-
                         <div>
-                            <label for="password_confirmation"
-                                class="block text-[6px] font-semibold uppercase tracking-wide text-[#52645a] sm:text-[8px]">Konfirmasi
-                                Password</label>
-                            <div class="relative">
-                                <input type="password" id="password_confirmation" name="password_confirmation"
-                                    required autocomplete="new-password"
-                                    class="block h-5 w-full rounded-md border border-[#e5dfd1] bg-white pl-2 pr-7 text-[7px] text-[#2C1810] outline-none placeholder:text-stone-400 focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20 sm:h-8 sm:text-[10px]"
+                            <label for="password_confirmation" class="block text-xs font-semibold uppercase tracking-wide text-[#52645a]">Konfirmasi Password</label>
+                            <div class="relative mt-1">
+                                <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password"
+                                    class="block w-full rounded-md border border-[#e5dfd1] bg-white px-3 py-2.5 pr-10 text-sm outline-none focus:border-[#a51f27] focus:ring-1 focus:ring-[#a51f27]/20"
                                     placeholder="Ulangi password">
                                 <button type="button" onclick="togglePassword('password_confirmation', this)"
-                                    class="absolute right-2 top-1/2 -translate-y-1/2 flex h-4 w-4 items-center justify-center border-0 bg-transparent p-0 text-[#8b8680] transition hover:text-[#a51f27] focus:outline-none"
-                                    tabindex="-1" aria-label="Tampilkan konfirmasi password">
-                                    <svg class="eye-open h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8b8680] hover:text-[#a51f27]" tabindex="-1">
+                                    <svg class="eye-open h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
-                                    <svg class="eye-closed hidden h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none"
-                                        stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    <svg class="eye-closed hidden h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex items-start gap-1.5 pt-0.5">
+                    <div class="flex items-start gap-2">
                         <input type="checkbox" id="terms" name="terms" required
-                            class="mt-0.5 h-2.5 w-2.5 shrink-0 cursor-pointer rounded border-stone-300 accent-[#a51f27]">
-                        <label for="terms"
-                            class="cursor-pointer select-none text-[6px] leading-relaxed text-stone-600 sm:text-[8px]">
-                            Saya menyetujui <a href="#" class="font-semibold text-[#a51f27] underline">Syarat &
-                                Ketentuan</a> serta
-                            <a href="#" class="font-semibold text-[#a51f27] underline">Kebijakan Privasi</a>
-                            NusaCandle.
+                            class="mt-0.5 h-4 w-4 rounded border-stone-300 accent-[#a51f27]">
+                        <label for="terms" class="text-xs text-stone-600">
+                            Saya menyetujui <a href="#" class="font-semibold text-[#a51f27] underline">Syarat & Ketentuan</a> serta
+                            <a href="#" class="font-semibold text-[#a51f27] underline">Kebijakan Privasi</a> NusaCandle.
                         </label>
                     </div>
 
                     <button type="submit"
-                        class="flex h-6 w-full items-center justify-center gap-1 rounded-md bg-[#a51f27] text-[7px] font-semibold text-white transition hover:bg-[#8e1820] sm:h-8 sm:text-[9px]">
-                        <span>Daftar Sekarang</span>
-                        <svg class="h-2.5 w-2.5 sm:h-3 sm:w-3" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        class="flex w-full items-center justify-center gap-2 rounded-md bg-[#a51f27] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#8e1820]">
+                        Daftar Sekarang
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
                     </button>
                 </form>
 
-                <p class="mt-3.5 text-center text-[7px] text-stone-500 sm:text-[8px]">
-                    Sudah punya akun? <a href="{{ route('login') }}"
-                        class="font-semibold text-[#a51f27] underline">Masuk sekarang</a>
+                <p class="mt-6 text-center text-sm text-stone-500">
+                    Sudah punya akun? <a href="{{ route('login') }}" class="font-semibold text-[#a51f27] underline">Masuk sekarang</a>
                 </p>
-            </section>
+            </div>
         </div>
-    </main>
+    </div>
 
-    {{-- Script Toggle Password --}}
     <script>
         function togglePassword(inputId, button) {
             const input = document.getElementById(inputId);
             const eyeOpen = button.querySelector('.eye-open');
             const eyeClosed = button.querySelector('.eye-closed');
-
             if (input.type === 'password') {
                 input.type = 'text';
                 eyeOpen.classList.add('hidden');
@@ -255,5 +201,4 @@
         }
     </script>
 </body>
-
 </html>

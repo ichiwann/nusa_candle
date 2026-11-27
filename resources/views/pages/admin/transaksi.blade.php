@@ -226,15 +226,55 @@
                 </table>
             </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-[#e8dfd1] px-3 py-3 sm:px-4">
-                <p class="text-[9px] text-[#718078]">
+            {{-- Pagination --}}
+            @if ($transaksis->hasPages())
+                <nav role="navigation" aria-label="Navigasi halaman" class="flex items-center justify-end gap-1.5 p-3">
+                    <p class="text-[9px] text-[#718078]">
                     Menampilkan {{ $transaksis->firstItem() ?? 0 }}–{{ $transaksis->lastItem() ?? 0 }} dari
                     {{ number_format($transaksis->total()) }} pembayaran
                 </p>
-                <div class="flex items-center gap-1">
-                    {{ $transaksis->links() }}
-                </div>
-            </div>
+                    {{-- Previous --}}
+                    @if ($transaksis->onFirstPage())
+                        <span aria-disabled="true" aria-label="Previous"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Previous
+                        </span>
+                    @else
+                        <a href="{{ $transaksis->previousPageUrl() }}" rel="prev" aria-label="Previous"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Elemen halaman --}}
+                    @foreach ($transaksis->getUrlRange(1, $transaksis->lastPage()) as $page => $url)
+                        @if ($page == $transaksis->currentPage())
+                            <span aria-current="page"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[#103a2a] text-[11px] font-bold text-white">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" aria-label="Halaman {{ $page }}"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($transaksis->hasMorePages())
+                        <a href="{{ $transaksis->nextPageUrl() }}" rel="next" aria-label="Next"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Next
+                        </a>
+                    @else
+                        <span aria-disabled="true" aria-label="Next"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Next
+                        </span>
+                    @endif
+                </nav>
+            @endif
         </section>
     </div>
 

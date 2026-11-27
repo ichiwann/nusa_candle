@@ -303,16 +303,53 @@
 
             <!-- Pagination -->
             @if ($pesanans->hasPages())
-                <div class="flex items-center justify-between border-t border-[#eee8dc] px-5 py-4">
+                <nav role="navigation" aria-label="Navigasi halaman" class="flex items-center justify-end gap-1.5 p-3">
                     <p class="text-xs text-[#718078]">
                         Menampilkan {{ $pesanans->firstItem() }}-{{ $pesanans->lastItem() }} dari
                         {{ $pesanans->total() }}
                         pesanan terdaftar
                     </p>
-                    <div class="flex items-center gap-1">
-                        {{ $pesanans->links() }}
-                    </div>
-                </div>
+                    {{-- Previous --}}
+                    @if ($pesanans->onFirstPage())
+                        <span aria-disabled="true" aria-label="Previous"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Previous
+                        </span>
+                    @else
+                        <a href="{{ $pesanans->previousPageUrl() }}" rel="prev" aria-label="Previous"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Previous
+                        </a>
+                    @endif
+
+                    {{-- Elemen halaman --}}
+                    @foreach ($pesanans->getUrlRange(1, $pesanans->lastPage()) as $page => $url)
+                        @if ($page == $pesanans->currentPage())
+                            <span aria-current="page"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[#103a2a] text-[11px] font-bold text-white">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" aria-label="Halaman {{ $page }}"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($pesanans->hasMorePages())
+                        <a href="{{ $pesanans->nextPageUrl() }}" rel="next" aria-label="Next"
+                            class="inline-flex items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#52645a] transition hover:bg-[#eae4d4]">
+                            Next
+                        </a>
+                    @else
+                        <span aria-disabled="true" aria-label="Next"
+                            class="inline-flex cursor-not-allowed items-center rounded-md border border-[#e8dfd1] bg-[#f5f0e2] px-3 py-1.5 text-[11px] font-semibold text-[#b3aa9c]">
+                            Next
+                        </span>
+                    @endif
+                </nav>
             @endif
         </section>
 
@@ -525,16 +562,9 @@
                                 <option value="dikirim">Dikirim (Siap / Dalam Perjalanan)</option>
                             </select>
                         </div>
-                        <div>
-                            <label for="status-tracking"
-                                class="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.06em] text-[#37312b]">
-                                Nomor Resi / Pelacakan Kurir
-                            </label>
-                            <input id="status-tracking" type="text" placeholder="Masukkan nomor resi"
-                                class="w-full rounded-md border border-[#d9d4c6] bg-[#fffdf7] px-3 py-3 text-xs text-[#30483a] outline-none placeholder:text-[#948b80] focus:border-[#64835d] focus:ring-1 focus:ring-[#64835d]/20">
-                        </div>
+                        
                     </div>
-
+ 
                     <div
                         class="flex items-start gap-2 rounded-md bg-[#f2efe4] px-3 py-3 text-[9px] leading-relaxed text-[#81786e]">
                         <svg class="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#64835d]" fill="none" stroke="currentColor"
@@ -738,21 +768,35 @@
             // 3. SET ACTION FORM (INI KUNCI PERBAIKANNYA)
             // Pastikan URL ini persis sama dengan yang ada di routes/web.php
             document.getElementById('status-form').action = `/admin/pesanan/${data.id}/status`;
-            document.getElementById('status-tracking').value = '';
 
-            // 4. Logika Disable/Enable Form
-            const select = document.getElementById('status_pesanan');
+                        const select = document.getElementById('status_pesanan');
             const submitBtn = document.getElementById('status-submit');
-            const trackingInput = document.getElementById('status-tracking'); // Ambil elemen input resi
 
             const lockedStatuses = ['dikirim', 'selesai', 'dibatalkan'];
             const locked = lockedStatuses.includes(data.status);
 
-            select.value = (data.status === 'dikirim') ? 'dikirim' : 'diproses';
+            // Bangun ulang opsi dropdown tiap modal dibuka (biar nggak "nyangkut")
+            select.innerHTML = '';
+            if (locked) {
+                // Status final → tampilkan status sebenarnya (Selesai / Dibatalkan / Dikirim)
+                const opt = document.createElement('option');
+                opt.value = data.status;
+                opt.textContent = data.status_label;
+                select.appendChild(opt);
+                select.value = data.status;
+            } else {
+                // Masih bisa diubah → tampilkan opsi yang diizinkan, default "Diproses"
+                const optDiproses = document.createElement('option');
+                optDiproses.value = 'diproses';
+                optDiproses.textContent = 'Diproses';
+                const optDikirim = document.createElement('option');
+                optDikirim.value = 'dikirim';
+                optDikirim.textContent = 'Dikirim (Siap / Dalam Perjalanan)';
+                select.append(optDiproses, optDikirim);
+                select.value = 'diproses';
+            }
 
-            // Disable SEMUA elemen form jika status terkunci
             select.disabled = locked;
-            trackingInput.disabled = locked; // ✅ Input resi ikut di-disable
             submitBtn.disabled = locked;
 
             // Tambahkan efek visual disabled ke tombol

@@ -122,7 +122,7 @@
                 'w-full',
                 'min-h-screen',
                 'grid-cols-1',
-                'overflow-hidden',
+        
                 'bg-[#f7f4e9]',
                 'md:grid-cols-[250px_minmax(0,1fr)]',
             );
